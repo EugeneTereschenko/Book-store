@@ -19,7 +19,7 @@
         </plugins>
     </build>
 
-    <groupId>net.codeshop.java</groupId>
+    <groupId>com.shop</groupId>
     <artifactId>BookStore</artifactId>
     <version>1.0-SNAPSHOT</version>
 
