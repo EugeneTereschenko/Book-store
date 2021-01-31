@@ -88,7 +88,11 @@ public class BookShopServlet extends HttpServlet {
         StringBuilder sb = new StringBuilder();
 
         for(int i=0; null!=book && i < book.size(); i++) {
-            sb.append("<tr><td><img src = \"./images/" + book.get(i).getImage() + "\" height = \"100\" width = \"100\"></td></tr><tr><td height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+           // sb.append("<tr><td><img src = \"./images/" + book.get(i).getImage() + "\" height = \"100\" width = \"100\"></td></tr><tr><td height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+            sb.append("<tr><td ><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td><td align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-sm\">\n" +
+                    "purchase</button></td></tr>");
+            sb.append("<tr id=\"" + book.get(i).getId() + "\"><td class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+
         }
 
         str = sb.toString();

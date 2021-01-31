@@ -65,45 +65,19 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td><img src="https://via.placeholder.com/400x200/FFB6C1/000000" class="img-cart"></td>
-                                                <td><strong>Product 1</strong><p>Size : 26</p></td>
-                                                <td>
-                                                    <form class="form-inline">
-                                                        <input class="form-control" type="text" value="1">
-                                                        <button rel="tooltip" class="btn btn-default"><i class="fa fa-pencil"></i></button>
-                                                        <a href="#" class="btn btn-primary"><i class="fa fa-trash-o"></i></a>
-                                                    </form>
-                                                </td>
-                                                <td>$54.00</td>
-                                                <td>$54.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td><img src="https://via.placeholder.com/400x200/87CEFA/000000" class="img-cart"></td>
-                                                <td><strong>Product 2</strong><p>Size : M</p></td>
-                                                <td>
-                                                    <form class="form-inline">
-                                                        <input class="form-control" type="text" value="2">
-                                                        <button class="btn btn-default" ><i class="fa fa-pencil"></i></button>
-                                                        <a href="#" class="btn btn-primary" rel="tooltip" ><i class="fa fa-trash-o"></i></a>
-                                                    </form>
-                                                </td>
-                                                <td>$16.00</td>
-                                                <td>$32.00</td>
-                                            </tr>
-                                            <tr>
                                                 <td colspan="6">&nbsp;</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right">Total Product</td>
-                                                <td>$86.00</td>
+                                                <td id="totalproduct" id_sum='0'>$00.00</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right">Total Shipping</td>
-                                                <td>$2.00</td>
+                                                <td id="totalshipping" id_sum='0'>$0.00</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right"><strong>Total</strong></td>
-                                                <td>$88.00</td>
+                                                <td id="totalcost" id_sum='0'>$00.00</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -120,9 +94,10 @@
     <%
         List<Book> book = (List<Book>) session.getAttribute("books");
         out.println("<div class=\"span3\" ><div class=\"panel panel-info table-responsive panel-shadow\"><table class=\"table table-success table-striped\" id=\"idBookTable\" ><tbody>");
-        for(int i=0; null!=book && i < 2; i++) {
-            out.println("<tr><td ><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"></td><td><button id=\"" + book.get(i).getId() + "\" class=\"me\">Small button</button></td></tr>");
-            out.println("<tr id=\"" + book.get(i).getId() + "\"><td class=\"row-data\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+        for(int i=0; null!=book && i < book.size(); i++) {
+            out.println("<tr><td ><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td><td align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-sm\">\n" +
+                    "purchase</button></td></tr>");
+            out.println("<tr id=\"" + book.get(i).getId() + "\"><td class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
             System.out.println(book.get(i).getId());
         }
         out.println("</tbody></table></div><div>");
