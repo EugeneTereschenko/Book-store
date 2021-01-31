@@ -5,6 +5,7 @@ $(document).ready(function(){
     var sumOfTotal = 0;
     var rows = 0;
 
+
     $("#idBookTable").on('click', '.me', function(){
 
 /*
@@ -18,6 +19,14 @@ $(document).ready(function(){
         var image = $('#col' + num).attr('id_image');
         var cost = $('#col' + num).attr('id_cost');
 
+
+        var valueIt = $('#valcartedit' + num).val();
+
+      //  alert(valueIt);
+
+        if (!valueIt >=1 ){
+        //    alert("true")
+
         rows = rows + 1;
 
         sumOfTotalProduct = +sumOfTotalProduct + +cost;
@@ -28,19 +37,31 @@ $(document).ready(function(){
         $('#totalcost').text('$' + sumOfTotal  + '.00');
 
 
+
+
+
         $('#idCartTable').prepend('<tr><td><img src =\"' + image + '\"/></td><td>' + text2 + '</td><td><input class="form-control" id=\"valcartedit' + num + '\"  type="text" value="1">\n' +
             '<button id=\"' + num + '\" class="btn btn-default itercost" ><i class="fa fa-pencil"></i></button>\n' +
             '<button id=\"' + num + '\" class="btn btn-primary iterdeletecost" rel="tooltip" ><i class="fa fa-trash-o"></i></button></td><td id=\"sumone' + num + '\" id_cost=\"' + cost + '\">$' + cost + '.00</td><td id=\"sumall' + num + '\" id_sum=\"' + cost + '\">$' + cost + '.00</td></tr>');
 
         //$('#idCartTable').append('<tr><td>' + text2 + '</td></tr>');
+        } else {
+            alert("check your choose");
+        }
 
     });
 
     $("#idCartTable").on('click', '.iterdeletecost', function(){
         var num = this.id;
+
+
         var valueIt = $('#valcartedit' + num).val();
-        var valueItid = $('#valcartedit' + num).attr('id');
+
+
+
         var sum = $('#sumone' + num).attr('id_cost');
+
+
         var valueOf = parseInt(valueIt);
 
         var sumOf = parseInt(sum) * valueOf;
