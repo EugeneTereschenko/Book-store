@@ -29,6 +29,7 @@
 <button type="button" class="btn btn-primary btn-sm" id="id_button">Small button</button>
 <div style="text-align: center">
     <h1>Welcome to Bookshop Website Panel</h1>
+
     <table align = "center" class="table" height="800">
         <tr><td align = "right" height="5"><button type="button" class="btn btn-primary btn-sm" id="left_button">next pages</button></td><td rowspan="2" width = "300"></td><td rowspan="2" width = "600"><link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
             <div class="container bootstrap snippets bootdey">
@@ -52,7 +53,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="table-responsive">
-                                        <table class="table">
+                                        <table class="table" id ="idCartTable">
                                             <thead>
                                             <tr>
                                                 <th>Product</th>
@@ -118,16 +119,19 @@
         <tr><td align = "right" height="400">
     <%
         List<Book> book = (List<Book>) session.getAttribute("books");
-        out.println("<div class=\"span3\" ><div class=\"panel panel-info table-responsive panel-shadow\"><table class=\"table table-success table-striped\" id=\"idBookTable\" >");
-        for(int i=0; null!=book && i < book.size(); i++) {
-            out.println("<tr><td><img src = \"./images/" + book.get(i).getImage() + "\" height = \"100\" width = \"100\"></td></tr><tr><td height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+        out.println("<div class=\"span3\" ><div class=\"panel panel-info table-responsive panel-shadow\"><table class=\"table table-success table-striped\" id=\"idBookTable\" ><tbody>");
+        for(int i=0; null!=book && i < 2; i++) {
+            out.println("<tr><td ><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"></td><td><button id=\"" + book.get(i).getId() + "\" class=\"me\">Small button</button></td></tr>");
+            out.println("<tr id=\"" + book.get(i).getId() + "\"><td class=\"row-data\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+            System.out.println(book.get(i).getId());
         }
-        out.println("</table></div><div>");
+        out.println("</tbody></table></div><div>");
     %>
-        </td></tr>
-
+        </td>
+        </tr>
     </table>
     <a href="/BookStore_war_exploded/logout">Logout</a>
 </div>
+
 </body>
 </html>
