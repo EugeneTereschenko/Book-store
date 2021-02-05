@@ -1,6 +1,8 @@
 package com.shop.db;
 
 import com.shop.entity.Book;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,8 +11,10 @@ import java.util.List;
 public class BookDAO {
 
 
-    private static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=root";
+    static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=testcomauser&password=AcPqw.TO,CYU.dcP12";
     private static final String SQL_FIND_BOOK = "SELECT * FROM books where title = (?)";
+    private static final String SQL_FIND_BOOK_BY_ID = "SELECT * FROM books where id = (?)";
+
     private static final String SQL_FIND_ALL_BOOKS = "SELECT * FROM books";
     private static final String SQL_FIND_BOOKS_FROM_TO = "SELECT * FROM books where id BETWEEN ? AND ? ";
 
@@ -51,6 +55,26 @@ public class BookDAO {
 
         try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_FIND_BOOK)) {
             prstatement.setString(1, title);
+
+            book = getBookParam(prstatement);
+
+        } catch (SQLException e) {
+            System.out.println("error find user" + e);
+        }
+
+        return book;
+
+    }
+
+
+    public Book checkBookById(int id) throws ClassNotFoundException {
+
+        Book book = null;
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_FIND_BOOK_BY_ID)) {
+            prstatement.setInt(1, id);
 
             book = getBookParam(prstatement);
 
@@ -135,15 +159,34 @@ public class BookDAO {
 
     }
 
-    public static void main(String[] args) throws ClassNotFoundException {
-        List<Book> books = new ArrayList<>();
+    public int totalPrice(String temp) throws ClassNotFoundException {
+       // System.out.println("price total");
 
-        books = findFromTO(3, 10 );
+        String id = null;
+        String value = null;
+        int total = 0;
+        Book book = new Book();
 
+        JSONObject json = new JSONObject(temp);
 
-        for (int i = 0; i < books.size(); i++){
-            System.out.println(" author " + books.get(i).getAuthor() + " title " + books.get(i).getTitle());
+        JSONArray array = json.getJSONArray("books");
+        int i = 0;
+        JSONObject myJsonObject = new JSONObject();
+        while(i < array.length()){
+            myJsonObject = array.getJSONObject(i);
+            id = (String) myJsonObject.get("id");
+            value = myJsonObject.getString("value");
+            if (!value.equals("undefined") && value != null) {
+                book = checkBookById(Integer.parseInt(id));
+                total += book.getPrice() * Integer.parseInt(value);
+            }
+            i++;
         }
+        //System.out.println(" total " + total);
+        return total;
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException{
 
     }
 

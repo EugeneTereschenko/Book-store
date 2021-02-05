@@ -8,15 +8,55 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
     <servlet>
-        <servlet-name>BookStorelogout</servlet-name>
+        <servlet-name>BookStore</servlet-name>
         <servlet-class>com.shop.BookShopServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>BookStorelogout</servlet-name>
+        <servlet-name>BookStore</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>BookStorelogout</servlet-name>
+        <servlet-name>BookStore</servlet-name>
         <url-pattern>/books</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/cards</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/registration</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/address</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/delivery</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/confirm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/complete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/items</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/addressdata</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/deliverydata</url-pattern>
     </servlet-mapping>
 </web-app>
