@@ -16,12 +16,12 @@
             src="https://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
             crossorigin="anonymous"></script>
-    <script src=".././ownscript.js"></script>
+    <script src="../ownscript.js"></script>
 </head>
 <body>
 <h1 align="center">Welcome to Bookshop</h1>
 <div class="alert alert-primary" role="alert">
-    <table><tr><td><button type="button" class="btn btn-primary btn-sm" id="id_button">Step1</button></td><td>Step2</td><td>Step3</td><td>Settings</td><td><%= session.getAttribute("username") %></td></tr></table>
+    <table><tr><td><button type="button" class="btn btn-primary btn-sm" id="id_button">Step1</button></td><td>Step2</td><td>Step3</td><td>Settings</td><td><%= request.getParameter("cartid") %></td><td><%= session.getAttribute("username") %></td><td><%= session.getAttribute("cartid") %></td></tr></table>
 </div>
 <table align="center"><tr><td>
 <div class="col-md-8 order-md-1">
@@ -90,6 +90,7 @@
                 <select class="custom-select d-block w-100" id="country" name="country" required>
                     <option value="">Choose...</option>
                     <option>United States</option>
+                    <option>Ukraine</option>
                 </select>
                 <div class="invalid-feedback">
                     Please select a valid country.
@@ -100,6 +101,7 @@
                 <select class="custom-select d-block w-100" id="state" name="state" required>
                     <option value="">Choose...</option>
                     <option>California</option>
+                    <option>Dnipro</option>
                 </select>
                 <div class="invalid-feedback">
                     Please provide a valid state.

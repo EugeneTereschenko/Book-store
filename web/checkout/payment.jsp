@@ -25,7 +25,7 @@
 </div>
 <table align="center"><tr><td>
 <div class="col-md-8 order-md-1">
-    <form class="needs-validation" novalidate>
+    <form class="needs-validation" novalidate action='paymentdata' method="POST">
         <hr class="mb-4">
         <h4 class="mb-3">Payment</h4>
         <div class="d-block my-3">
@@ -45,7 +45,7 @@
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="cc-name">Name on card</label>
-                <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                <input type="text" class="form-control" id="cc-name" name="credname" placeholder="" required>
                 <small class="text-muted">Full name as displayed on card</small>
                 <div class="invalid-feedback">
                     Name on card is required
@@ -53,7 +53,7 @@
             </div>
             <div class="col-md-6 mb-3">
                 <label for="cc-number">Credit card number</label>
-                <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                <input type="text" class="form-control" id="cc-number" name="crednumber" placeholder="" required>
                 <div class="invalid-feedback">
                     Credit card number is required
                 </div>
@@ -62,14 +62,14 @@
         <div class="row">
             <div class="col-md-3 mb-3">
                 <label for="cc-expiration">Expiration</label>
-                <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                <input type="text" class="form-control" id="cc-expiration" name="credexpiration" placeholder="" required>
                 <div class="invalid-feedback">
                     Expiration date required
                 </div>
             </div>
             <div class="col-md-3 mb-3">
                 <label for="cc-expiration">CVV</label>
-                <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                <input type="text" class="form-control" id="cc-cvv" name="credcvv" placeholder="" required>
                 <div class="invalid-feedback">
                     Security code required
                 </div>
@@ -80,6 +80,5 @@
     </form>
 </div>
 </td></tr></table>
-<a href="/bookstore/confirm">Confirm</a>
 </body>
 </html>

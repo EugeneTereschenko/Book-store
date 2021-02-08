@@ -2,9 +2,7 @@ package com.shop;
 
 
 import com.shop.db.*;
-import com.shop.entity.Book;
-import com.shop.entity.Cart;
-import com.shop.entity.User;
+import com.shop.entity.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -13,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.List;
 
 @WebServlet("/authentication")
@@ -68,7 +67,22 @@ public class BookShopServlet extends HttpServlet {
                 }
                 break;
             case "/deliverydata":
-                deliverydata(request, response);
+                try {
+                    deliverydata(request, response);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "/paymentdata":
+
+                try {
+                    paymentdata(request, response);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 break;
             default:
                 break;
@@ -107,10 +121,19 @@ public class BookShopServlet extends HttpServlet {
             case "/complete":
                 complete(request, response);
                 break;
+            case "/calendar":
+                calendar(request, response);
+                break;
             default:
                 break;
         }
 
+    }
+
+    private void calendar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        System.out.println("calendar check");
+        PrintWriter out=response.getWriter();
+        request.getRequestDispatcher("./checkout/calendar.jsp").include(request, response);
     }
 
     private void complete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -131,21 +154,130 @@ public class BookShopServlet extends HttpServlet {
         request.getRequestDispatcher("./checkout/payment.jsp").include(request, response);
     }
 
+    private void paymentdata(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException, ParseException {
+
+        String paymentMethod = request.getParameter("paymentMethod");
+        String ccname = request.getParameter("credname");
+        String ccnumber = request.getParameter("crednumber");
+        String ccexpiration = request.getParameter("credexpiration");
+        String cccvv = request.getParameter("credcvv");
+
+        System.out.println(" paymentMethod " + paymentMethod + " ccname " + ccname + " ccnumber " + ccnumber + " ccexpiration " + ccexpiration + " cccvv " + cccvv);
+
+        if (ccname != null && ccnumber != null) {
+
+            int userId = 0;
+            int cartId = 0;
+
+            Cookie[] cookies = request.getCookies();
+            for (int i = 0; i < cookies.length; i++) {
+                String name = cookies[i].getName();
+                String valueID = cookies[i].getValue();
+                if (name.equals("userid")) {
+                    userId = Integer.parseInt(valueID);
+                }
+                if (name.equals("cartid")) {
+                    cartId = Integer.parseInt(valueID);
+                }
+            }
+
+
+
+            Cart cart = new Cart();
+            CartDAO cartDAO = new CartDAO();
+            cart = cartDAO.checkCartByStep(cartId, "payment");
+            cartDAO.insertCart("confirm", cartId);
+
+            Card card = new Card();
+            CardDAO cardDAO = new CardDAO();
+
+            //Date ccexpirationDate= (Date) new SimpleDateFormat("yyyy").parse(ccexpiration);
+
+            card = CardDAO.insertCard(userId, ccexpiration, Integer.parseInt(cccvv), ccname, ccnumber);
+
+
+            RequestDispatcher requestDispatcher = request
+                    .getRequestDispatcher("./checkout/confirm.jsp");
+            requestDispatcher.forward(request, response);
+        } else {
+            RequestDispatcher requestDispatcher = request
+                    .getRequestDispatcher("./checkout/payment.jsp");
+            requestDispatcher.forward(request, response);
+        }
+
+    }
+
     private void delivery(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         System.out.println("delivery check");
         PrintWriter out=response.getWriter();
         request.getRequestDispatcher("./checkout/delivery.jsp").include(request, response);
     }
 
+    private void deliverydata(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException {
+        String deliveryTO = request.getParameter("delivery");
+        String datetimeOrderTO = request.getParameter("timedateOrder");
+
+        DeliveryDAO deliveryDAO = new DeliveryDAO();
+        Delivery delivery = new Delivery();
+
+        if (deliveryTO != null && datetimeOrderTO != null){
+
+            if (deliveryTO.equals("expected")){
+                delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 5);
+            }
+            if (deliveryTO.equals("standard")){
+                delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 5);
+            }
+            if (deliveryTO.equals("collect")){
+                delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 5);
+            }
+            if (deliveryTO.equals("online")){
+                delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 1);
+            }
+
+            int userId = 0;
+            int cartId = 0;
+
+            Cookie[] cookies = request.getCookies();
+            for (int i = 0; i < cookies.length; i++) {
+                String name = cookies[i].getName();
+                String valueID = cookies[i].getValue();
+                if (name.equals("userid")) {
+                    userId = Integer.parseInt(valueID);
+                }
+                if (name.equals("cartid")) {
+                    cartId = Integer.parseInt(valueID);
+                }
+            }
+
+            Cart cart = new Cart();
+            CartDAO cartDAO = new CartDAO();
+            cart = cartDAO.checkCartByStep(cartId, "delivery");
+
+            Order order = new Order();
+            OrderDAO orderDAO = new OrderDAO();
+            order = orderDAO.insertOrder(userId, cart.getItem_total_price(), "dnipro", delivery.getId());
+
+
+            //Orderitem orderitem = new Orderitem();
+            OrderitemDAO orderitemDAO = new OrderitemDAO();
+            //orderitem =
+            orderitemDAO.insertOrderitem(order.getId(), cart.getId());
+
+            cart = cartDAO.insertCart("payment", cartId);
+
+            AddressDAO addressDAO = new AddressDAO();
+            addressDAO.updateOrderId(userId, order.getId());
+        }
+
+
+        System.out.println(" delivery " + deliveryTO + " datetimeOrder " + datetimeOrderTO);
+    }
+
     private void address(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         System.out.println("address check");
         PrintWriter out=response.getWriter();
         request.getRequestDispatcher("./checkout/address.jsp").include(request, response);
-    }
-
-    private void deliverydata(HttpServletRequest request, HttpServletResponse response){
-        String delivery = request.getParameter("delivery");
-        System.out.println(delivery);
     }
 
     private void addressdata(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
@@ -169,6 +301,7 @@ public class BookShopServlet extends HttpServlet {
 
         if (email != null) {
             int userId = 0;
+            int cartId = 0;
 
             Cookie[] cookies = request.getCookies();
             for (int i = 0; i < cookies.length; i++) {
@@ -177,11 +310,22 @@ public class BookShopServlet extends HttpServlet {
                 if (name.equals("userid")) {
                     userId = Integer.parseInt(valueID);
                 }
+                if (name.equals("cartid")) {
+                    cartId = Integer.parseInt(valueID);
+                }
             }
+
+            System.out.println(" cart id " + cartId);
+            System.out.println(" user id " + userId);
 
             AddressDAO addressDAO = new AddressDAO();
 
             addressDAO.insertAddress("shipping", firstName, lastName, address, "Dnepr", Integer.parseInt(zip), country, phone, userId);
+
+            Cart cart = new Cart();
+            CartDAO cartDAO = new CartDAO();
+
+            cart = cartDAO.insertCart("delivery", cartId);
 
             RequestDispatcher requestDispatcher = request
                     .getRequestDispatcher("./checkout/delivery.jsp");
@@ -195,7 +339,7 @@ public class BookShopServlet extends HttpServlet {
 
     }
 
-    private static void items(HttpServletRequest request, HttpServletResponse response) throws ServletException, ClassNotFoundException {
+    private static void items(HttpServletRequest request, HttpServletResponse response) throws ServletException, ClassNotFoundException, IOException {
 
         String userId = null;
         String temp = request.getParameter("books");
@@ -206,7 +350,6 @@ public class BookShopServlet extends HttpServlet {
         int totalPrice = bookDAO.totalPrice(temp);
         //System.out.println(totalPrice);
 
-
         Cookie[] cookies = request.getCookies();
         for (int i = 0; i < cookies.length; i++) {
             String name = cookies[i].getName();
@@ -216,10 +359,16 @@ public class BookShopServlet extends HttpServlet {
             }
         }
 
-
         cart = cartDAO.insertCart(Integer.parseInt(userId), totalPrice, "address");
         System.out.println(" userId " + userId + " totalPrice " + totalPrice + " cart id " + cart.getId());
         itemDAO.insertItem(temp, cart.getId());
+
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
+        out.print(Integer.toString(cart.getId()));
+        out.flush();
+        out.close();
+
     }
 
     private void registration(HttpServletRequest request, HttpServletResponse response) throws ServletException, ClassNotFoundException {

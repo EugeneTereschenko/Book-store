@@ -163,9 +163,12 @@ $(document).ready(function(){
                         }
                     },
                     success: function (data) {
-                        //alert('success'+data);
+                        alert('success'+data);
                         console.log(data);
-                        //alert(data);
+
+                        document.cookie =  "cartid=" + data + ";";
+                        window.location.replace("http://localhost:8080/bookstore/address");
+                       // alert(data);
                         //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
                         //$('#idBookTable').append(data);
                     },
@@ -175,8 +178,7 @@ $(document).ready(function(){
                     }
                 });
 
-
-            window.location.replace("http://localhost:8080/bookstore/address");
+            //window.location.replace("http://localhost:8080/bookstore/address");
         });
 
 
@@ -199,23 +201,6 @@ $(document).ready(function(){
                    // alert(data);
                 }
             });
-        });
-
-        $("#id_standard").click(function (){
-           $.ajax({
-               url: '/bookstore/deliverydata',
-               type: 'POST',
-               data: {"delivery": "standard"},
-               success: function (data) {
-                   console.log(data);
-               },
-               failure: function (data) {
-                   console.log(data);
-                   // alert(data);
-               }
-           });
-
-            window.location.replace("http://localhost:8080/bookstore/payment");
         });
 
 });

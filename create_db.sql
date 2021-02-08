@@ -72,6 +72,20 @@ create table if not exists books (
   )
 );
 
+
+create table if not exists cards (
+  card_number varchar(200),
+  name varchar(200),
+  image varchar(200),
+  cvv integer,
+  expiration_month_year varchar(200),
+  user_id int,
+  created_at datetime,
+  update_at datetime,
+  foreign key (user_id)
+  references users (id) on delete cascade
+);
+
 create table if not exists deliveries (
   id integer not null auto_increment,
   name varchar(300),
@@ -79,26 +93,7 @@ create table if not exists deliveries (
   price int,
   created_at datetime,
   update_at datetime,
-  primary key (id),
-  unique (
-    name
-  )
-);
-
-create table if not exists cards (
-  card_number varchar(200),
-  name varchar(200),
-  image varchar(200),
-  cvv integer,
-  expiration_month_year datetime,
-  user_id int,
-  created_at datetime,
-  update_at datetime,
-  foreign key (user_id)
-  references users (id) on delete cascade,
-  unique (
-    user_id
-  )
+  primary key (id)
 );
 
 create table if not exists carts (
@@ -179,12 +174,9 @@ create table if not exists orders (
   foreign key (user_id)
   references users (id) on delete cascade,
   foreign key (delivery_id)
-  references deliveries (id) on delete cascade,
-  unique (
-    user_id,
-    delivery_id
-  )
+  references deliveries (id) on delete cascade
 );
+
 
 create table if not exists order_items (
   book_id int,
@@ -195,11 +187,7 @@ create table if not exists order_items (
   foreign key (book_id)
   references books (id) on delete cascade,
   foreign key (order_id)
-  references orders (id) on delete cascade,
-  unique (
-    book_id,
-    order_id
-  )
+  references orders (id) on delete cascade
 );
 
 create table if not exists reviews (

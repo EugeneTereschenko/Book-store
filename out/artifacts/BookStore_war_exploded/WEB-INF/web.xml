@@ -59,4 +59,12 @@
         <servlet-name>BookStore</servlet-name>
         <url-pattern>/deliverydata</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/paymentdata</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/calendar</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -11,6 +11,9 @@ public class AddressDAO {
     private static final String SQL_INSERT_ADDRESS = "INSERT INTO addresses (address_type, first_name, last_name, address, city, zip, country, phone, user_id, created_at, update_at) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
+    private static final String SQL_UPDATE_ADDRESS_ORDER_ID = "UPDATE addresses SET order_id = (?) where user_id = (?)";
+
+
     //private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, encrypted_password) VALUES (?, ?, ?)";
 
 
@@ -94,6 +97,23 @@ public class AddressDAO {
                 } catch (SQLException e) {
                     System.out.println(e);
                 }
+
+        return 0;
+    }
+
+    public int updateOrderId(int user_id, int order_id) throws ClassNotFoundException {
+        int rows = 0;
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_ORDER_ID)) {
+            prstatement.setInt(1, order_id);
+            prstatement.setInt(2, user_id);
+
+            rows = prstatement.executeUpdate();
+
+            return rows;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
 
         return 0;
     }
