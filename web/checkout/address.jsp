@@ -74,11 +74,6 @@
         </div>
 
         <div class="mb-3">
-            <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-            <input type="text" class="form-control" name="address2" id="address2" placeholder="Apartment or suite">
-        </div>
-
-        <div class="mb-3">
             <label for="phone">phone <span class="text-muted">(Optional)</span></label>
             <input type="text" class="form-control" name="phone" id="phone" placeholder="phone">
         </div>

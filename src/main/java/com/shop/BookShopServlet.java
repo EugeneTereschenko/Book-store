@@ -74,7 +74,6 @@ public class BookShopServlet extends HttpServlet {
                 }
                 break;
             case "/paymentdata":
-
                 try {
                     paymentdata(request, response);
                 } catch (ClassNotFoundException e) {
@@ -82,7 +81,13 @@ public class BookShopServlet extends HttpServlet {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
+                break;
+            case "/confirmdata":
+                try {
+                    confirmdata(request, response);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             default:
                 break;
@@ -142,9 +147,58 @@ public class BookShopServlet extends HttpServlet {
         request.getRequestDispatcher("./checkout/complete.jsp").include(request, response);
     }
 
+    private void confirmdata(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
+        String promocode = request.getParameter("promocode");
+
+        System.out.println(promocode);
+
+        if (promocode != null) {
+            int userId = 0;
+            int cartId = 0;
+            Cookie[] cookies = request.getCookies();
+            for (int i = 0; i < cookies.length; i++) {
+                String name = cookies[i].getName();
+                String valueID = cookies[i].getValue();
+                if (name.equals("userid")) {
+                    userId = Integer.parseInt(valueID);
+                }
+                if (name.equals("cartid")) {
+                    cartId = Integer.parseInt(valueID);
+                }
+            }
+
+            if (Integer.parseInt(promocode) == 123123) {
+            Cart cart = new Cart();
+            CartDAO cartDAO = new CartDAO();
+            cart = cartDAO.checkCartByStep(cartId, "confirm");
+            cartDAO.updateCartCoupon(cartId, Integer.parseInt(promocode));
+            cartDAO.updateCart(cartId, "complete");
+
+            Delivery delivery = new Delivery();
+            DeliveryDAO deliveryDAO = new DeliveryDAO();
+            delivery = deliveryDAO.checkDeliveryById(cart.getDelivery_id());
+
+            response.setContentType("text/plain");
+            PrintWriter out = response.getWriter();
+            out.print(Integer.toString(delivery.getPrice() + cart.order_total_price - 5));
+            out.flush();
+            out.close();
+            }
+        }
+        //System.out.println("confirm check");
+    }
+
     private void confirm(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println("delivery check");
-        PrintWriter out=response.getWriter();
+        System.out.println("confirm check");
+
+        //PrintWriter out=response.getWriter();
+
+        //HttpSession session = request.getSession();
+        //session.setAttribute("totalProductPrice", "78");
+        //session.setAttribute("orderProductPrice", "125");
+        //session.setAttribute("totalPrice", "125");
+
+
         request.getRequestDispatcher("./checkout/confirm.jsp").include(request, response);
     }
 
@@ -186,7 +240,9 @@ public class BookShopServlet extends HttpServlet {
             Cart cart = new Cart();
             CartDAO cartDAO = new CartDAO();
             cart = cartDAO.checkCartByStep(cartId, "payment");
-            cartDAO.insertCart("confirm", cartId);
+            cartDAO.updateCart(cartId, "confirm");
+
+            System.out.println(" cart.getDelivery_id() " + cart.getDelivery_id());
 
             Card card = new Card();
             CardDAO cardDAO = new CardDAO();
@@ -196,6 +252,23 @@ public class BookShopServlet extends HttpServlet {
             card = CardDAO.insertCard(userId, ccexpiration, Integer.parseInt(cccvv), ccname, ccnumber);
 
 
+
+            HttpSession session = request.getSession();
+
+            String addressId=(String)session.getAttribute("addressid");
+            System.out.println(" addressId " + addressId);
+
+            System.out.println(" cart.getDelivery_id() " + cart.getDelivery_id());
+
+            Delivery delivery = new Delivery();
+            DeliveryDAO deliveryDAO = new DeliveryDAO();
+            delivery = deliveryDAO.checkDeliveryById(cart.getDelivery_id());
+
+            session.setAttribute("totalProductPrice", Integer.toString(cart.item_total_price));
+            session.setAttribute("orderProductPrice", Integer.toString(cart.order_total_price));
+            session.setAttribute("totalPrice", Integer.toString(delivery.getPrice() + cart.order_total_price));
+
+            request.getRequestDispatcher("./checkout/confirm.jsp").forward(request, response);
             RequestDispatcher requestDispatcher = request
                     .getRequestDispatcher("./checkout/confirm.jsp");
             requestDispatcher.forward(request, response);
@@ -220,19 +293,25 @@ public class BookShopServlet extends HttpServlet {
         DeliveryDAO deliveryDAO = new DeliveryDAO();
         Delivery delivery = new Delivery();
 
+        int totalDeliver = 0;
+
         if (deliveryTO != null && datetimeOrderTO != null){
 
             if (deliveryTO.equals("expected")){
                 delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 5);
+                totalDeliver = 5;
             }
             if (deliveryTO.equals("standard")){
-                delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 5);
+                delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 10);
+                totalDeliver = 10;
             }
             if (deliveryTO.equals("collect")){
-                delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 5);
+                delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 15);
+                totalDeliver = 15;
             }
             if (deliveryTO.equals("online")){
                 delivery = deliveryDAO.insertDelivery(deliveryTO, datetimeOrderTO, 1);
+                totalDeliver = 1;
             }
 
             int userId = 0;
@@ -250,13 +329,26 @@ public class BookShopServlet extends HttpServlet {
                 }
             }
 
+
+            HttpSession session = request.getSession();
+            String addressId=(String)session.getAttribute("addressid");
+            System.out.println(" addressId " + addressId);
+
+
             Cart cart = new Cart();
             CartDAO cartDAO = new CartDAO();
             cart = cartDAO.checkCartByStep(cartId, "delivery");
 
+            Address address = new Address();
+            AddressDAO addressDAO = new AddressDAO();
+            address = addressDAO.checkAddressById(Integer.parseInt(addressId));
+
+
+            System.out.println(" address.getCity() " + address.getCity());
+
             Order order = new Order();
             OrderDAO orderDAO = new OrderDAO();
-            order = orderDAO.insertOrder(userId, cart.getItem_total_price(), "dnipro", delivery.getId());
+            order = orderDAO.insertOrder(userId, cart.getItem_total_price(), totalDeliver + cart.getItem_total_price() , address.getCity(), delivery.getId());
 
 
             //Orderitem orderitem = new Orderitem();
@@ -264,10 +356,10 @@ public class BookShopServlet extends HttpServlet {
             //orderitem =
             orderitemDAO.insertOrderitem(order.getId(), cart.getId());
 
-            cart = cartDAO.insertCart("payment", cartId);
+            cart = cartDAO.updateCartDelivery(cartId, delivery.getId(), "payment");
 
-            AddressDAO addressDAO = new AddressDAO();
-            addressDAO.updateOrderId(userId, order.getId());
+            //addressDAO.updateOrderId(userId, order.getId());
+            addressDAO.updateOrderById(Integer.parseInt(addressId), order.getId(), userId);
         }
 
 
@@ -285,8 +377,7 @@ public class BookShopServlet extends HttpServlet {
         String lastName = request.getParameter("lastName");
         String username = request.getParameter("username");
         String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        String address2 = request.getParameter("address2");
+        String addressTo = request.getParameter("address");
         String phone = request.getParameter("phone");
         String country = request.getParameter("country");
         String state = request.getParameter("state");
@@ -295,8 +386,8 @@ public class BookShopServlet extends HttpServlet {
         String saveinfo = request.getParameter("save-info");
         String zip = request.getParameter("zip");
 
-        System.out.println(" firstname " + firstName + " lastname " + lastName + " username " + username + " email " + email + " address " + address);
-        System.out.println(" address2 " + address2 + " phone " + phone + " country " + country + " state " + state + " sameaddress " + sameaddress);
+        System.out.println(" firstname " + firstName + " lastname " + lastName + " username " + username + " email " + email + " address " + addressTo);
+        System.out.println(" phone " + phone + " country " + country + " state " + state + " sameaddress " + sameaddress);
         System.out.println(" saveinfo " + saveinfo + " zip " + zip);
 
         if (email != null) {
@@ -319,14 +410,22 @@ public class BookShopServlet extends HttpServlet {
             System.out.println(" user id " + userId);
 
             AddressDAO addressDAO = new AddressDAO();
-
-            addressDAO.insertAddress("shipping", firstName, lastName, address, "Dnepr", Integer.parseInt(zip), country, phone, userId);
+            Address address = new Address();
+            address = addressDAO.insertAddress("shipping", firstName, lastName, addressTo, state, Integer.parseInt(zip), country, phone, userId);
 
             Cart cart = new Cart();
             CartDAO cartDAO = new CartDAO();
 
-            cart = cartDAO.insertCart("delivery", cartId);
+            cart = cartDAO.updateCart(cartId,"delivery");
 
+            Cookie cookie = new Cookie("addressid", Integer.toString(address.getId()));
+            cookie.setMaxAge(1800);
+            response.addCookie(cookie);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("addressid", Integer.toString(address.getId()));
+
+            request.getRequestDispatcher("./checkout/delivery.jsp").forward(request, response);
             RequestDispatcher requestDispatcher = request
                     .getRequestDispatcher("./checkout/delivery.jsp");
             requestDispatcher.forward(request, response);
@@ -359,7 +458,7 @@ public class BookShopServlet extends HttpServlet {
             }
         }
 
-        cart = cartDAO.insertCart(Integer.parseInt(userId), totalPrice, "address");
+        cart = cartDAO.insertCart(Integer.parseInt(userId), totalPrice + 2, totalPrice, "address");
         System.out.println(" userId " + userId + " totalPrice " + totalPrice + " cart id " + cart.getId());
         itemDAO.insertItem(temp, cart.getId());
 

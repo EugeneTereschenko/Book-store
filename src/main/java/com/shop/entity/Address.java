@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Address {
 
+    public int id;
     public String address_type;
     public String first_name;
     public String last_name;
@@ -17,6 +18,14 @@ public class Address {
     public int order_id;
     public Date created_at;
     public Date update_at;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getAddress_type() {
         return address_type;

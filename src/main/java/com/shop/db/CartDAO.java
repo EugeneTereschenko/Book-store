@@ -9,9 +9,10 @@ public class CartDAO {
     static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=testcomauser&password=AcPqw.TO,CYU.dcP12";
     private static final String SQL_FIND_CART = "SELECT * FROM carts where user_id = (?)";
     private static final String SQL_FIND_CART_WITH_CHECKOUT_STEP = "SELECT * FROM carts where id = (?) AND checkout_step = (?)";
-    private static final String SQL_INSERT_CART = "INSERT INTO carts (created_at, update_at, user_id, item_total_price, checkout_step) VALUES (NOW(), NOW(), ?, ?, ?)";
+    private static final String SQL_INSERT_CART = "INSERT INTO carts (created_at, update_at, user_id, order_total_price, item_total_price, checkout_step) VALUES (NOW(), NOW(), ?, ?, ?, ?)";
     private static final String SQL_UPDATE_CART = "UPDATE carts set checkout_step = (?) where id = (?)";
-
+    private static final String SQL_UPDATE_CART_DELIVERY = "UPDATE carts set checkout_step = (?), delivery_id =(?) where id = (?)";
+    private static final String SQL_UPDATE_CART_COUPON = "UPDATE carts set coupon = (?) where id = (?)";
 
     public Cart getCartParam(PreparedStatement prstatement){
          Cart cart = null;
@@ -60,13 +61,14 @@ public class CartDAO {
 
 
 
-    public Cart insertCart(int user_id, int item_total_price, String checkout_step) throws ClassNotFoundException {
+    public Cart insertCart(int user_id, int order_total_price, int item_total_price, String checkout_step) throws ClassNotFoundException {
             Cart cart = null;
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_INSERT_CART, Statement.RETURN_GENERATED_KEYS)) {
                     prstatement.setInt(1, user_id);
-                    prstatement.setInt(2, item_total_price);
-                    prstatement.setString(3, checkout_step);
+                    prstatement.setInt(2, order_total_price);
+                    prstatement.setInt(3, item_total_price);
+                    prstatement.setString(4, checkout_step);
                     if (prstatement.executeUpdate() > 0) {
                         ResultSet result = prstatement.getGeneratedKeys();
                         cart = new Cart();
@@ -81,11 +83,55 @@ public class CartDAO {
         return null;
     }
 
-    public Cart insertCart(String checkout_step, int id) throws ClassNotFoundException {
+    public Cart updateCartDelivery(int id, int delivery_id, String checkout_step) throws ClassNotFoundException {
+        Cart cart = null;
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_CART_DELIVERY, Statement.RETURN_GENERATED_KEYS)) {
+            prstatement.setString(1, checkout_step);
+            prstatement.setInt(2, delivery_id);
+            prstatement.setInt(3, id);
+
+            if (prstatement.executeUpdate() > 0) {
+                ResultSet result = prstatement.getGeneratedKeys();
+                cart = new Cart();
+                if (result.next()) {
+                    cart.setId(result.getInt(1));
+                }
+            }
+            return cart;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+
+    public Cart updateCart(int id, String checkout_step) throws ClassNotFoundException {
         Cart cart = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_CART, Statement.RETURN_GENERATED_KEYS)) {
             prstatement.setString(1, checkout_step);
+            prstatement.setInt(2, id);
+            if (prstatement.executeUpdate() > 0) {
+                ResultSet result = prstatement.getGeneratedKeys();
+                cart = new Cart();
+                if (result.next()) {
+                    cart.setId(result.getInt(1));
+                }
+            }
+            return cart;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+
+    public Cart updateCartCoupon(int id, int coupon) throws ClassNotFoundException {
+        Cart cart = null;
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_CART_COUPON, Statement.RETURN_GENERATED_KEYS)) {
+            prstatement.setInt(1, coupon);
             prstatement.setInt(2, id);
             if (prstatement.executeUpdate() > 0) {
                 ResultSet result = prstatement.getGeneratedKeys();

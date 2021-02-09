@@ -17,65 +17,41 @@
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
             crossorigin="anonymous"></script>
     <script src=".././ownscript.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $("#idcompletepost").click(function (){
+                window.location.replace("http://localhost:8080/bookstore/logout");
+            });
+        });
+    </script>
+
+
 </head>
 <body>
 <div class="alert alert-primary" role="alert">
     <table><tr><td>Step1</td><td>Step2</td><td>Step3</td><td>Step4</td><td><button type="button" class="btn btn-primary btn-sm" id="id_button">Step5</button></td><td>Settings</td><td><%= session.getAttribute("username") %></td></tr></table>
 </div>
 
-<div class="card" style="width: 18rem;">
-    <div class="card-header">
-        Address
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Vestibulum at eros</li>
-    </ul>
-</div>
-
-<div class="card" style="width: 18rem;">
-    <div class="card-header">
-        Delivery
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Vestibulum at eros</li>
-    </ul>
-</div>
-
-
-<div class="card" style="width: 18rem;">
-    <div class="card-header">
-        Payment
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Vestibulum at eros</li>
-    </ul>
-</div>
-
-
-<div class="card" style="width: 18rem;">
-    <div class="card-header">
-        Product
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Vestibulum at eros</li>
-    </ul>
-</div>
-
+<table align="center"><tr><td>
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Complete</a>
+        <h5 class="card-title">Books</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Costs (USD)</h6>
+        <%
+            String totalPrice = (String) session.getAttribute("totalPrice");
+            int temp = Integer.parseInt(totalPrice);
+            temp -= 5;
+            out.println("<p class=\"card-text\">" + temp + "</p>");
+        %>
     </div>
 </div>
+</td></tr><tr><td>
+<div class="card-body">
+    <button type="button" id="idcompletepost" class="btn btn-lg btn-block btn-primary">Complete</button>
+</div>
+</td></tr></table>
 
 </body>
 </html>

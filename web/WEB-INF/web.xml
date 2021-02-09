@@ -64,6 +64,10 @@
         <url-pattern>/paymentdata</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+    <servlet-name>BookStore</servlet-name>
+    <url-pattern>/confirmdata</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>BookStore</servlet-name>
         <url-pattern>/calendar</url-pattern>
     </servlet-mapping>

@@ -224,6 +224,7 @@ create table if not exists active_admin_comments (
 );
 
 create table if not exists addresses (
+  id integer not null auto_increment,
   address_type varchar(300),
   first_name varchar(300),
   last_name varchar(300),
@@ -237,6 +238,7 @@ create table if not exists addresses (
   order_id int,
   created_at datetime,
   update_at datetime,
+  primary key (id),
   foreign key (user_id)
   references users (id) on delete cascade,
   foreign key (order_id)

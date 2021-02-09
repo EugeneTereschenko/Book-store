@@ -23,7 +23,7 @@ public class DeliveryDAO {
                 delivery.setTime(result.getString("time"));
                 delivery.setPrice(result.getInt("price"));
             } else {
-                System.out.println("Order is not valid");
+                System.out.println("Delivery is not valid");
                 return null;
             }
         } catch (SQLException | NullPointerException e) {

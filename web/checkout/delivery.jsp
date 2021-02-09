@@ -138,7 +138,7 @@
 
 <h1 align="center">Welcome to Bookshop</h1>
 <div class="alert alert-primary" role="alert">
-    <table><tr><td>Step1</td><td><button type="button" class="btn btn-primary btn-sm" id="id_button_step2">Step2</button></td><td>Step3</td><td><%= request.getParameter("cartid") %></td><td><%= session.getAttribute("username") %></td><td><%= session.getAttribute("cartid") %></td><td>Settings</td></tr></table>
+    <table><tr><td>Step1</td><td><button type="button" class="btn btn-primary btn-sm" id="id_button_step2">Step2</button></td><td>Step3</td><td><%= session.getAttribute("username") %></td><td><%= session.getAttribute("addressid") %></td><td>Settings</td></tr></table>
 </div>
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Delivery</h1>

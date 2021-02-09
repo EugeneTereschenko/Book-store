@@ -8,7 +8,7 @@ public class OrderDAO {
 
     static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=testcomauser&password=AcPqw.TO,CYU.dcP12";
     private static final String SQL_FIND_ORDER = "SELECT * FROM orders where id = (?)";
-    private static final String SQL_INSERT_ORDER = "INSERT INTO orders (created_at, update_at, item_total_price, user_id, state, delivery_id) VALUES (NOW(), NOW(), ?, ?, ?, ?)";
+    private static final String SQL_INSERT_ORDER = "INSERT INTO orders (created_at, update_at, item_total_price, order_total_price, user_id, state, delivery_id) VALUES (NOW(), NOW(), ?, ?, ?, ?, ?)";
     //private static final String SQL_UPDATE_ORDER = "UPDATE carts set checkout_step = (?) where id = (?)";
 
 
@@ -21,6 +21,7 @@ public class OrderDAO {
                 order.setId(result.getInt("id"));
                 order.setUser_id(result.getInt("user_id"));
                 order.setState(result.getString("state"));
+                order.setItem_total_price(result.getInt("order_total_price"));
                 order.setItem_total_price(result.getInt("item_total_price"));
                 order.setDelivery_id(result.getInt("delivery_id"));
             } else {
@@ -49,21 +50,20 @@ public class OrderDAO {
                 con.rollback();
             }
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            System.out.println("error find order" + e);
         }
         return order;
     }
 
-
-
-    public Order insertOrder(int user_id, int item_total_price, String state, int delivery_id) throws ClassNotFoundException {
+    public Order insertOrder(int user_id, int item_total_price, int order_total_price, String state, int delivery_id) throws ClassNotFoundException {
         Order order = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_INSERT_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             prstatement.setInt(1, item_total_price);
-            prstatement.setInt(2, user_id);
-            prstatement.setString(3, state);
-            prstatement.setInt(4,delivery_id);
+            prstatement.setInt(2, order_total_price);
+            prstatement.setInt(3, user_id);
+            prstatement.setString(4, state);
+            prstatement.setInt(5,delivery_id);
             if (prstatement.executeUpdate() > 0) {
                 ResultSet result = prstatement.getGeneratedKeys();
                 order = new Order();
