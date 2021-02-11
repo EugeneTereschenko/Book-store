@@ -18,6 +18,11 @@ public class BookDAO {
     private static final String SQL_FIND_ALL_BOOKS = "SELECT * FROM books";
     private static final String SQL_FIND_BOOKS_FROM_TO = "SELECT * FROM books where id BETWEEN ? AND ? ";
 
+    private static final String SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_TITLE = "SELECT * FROM books where id BETWEEN 1 AND (?) ORDER BY title";
+    private static final String SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_AUTHOR = "SELECT * FROM books where id BETWEEN 1 AND (?) ORDER BY author";
+    private static final String SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_PRICE = "SELECT * FROM books where id BETWEEN 1 AND (?) ORDER BY price";
+    private static final String SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_YEAR = "SELECT * FROM books where id BETWEEN 1 AND (?) ORDER BY year";
+
 
     public Book getBookParam(PreparedStatement prstatement){
         Book book = null;
@@ -185,6 +190,190 @@ public class BookDAO {
         //System.out.println(" total " + total);
         return total;
     }
+
+    public List<Book> findOrderTOByTitle(int rows) throws ClassNotFoundException {
+
+
+        List<Book> books = new ArrayList<>();
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        Book book = null;
+
+        try (Connection con = DriverManager.getConnection(URL)) {
+            try (PreparedStatement prstatement = con.prepareStatement(SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_TITLE)) {
+
+                prstatement.setInt(1, rows);
+
+                ResultSet result = prstatement.executeQuery();
+
+                while (result.next()) {
+                    book = new Book();
+                    book.setId(result.getInt("id"));
+                    book.setAuthor(result.getString("author"));
+                    book.setTitle(result.getString("title"));
+                    book.setDescription(result.getString("description"));
+                    book.setImage(result.getString("image"));
+                    book.setMaterials(result.getString("materials"));
+                    book.setPrice(result.getInt("price"));
+                    book.setHeight(result.getInt("height"));
+                    book.setWidth(result.getInt("width"));
+                    book.setDepth(result.getInt("depth"));
+                    book.setYear(result.getString("year"));
+                    book.setIn_stock(result.getInt("in_stock"));
+                    //book.setCreated_at(result.getDate("created_at"));
+                    //book.setUpdate_at(result.getDate("update-at"));
+
+                    books.add(book);
+                }
+
+            }
+        } catch (SQLException e) {
+            System.out.println("error find user" + e);
+        }
+
+        return books;
+
+    }
+
+    public List<Book> findOrderTOByAuthor(int rows) throws ClassNotFoundException {
+
+
+        List<Book> books = new ArrayList<>();
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        Book book = null;
+
+        try (Connection con = DriverManager.getConnection(URL)) {
+            try (PreparedStatement prstatement = con.prepareStatement(SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_AUTHOR)) {
+
+                prstatement.setInt(1, rows);
+
+                ResultSet result = prstatement.executeQuery();
+
+                while (result.next()) {
+                    book = new Book();
+                    book.setId(result.getInt("id"));
+                    book.setAuthor(result.getString("author"));
+                    book.setTitle(result.getString("title"));
+                    book.setDescription(result.getString("description"));
+                    book.setImage(result.getString("image"));
+                    book.setMaterials(result.getString("materials"));
+                    book.setPrice(result.getInt("price"));
+                    book.setHeight(result.getInt("height"));
+                    book.setWidth(result.getInt("width"));
+                    book.setDepth(result.getInt("depth"));
+                    book.setYear(result.getString("year"));
+                    book.setIn_stock(result.getInt("in_stock"));
+                    //book.setCreated_at(result.getDate("created_at"));
+                    //book.setUpdate_at(result.getDate("update-at"));
+
+                    books.add(book);
+                }
+
+            }
+        } catch (SQLException e) {
+            System.out.println("error find user" + e);
+        }
+
+        return books;
+
+    }
+
+
+    public List<Book> findOrderTOByPrice(int rows) throws ClassNotFoundException {
+
+
+        List<Book> books = new ArrayList<>();
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        Book book = null;
+
+        try (Connection con = DriverManager.getConnection(URL)) {
+            try (PreparedStatement prstatement = con.prepareStatement(SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_PRICE)) {
+
+                prstatement.setInt(1, rows);
+
+                ResultSet result = prstatement.executeQuery();
+
+                while (result.next()) {
+                    book = new Book();
+                    book.setId(result.getInt("id"));
+                    book.setAuthor(result.getString("author"));
+                    book.setTitle(result.getString("title"));
+                    book.setDescription(result.getString("description"));
+                    book.setImage(result.getString("image"));
+                    book.setMaterials(result.getString("materials"));
+                    book.setPrice(result.getInt("price"));
+                    book.setHeight(result.getInt("height"));
+                    book.setWidth(result.getInt("width"));
+                    book.setDepth(result.getInt("depth"));
+                    book.setYear(result.getString("year"));
+                    book.setIn_stock(result.getInt("in_stock"));
+                    //book.setCreated_at(result.getDate("created_at"));
+                    //book.setUpdate_at(result.getDate("update-at"));
+
+                    books.add(book);
+                }
+
+            }
+        } catch (SQLException e) {
+            System.out.println("error find user" + e);
+        }
+
+        return books;
+
+    }
+
+
+
+    public List<Book> findOrderTOByYear(int rows) throws ClassNotFoundException {
+
+
+        List<Book> books = new ArrayList<>();
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        Book book = null;
+
+        try (Connection con = DriverManager.getConnection(URL)) {
+            try (PreparedStatement prstatement = con.prepareStatement(SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_YEAR)) {
+
+                prstatement.setInt(1, rows);
+
+                ResultSet result = prstatement.executeQuery();
+
+                while (result.next()) {
+                    book = new Book();
+                    book.setId(result.getInt("id"));
+                    book.setAuthor(result.getString("author"));
+                    book.setTitle(result.getString("title"));
+                    book.setDescription(result.getString("description"));
+                    book.setImage(result.getString("image"));
+                    book.setMaterials(result.getString("materials"));
+                    book.setPrice(result.getInt("price"));
+                    book.setHeight(result.getInt("height"));
+                    book.setWidth(result.getInt("width"));
+                    book.setDepth(result.getInt("depth"));
+                    book.setYear(result.getString("year"));
+                    book.setIn_stock(result.getInt("in_stock"));
+                    //book.setCreated_at(result.getDate("created_at"));
+                    //book.setUpdate_at(result.getDate("update-at"));
+
+                    books.add(book);
+                }
+
+            }
+        } catch (SQLException e) {
+            System.out.println("error find user" + e);
+        }
+
+        return books;
+
+    }
+
 
     public static void main(String[] args) throws ClassNotFoundException{
 

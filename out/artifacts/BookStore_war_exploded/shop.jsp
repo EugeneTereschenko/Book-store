@@ -29,12 +29,62 @@
     <table><tr><td><button type="button" class="btn btn-primary btn-sm" id="id_button">Exit</button></td><td><%= session.getAttribute("username") %></td><td>A simple primary alert—check it out!</td></tr></table>
 </div>
 
-<div style="text-align: center">
+
+<div align="center">
 
 
 
-    <table align = "center" class="table" height="800">
-        <tr><td align = "right" height="5"><button type="button" class="btn btn-primary btn-sm" id="right_button">next pages</button></td><td rowspan="2" width = "300"></td><td rowspan="2" width = "600"><link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <table align = "right" class="table" height="800" width="800" >
+        <tr><td width="500"></td><td align = "right" height="5" width = "250"><button type="button" class="btn btn-primary btn-sm" id="right_button">next pages</button></td>
+            <td  width = "150"></td>
+            <td width = "500"></td></tr><tr><td width="400"></td><td>
+                <!--
+    <table align = "center" border="1" >
+    <td></td width="300" ><td align ="right" height="800">
+  -->
+
+
+    <%
+
+        List<Book> book = (List<Book>) session.getAttribute("books");
+
+        //out.println("<div class=\"card\" style=\"width: 550px;\">\n" +
+        //"<div class=\"card-header\">\n" +
+        //"Books</div>");
+        out.println("<div class=\"card\" style=\"width: 550px;\">");
+        out.println("<div class=\"table-wrapper-scroll-y my-custom-scrollbar\">");
+        //"</div><div class=\"panel panel-info table-responsive panel-shadow\">");
+        //out.println("<div class=\"table-responsive-md\">");
+       // out.println("<div class=\"table-responsive\">");
+        out.println("<div class=\"panel panel-info table-responsive panel-shadow\">");
+        out.println("<table class=\"table card-table table-success table-striped\" id=\"idBookTable\"><tbody>");
+        out.println("<tr><td width =\"150\"><button type=\"button\" class=\"btn btn-primary btn-block\" id=\"id_button_title\" >Title</button></td>" +
+                "<td width =\"150\"><button type=\"button\" class=\"btn btn-primary btn-block\" id=\"id_button_author\" >Author</button></td>" +
+                "<td ><button type=\"button\" class=\"btn btn-primary btn-block\" id=\"id_button_price\" >Price</button></td>" +
+                "<td ><button type=\"button\" class=\"btn btn-primary btn-block\" id=\"id_button_year\">Year</button></td></tr>");
+        out.println("<tr><td colspan=\"4\"  style=\"width: 550px;\" style=\"height: 20px;\"></td></tr>");
+        for(int i=0; null!=book && i < book.size(); i++) {
+            out.println("<tr><td colspan=\"4\" width =\"550\"><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td></tr>");
+            out.println("<tr id=\"" + book.get(i).getId() + "\"><td colspan=\"4\" class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" height = \"100\" width=\"400\">" + book.get(i).getTitle() + "</td></tr>");
+            out.println("<tr><td colspan=\"4\" >" + book.get(i).getAuthor() + "</td></tr>");
+            out.println("<tr><td>$" + book.get(i).getPrice() + ".00</td><td colspan=\"3\" align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-block\" height=\"20\" width=\"70\">Add to cart</button></td></tr>");
+            System.out.println(book.get(i).getId());
+        }
+
+        out.println("</tbody></table>");
+        out.println("</div></div>");
+        out.println("</div>");
+//</div></div>
+        //out.println("</tbody></table></div></div></div>");
+
+    %>
+
+
+        </td>
+        <td></td>
+
+        <td width="300" align="center">
+            <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
             <div class="container bootstrap snippets bootdey">
                 <div class="col-md-9 col-sm-8 content">
                     <div class="row">
@@ -92,25 +142,14 @@
                         </div>
                     </div>
                 </div>
-            </div></td></tr>
-        <tr><td align = "right" height="400">
-    <%
+            </div>
 
-        List<Book> book = (List<Book>) session.getAttribute("books");
-        out.println("<div class=\"span3\" ><div class=\"panel panel-info table-responsive panel-shadow\"><table class=\"table table-success table-striped\" id=\"idBookTable\" ><tbody>");
-        for(int i=0; null!=book && i < book.size(); i++) {
-            out.println("<tr><td ><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td><td align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-sm\">\n" +
-                    "purchase</button></td></tr>");
-            out.println("<tr id=\"" + book.get(i).getId() + "\"><td class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
-            System.out.println(book.get(i).getId());
-        }
-        out.println("</tbody></table></div><div>");
-    %>
         </td>
+
         </tr>
     </table>
+
     <a href="/bookstore/logout">Logout</a>
-    <a href="/bookstore/address">Address</a>
 </div>
 
 </body>

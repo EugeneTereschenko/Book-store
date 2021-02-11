@@ -35,8 +35,12 @@ public class BookShopServlet extends HttpServlet {
             case "/authentication":
                 loginUser((HttpServletRequest) request, response);
                 break;
-            case "/cards":
-                cards(request, response);
+            case "/booksorder":
+                try {
+                    booksorder(request, response);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "/items":
                 try {
@@ -596,12 +600,13 @@ public class BookShopServlet extends HttpServlet {
         List<Book> book = bookDAO.findFromTO(begin, end);
         StringBuilder sb = new StringBuilder();
 
+
         for(int i=0; null!=book && i < book.size(); i++) {
             // sb.append("<tr><td><img src = \"./images/" + book.get(i).getImage() + "\" height = \"100\" width = \"100\"></td></tr><tr><td height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
-            sb.append("<tr><td ><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td><td align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-sm\">\n" +
-                    "purchase</button></td></tr>");
-            sb.append("<tr id=\"" + book.get(i).getId() + "\"><td class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
-
+            sb.append("<tr><td colspan=\"4\"><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td></tr>");
+            sb.append("<tr id=\"" + book.get(i).getId() + "\"><td colspan=\"4\" class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"400\">" + book.get(i).getTitle() + "</td></tr>");
+            sb.append("<tr><td colspan=\"4\" >" + book.get(i).getAuthor() + "</td></tr>");
+            sb.append("<tr><td>$" + book.get(i).getPrice() + ".00</td><td colspan=\"3\" align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-block\">Add to cart</button></td></tr>");
         }
 
         str = sb.toString();
@@ -612,7 +617,56 @@ public class BookShopServlet extends HttpServlet {
         out.close();
     }
 
-    private void cards(HttpServletRequest request, HttpServletResponse response){
+    private void booksorder(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
+        String rows = request.getParameter("temp1");
+        String typeOrder = request.getParameter("temp2");
+        List<Book> book = null;
+
+
+        int rowsOfBook = Integer.parseInt(rows);
+        System.out.println(" " + rows + " " + typeOrder);
+
+        String str = null;
+        System.out.println("servlet");
+
+
+        BookDAO bookDAO = new BookDAO();
+
+        if (typeOrder.equals("title")) {
+            book = bookDAO.findOrderTOByTitle(rowsOfBook);
+        }
+
+        if (typeOrder.equals("author")) {
+            book = bookDAO.findOrderTOByAuthor(rowsOfBook);
+        }
+
+        if (typeOrder.equals("price")) {
+            book = bookDAO.findOrderTOByPrice(rowsOfBook);
+        }
+
+        if (typeOrder.equals("year")) {
+            book = bookDAO.findOrderTOByYear(rowsOfBook);
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+
+        for(int i=0; null!=book && i < book.size(); i++) {
+            // sb.append("<tr><td><img src = \"./images/" + book.get(i).getImage() + "\" height = \"100\" width = \"100\"></td></tr><tr><td height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+            sb.append("<tr><td colspan=\"4\"><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td></tr>");
+            sb.append("<tr id=\"" + book.get(i).getId() + "\"><td colspan=\"4\" class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+            sb.append("<tr><td colspan=\"4\" >" + book.get(i).getAuthor() + "</td></tr>");
+            sb.append("<tr><td>$" + book.get(i).getPrice() + ".00</td><td colspan=\"3\" align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-block\">Add to cart</button></td></tr>");
+            System.out.println(" title " + book.get(i).getTitle());
+
+        }
+
+        str = sb.toString();
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
+        out.print(str);
+        out.flush();
+        out.close();
 
     }
 
