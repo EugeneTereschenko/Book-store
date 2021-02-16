@@ -3,7 +3,6 @@ DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS addresses;
-DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS cards;
 DROP TABLE IF EXISTS carts;
 DROP TABLE IF EXISTS deliveries;
@@ -159,35 +158,16 @@ create table if not exists items (
 );
 
 
-create table if not exists orders (
-  id integer not null auto_increment,
-  invoice varchar(200),
-  item_total_price int,
-  order_total_price int,
-  coupon int,
-  user_id int,
-  state varchar(200),
-  delivery_id int,
-  created_at datetime,
-  update_at datetime,
-  primary key (id),
-  foreign key (user_id)
-  references users (id) on delete cascade,
-  foreign key (delivery_id)
-  references deliveries (id) on delete cascade
-);
-
-
 create table if not exists order_items (
   book_id int,
-  order_id int,
+  delivery_id int,
   quantity int,
   created_at datetime,
   update_at datetime,
   foreign key (book_id)
   references books (id) on delete cascade,
-  foreign key (order_id)
-  references orders (id) on delete cascade
+  foreign key (delivery_id)
+  references deliveries (id) on delete cascade
 );
 
 create table if not exists reviews (
@@ -235,16 +215,13 @@ create table if not exists addresses (
   phone varchar(300),
   user_id int,
   checkbox_id int,
-  order_id int,
+  delivery_id int,
   created_at datetime,
   update_at datetime,
   primary key (id),
   foreign key (user_id)
   references users (id) on delete cascade,
-  foreign key (order_id)
-  references orders (id) on delete cascade,
   unique (
-    user_id,
-    order_id
+    phone
   )
 );

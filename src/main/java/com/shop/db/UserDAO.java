@@ -2,11 +2,14 @@ package com.shop.db;
 import com.shop.entity.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO{
 
     private static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=testcomauser&password=AcPqw.TO,CYU.dcP12";
     private static final String SQL_FIND_USER = "SELECT * FROM users where email = (?) and encrypted_password = (?)";
+    private static final String SQL_FIND_ALL_USERS = "SELECT * FROM users";
     private static final String SQL_FIND_USER_BY_LOGIN = "SELECT * FROM users where email = (?)";
     private static final String SQL_FIND_USER_BY_ID = "SELECT * FROM users where id = (?)";
     private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, remember_created_at, current_sign_in_at, encrypted_password) VALUES (?, ?, NOW(), NOW(), ?)";
@@ -22,8 +25,8 @@ public class UserDAO{
                 user = new User();
                 user.setId(result.getInt("id"));
                 user.setEmail(result.getString("email"));
-                //user.setCurrent_sign_in_at(result.getDate("current_sign_in_at"));
-                //user.setRemember_created_at(result.getDate("remember_created_at"));
+                user.setCurrent_sign_in_at(result.getDate("current_sign_in_at"));
+                user.setRemember_created_at(result.getDate("remember_created_at"));
                 user.setEncrypted_password(result.getString("encrypted_password"));
             } else {
                 System.out.println("You are not valid");
@@ -153,6 +156,29 @@ public class UserDAO{
 
         return null;
     }
+
+    public List<User> findAllUsers() throws ClassNotFoundException {
+
+        List<User> users = new ArrayList<>();
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        try (Connection con = DriverManager.getConnection(URL); Statement statement = con.createStatement(); ResultSet result = statement.executeQuery(SQL_FIND_ALL_USERS)) {
+            while (result.next()) {
+                User user = new User();
+                user.setId(result.getInt("id"));
+                user.setEmail(result.getString("email"));
+                user.setName(result.getString("name"));
+                user.setRemember_created_at(result.getDate("remember_created_at"));
+                user.setCurrent_sign_in_at(result.getDate("current_sign_in_at"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return users;
+    }
+
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 

@@ -44,14 +44,24 @@
                 data: {"delivery": "expected", "timedateOrder": datetimeOrder},
                 success: function (data) {
                     console.log(data);
+
+                    var obj = JSON.parse(data);
+
+                    document.cookie = "totppriceid=" + obj.totppriceid + ";";
+                    document.cookie = "ordpriceid=" + obj.ordpriceid + ";";
+                    document.cookie = "totpriceid=" + obj.totpriceid + ";";
+                    //document.cookie = data;
+                    window.location.replace("http://localhost:8080/bookstore/confirm");
+
+
                 },
                 failure: function (data) {
                     console.log(data);
                     // alert(data);
                 }
             });
-
-            window.location.replace("http://localhost:8080/bookstore/payment");
+            //document.cookie =  "cartid=" + data + ";";
+            //window.location.replace("http://localhost:8080/bookstore/confirm");
         });
 
 
@@ -59,20 +69,39 @@
 
             var datetimeOrder = $("#selectedDtaeVal").text();
 
+
             $.ajax({
                 url: '/bookstore/deliverydata',
                 type: 'POST',
                 data: {"delivery": "standard", "timedateOrder": datetimeOrder},
                 success: function (data) {
                     console.log(data);
+                  //  alert(data);
+                    var obj = JSON.parse(data);
+
+                    //json.put("totppriceid", cart.item_total_price);
+                    //json.put("ordpriceid", cart.order_total_price);
+                    //json.put("totpriceid", delivery.getPrice() + cart.order_total_price);
+
+
+                  //  alert(obj.totppriceid);
+                  //  alert(obj.ordpriceid);
+                  //  alert(obj.totpriceid);
+
+
+                    document.cookie = "totppriceid=" + obj.totppriceid + ";";
+                    document.cookie = "ordpriceid=" + obj.ordpriceid + ";";
+                    document.cookie = "totpriceid=" + obj.totpriceid + ";";
+                    //document.cookie = data;
+                    window.location.replace("http://localhost:8080/bookstore/confirm");
                 },
                 failure: function (data) {
                     console.log(data);
                     // alert(data);
                 }
             });
-
-            window.location.replace("http://localhost:8080/bookstore/payment");
+            //document.cookie =  "cartid=" + data + ";";
+            //window.location.replace("http://localhost:8080/bookstore/confirm");
         });
 
 
@@ -86,15 +115,27 @@
                 data: {"delivery": "collect", "timedateOrder": datetimeOrder},
                 success: function (data) {
                     console.log(data);
+                    //alert(data)
+
+
+                    var obj = JSON.parse(data);
+
+
+                    document.cookie = "totppriceid=" + obj.totppriceid + ";";
+                    document.cookie = "ordpriceid=" + obj.ordpriceid + ";";
+                    document.cookie = "totpriceid=" + obj.totpriceid + ";";
+                    //document.cookie = data;
+                    window.location.replace("http://localhost:8080/bookstore/confirm");
+
                 },
                 failure: function (data) {
                     console.log(data);
                     // alert(data);
                 }
             });
-
-            window.location.replace("http://localhost:8080/bookstore/payment");
-        });id_online
+            //document.cookie =  "cartid=" + data + ";";
+            //window.location.replace("http://localhost:8080/bookstore/confirm");
+        });
 
 
 
@@ -107,6 +148,16 @@
                 type: 'POST',
                 data: {"delivery": "online", "timedateOrder": datetimeOrder},
                 success: function (data) {
+
+                    var obj = JSON.parse(data);
+
+
+                    document.cookie = "totppriceid=" + obj.totppriceid + ";";
+                    document.cookie = "ordpriceid=" + obj.ordpriceid + ";";
+                    document.cookie = "totpriceid=" + obj.totpriceid + ";";
+                    //document.cookie = data;
+                    window.location.replace("http://localhost:8080/bookstore/confirm");
+
                     console.log(data);
                 },
                 failure: function (data) {
@@ -114,8 +165,8 @@
                     // alert(data);
                 }
             });
-
-            window.location.replace("http://localhost:8080/bookstore/payment");
+            //document.cookie =  "cartid=" + data + ";";
+           //window.location.replace("http://localhost:8080/bookstore/confirm");
         });
 
         $.datepicker.setDefaults({

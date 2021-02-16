@@ -8,6 +8,65 @@ $(document).ready(function(){
     var myrows = 4;
     var myorderrows = 4;
 
+
+   // $("#idBookTable").on('click', '.takepages', function(){
+    $("#takepagesnew").click(function () {
+
+        //alert("hello");
+
+        var rowsplus = myrows + 4;
+        var temprows = myrows + 1;
+
+        $.ajax({
+            url: '/bookstore/books',
+            type: 'POST',
+            data: {"temp1": temprows, "temp2": rowsplus},
+            success: function (data) {
+                console.log(data);
+                //alert(data);
+                //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
+
+                console.log(data);
+
+                for (var i = 0; i < data.books.length; i++){
+                    //alert(data.books[i].imageid);
+                    $('#idBookTable').append('<tr><td colspan="5"><img src = "./images/' + data.books[i].imageid + '" height="100" width="100"/></td></tr>');
+                    $('#idBookTable').append('<tr id="' + data.books[i].bookid + '"><td colspan="5" class="row-data" id_cost="' + data.books[i].priceid + '" id_image=\"./images/' + data.books[i].imageid  + '" id="col' + data.books[i].bookid + '" height = "100" width="200">' + data.books[i].titleid + '</td></tr>');
+                    $('#idBookTable').append('<tr><td colspan="5" >' + data.books[i].authorid  + '</td></tr>');
+                    $('#idBookTable').append('<tr><td>$' + data.books[i].priceid + '.00</td><td colspan="4" align="center"><input id="' + data.books[i].bookid + '" class="me btn btn-primary btn-block"  height="20" width="70" value="' + data.books[i].local + '" /></td></tr>');
+                }
+
+
+                //json.put("bookid", book.get(i).getId());
+                //json.put("imageid", book.get(i).getImage());
+                //json.put("priceid", book.get(i).getPrice());
+                //json.put("titleid", book.get(i).getTitle());
+                //json.put("authorid", book.get(i).getAuthor());
+                //json.put("localinput", addTo);
+                //document.cookie = "totppriceid=" + obj.totppriceid + ";";
+                //document.cookie = "ordpriceid=" + obj.ordpriceid + ";";
+                //document.cookie = "totpriceid=" + obj.totpriceid + ";";
+                //document.cookie = data;
+                //window.location.replace("http://localhost:8080/bookstore/confirm");
+
+                //alert(data);
+                //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
+                //$('#idBookTable').append(data);
+
+
+
+                // $('#idBookTable').append(data);
+            },
+            failure: function (data) {
+                console.log(data);
+                // alert(data);
+            }
+        });
+
+        myrows = myrows + 4;
+
+    });
+
     $("#idBookTable").on('click', '.me', function(){
 
         valuesid.push(this.id);
@@ -115,6 +174,14 @@ $(document).ready(function(){
             alert("Help");
         });
 
+        $("#idusersitemy").click(function () {
+            window.location.replace("http://localhost:8080/bookstore/showusers");
+        });
+
+        $("#idbooksitemy").click(function () {
+            window.location.replace("http://localhost:8080/bookstore/showbooks");
+        });
+
         $("#id_button").click(function () {
            // alert("help me");
             window.location.replace("http://localhost:8080/bookstore/logout");
@@ -176,34 +243,6 @@ $(document).ready(function(){
             //window.location.replace("http://localhost:8080/bookstore/address");
         });
 
-
-        $("#right_button").click(function () {
-           // var rows = $('#idBookTable tr').length;
-            //rows = rows / 4;
-            //
-
-            var rowsplus = myrows + 4;
-            var temprows = myrows + 1;
-
-            $.ajax({
-                url: '/bookstore/books',
-                type: 'POST',
-                data: {"temp1": temprows, "temp2": rowsplus},
-                success: function (data) {
-                    console.log(data);
-                    //alert(data);
-                    //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
-                    $('#idBookTable').append(data);
-                },
-                failure: function (data) {
-                    console.log(data);
-                   // alert(data);
-                }
-            });
-
-            myrows = myrows + 4;
-
-        });
 
 
     $("#id_button_title").click(function () {

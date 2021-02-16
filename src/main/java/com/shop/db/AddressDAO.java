@@ -12,8 +12,8 @@ public class AddressDAO {
     private static final String SQL_INSERT_ADDRESS = "INSERT INTO addresses (address_type, first_name, last_name, address, city, zip, country, phone, user_id, created_at, update_at) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
-    private static final String SQL_UPDATE_ADDRESS_ORDER_ID = "UPDATE addresses SET order_id = (?) where user_id = (?)";
-    private static final String SQL_UPDATE_ADDRESS_ORDER_ID_BY_ID = "UPDATE addresses SET order_id = (?) where id = (?) and user_id = (?)";
+    private static final String SQL_UPDATE_ADDRESS_DELIVERY_ID = "UPDATE addresses SET delivery_id = (?) where user_id = (?)";
+    private static final String SQL_UPDATE_ADDRESS_DELIVERY_ID_BY_ID = "UPDATE addresses SET delivery_id = (?) where id = (?) and user_id = (?)";
 
     //private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, encrypted_password) VALUES (?, ?, ?)";
 
@@ -34,6 +34,7 @@ public class AddressDAO {
                 address.setAddress(result.getString("country"));
                 address.setPhone(result.getString("phone"));
                 address.setUser_id(result.getInt("user_id"));
+                address.setDelivery_id(result.getInt("delivery_id"));
             } else {
                 System.out.println("Address not valid");
 
@@ -118,10 +119,10 @@ public class AddressDAO {
         return null;
     }
 
-    public Address updateOrderId(int user_id, int order_id) throws ClassNotFoundException {
+    public Address updateDeliveryId(int user_id, int order_id) throws ClassNotFoundException {
         Address address = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_ORDER_ID, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_DELIVERY_ID, Statement.RETURN_GENERATED_KEYS)) {
             prstatement.setInt(1, order_id);
             prstatement.setInt(2, user_id);
 
@@ -139,11 +140,11 @@ public class AddressDAO {
         return null;
     }
 
-    public Address updateOrderById(int address_id, int order_id, int user_id ) throws ClassNotFoundException {
+    public Address updateDeliveryById(int address_id, int delivery_id, int user_id ) throws ClassNotFoundException {
         Address address = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_ORDER_ID_BY_ID, Statement.RETURN_GENERATED_KEYS)) {
-            prstatement.setInt(1, order_id);
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_DELIVERY_ID_BY_ID, Statement.RETURN_GENERATED_KEYS)) {
+            prstatement.setInt(1, delivery_id);
             prstatement.setInt(2, address_id);
             prstatement.setInt(3, user_id);
 

@@ -34,95 +34,53 @@
         });
 
         $("#datepicker").datepicker();
+
+        //$('.selectpicker').selectpicker();
+
+        $('#selectedLanguage').on('click',function() {
+            alert($(this).val());
+            console.log($(this).val());
+        });
+
+        $("#dialog").dialog({
+           autoOpen: false,
+           modal: true
+        });
+
+        $("#myButton").on("click", function(e){
+            e.preventDefault();
+            $("#dialog").dialog("open");
+        });
+
+        $("#id_book_but").click(function () {
+            //alert("TEST");
+            var text3 = $('#id_book').val();
+            alert(text3);
+        });
+
+        $("#id_book_but_new").click(function () {
+
+            window.location.replace("http://localhost:8080/bookstore/shop.jsp");
+
+        });
     });
 </script>
 <button type="button" class="btn btn-primary btn-sm" id="id_button_step2">Step2</button>
+<select class="selectpicker" data-width="fit" id="selectedLanguage">
+    <option data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
+    <option  data-content='<span class="flag-icon flag-icon-mx"></span> Español'>Español</option>
+</select>
 
-
-<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
-<div class="container bootstrap snippets bootdey">
-    <div class="col-md-9 col-sm-8 content">
-        <div class="row">
-            <div class="col-md-12">
-                <ol class="breadcrumb">
-                    <li><a href="#">Home</a></li>
-                    <li class="active">Cart</li>
-                </ol>
-            </div>
+<button id="myButton">click!</button>
+<button id="id_book_but_new" class="btn btn-default id_book_but" >index</button>
+<div id="dialog" title="Dialog box">
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-info panel-shadow">
-                    <div class="panel-heading">
-                        <h3>
-                            <img class="img-circle img-thumbnail" src="https://bootdey.com/img/Content/user_3.jpg">
-                            Matew darfkmoun
-                        </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <table class="table" id ="idCartTable">
-                                <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Description</th>
-                                    <th>Qty</th>
-                                    <th>Price</th>
-                                    <th>Total</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td colspan="6">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-right">Total Product</td>
-                                    <td id="totalproduct" id_sum='0'>$00.00</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-right">Total Shipping</td>
-                                    <td id="totalshipping" id_sum='0'>$0.00</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-right"><strong>Total</strong></td>
-                                    <td id="totalcost" id_sum='0'>$00.00</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <a href="#" class="btn btn-success"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Continue Shopping</a>
-                <button id="nextcart" class="btn btn-primary pull-right">Next<span class="glyphicon glyphicon-chevron-right"></span></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-    Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
+        <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+        <input class="form-control" id="id_book"  type="text" value="1">
+        <button id="id_book_but" class="btn btn-default id_book_but" >test</button>
     </div>
 </div>
 

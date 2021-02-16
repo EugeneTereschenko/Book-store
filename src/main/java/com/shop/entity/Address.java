@@ -15,9 +15,18 @@ public class Address {
     public String phone;
     public int user_id;
     public int checkbox_id;
-    public int order_id;
+    public int delivery_id;
     public Date created_at;
     public Date update_at;
+
+
+    public int getDelivery_id() {
+        return delivery_id;
+    }
+
+    public void setDelivery_id(int delivery_id) {
+        this.delivery_id = delivery_id;
+    }
 
     public int getId() {
         return id;
@@ -107,13 +116,6 @@ public class Address {
         this.checkbox_id = checkbox_id;
     }
 
-    public int getOrder_id() {
-        return order_id;
-    }
-
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
-    }
 
     public Date getCreated_at() {
         return created_at;

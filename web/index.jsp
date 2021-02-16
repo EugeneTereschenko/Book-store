@@ -14,8 +14,37 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   </head>
   <body>
+  <script>
+    $(function() {
+
+      $("#id_book_login").click(function () {
+        var text1 = $('#username').val();
+        var text2 = $('#password').val();
+        var text3 = $('#lang').val();
+
+        $.ajax({
+          url: '/bookstore/authentication',
+          type: 'POST',
+          data: {"login": text1, "pass": text2, "lang": text3},
+          success: function (data) {
+
+            if (data != "stop") {
+              window.location.replace("http://localhost:8080/bookstore/shop.jsp");
+            }
+
+          },
+          failure: function (data) {
+          //  console.log(data);
+            // alert(data);
+          }
+        });
+
+
+
+        });
+    });
+  </script>
   <table align = "center"><tr><td>
-  <form class="form-horizontal" action='authentication' method="POST">
     <fieldset>
       <div id="legend">
         <legend class="">Sing in</legend>
@@ -39,10 +68,18 @@
         </div>
       </div>
 
+      <div class="control-group" align = "center">
+        <select class="form-select" aria-label="Default select example" id="lang" name="lang" >
+          <option selected>Choose Language</option>
+          <option value="1">English</option>
+          <option value="2">Russian</option>
+        </select>
+      </div>
+
       <div class="control-group">
         <!-- Button -->
         <div class="controls">
-          <button class="btn btn-success">RUN</button>
+          <button id="id_book_login" class="btn btn-default id_book_login" >login</button>
         </div>
       </div>
 
@@ -52,7 +89,6 @@
         </p>
       </div>
     </fieldset>
-  </form>
   </td></tr></table>
   </body>
 </html>

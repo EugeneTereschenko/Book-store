@@ -23,7 +23,7 @@
         $(document).ready(function() {
 
             $("#idcomplete").click(function (){
-                window.location.replace("http://localhost:8080/bookstore/complete");
+                window.location.replace("http://localhost:8080/bookstore/payment");
             });
 /*
             $("#idsendcode").click(function (){

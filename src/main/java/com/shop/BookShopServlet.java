@@ -3,6 +3,8 @@ package com.shop;
 
 import com.shop.db.*;
 import com.shop.entity.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -10,19 +12,18 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Properties;
 
 @WebServlet("/authentication")
 public class BookShopServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-
-    //static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=testcomauser&password=AcPqw.TO,CYU.dcP12";
-    //static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=root&password=AcPqw.TO,CYU.dcP12";
-    //static final String SQL_FIND_ALL_PRODUCTS = "SELECT * FROM users";
-
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -102,13 +103,8 @@ public class BookShopServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
         String action = request.getServletPath();
 
-        System.out.println("test logout");
-
-        System.out.println(action.toString());
 
         switch(action)
         {
@@ -125,7 +121,11 @@ public class BookShopServlet extends HttpServlet {
                 payment(request, response);
                 break;
             case "/confirm":
-                confirm(request, response);
+                try {
+                    confirm(request, response);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "/complete":
                 complete(request, response);
@@ -176,7 +176,7 @@ public class BookShopServlet extends HttpServlet {
             CartDAO cartDAO = new CartDAO();
             cart = cartDAO.checkCartByStep(cartId, "confirm");
             cartDAO.updateCartCoupon(cartId, Integer.parseInt(promocode));
-            cartDAO.updateCart(cartId, "complete");
+            cartDAO.updateCart(cartId, "payment");
 
             Delivery delivery = new Delivery();
             DeliveryDAO deliveryDAO = new DeliveryDAO();
@@ -189,26 +189,57 @@ public class BookShopServlet extends HttpServlet {
             out.close();
             }
         }
-        //System.out.println("confirm check");
+
     }
 
-    private void confirm(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void confirm(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
         System.out.println("confirm check");
 
-        //PrintWriter out=response.getWriter();
+//
 
-        //HttpSession session = request.getSession();
-        //session.setAttribute("totalProductPrice", "78");
-        //session.setAttribute("orderProductPrice", "125");
-        //session.setAttribute("totalPrice", "125");
+        int userId = 0;
+        int cartId = 0;
+        int totppriceId = 0;
+        int ordpriceId = 0;
+        int totpriceId = 0;
+
+
+        Cookie[] cookies = request.getCookies();
+        for (int i = 0; i < cookies.length; i++) {
+            String name = cookies[i].getName();
+            String valueID = cookies[i].getValue();
+            if (name.equals("userid")) {
+                userId = Integer.parseInt(valueID);
+            }
+            if (name.equals("cartid")) {
+                cartId = Integer.parseInt(valueID);
+            }
+            if (name.equals("totppriceid")) {
+                totppriceId = Integer.parseInt(valueID);
+            }
+            if (name.equals("ordpriceid")) {
+                ordpriceId = Integer.parseInt(valueID);
+            }
+            if (name.equals("totpriceid")) {
+                totpriceId = Integer.parseInt(valueID);
+            }
+        }
+
+        System.out.println("cart and user  confirm " + userId + " cart" + cartId + " totppriceid " + totppriceId + " ordpriceid " + ordpriceId + " totpriceid " + totpriceId);
+
+
+        HttpSession session = request.getSession();
+
+        session.setAttribute("totalProductPrice", Integer.toString(totppriceId));
+        session.setAttribute("orderProductPrice", Integer.toString(ordpriceId));
+        session.setAttribute("totalPrice", Integer.toString(totpriceId));
 
 
         request.getRequestDispatcher("./checkout/confirm.jsp").include(request, response);
     }
 
     private void payment(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println("payment check");
-        PrintWriter out=response.getWriter();
+
         request.getRequestDispatcher("./checkout/payment.jsp").include(request, response);
     }
 
@@ -244,37 +275,17 @@ public class BookShopServlet extends HttpServlet {
             Cart cart = new Cart();
             CartDAO cartDAO = new CartDAO();
             cart = cartDAO.checkCartByStep(cartId, "payment");
-            cartDAO.updateCart(cartId, "confirm");
+            cartDAO.updateCart(cartId, "complete");
 
             System.out.println(" cart.getDelivery_id() " + cart.getDelivery_id());
 
             Card card = new Card();
             CardDAO cardDAO = new CardDAO();
 
-            //Date ccexpirationDate= (Date) new SimpleDateFormat("yyyy").parse(ccexpiration);
-
             card = CardDAO.insertCard(userId, ccexpiration, Integer.parseInt(cccvv), ccname, ccnumber);
 
-
-
-            HttpSession session = request.getSession();
-
-            String addressId=(String)session.getAttribute("addressid");
-            System.out.println(" addressId " + addressId);
-
-            System.out.println(" cart.getDelivery_id() " + cart.getDelivery_id());
-
-            Delivery delivery = new Delivery();
-            DeliveryDAO deliveryDAO = new DeliveryDAO();
-            delivery = deliveryDAO.checkDeliveryById(cart.getDelivery_id());
-
-            session.setAttribute("totalProductPrice", Integer.toString(cart.item_total_price));
-            session.setAttribute("orderProductPrice", Integer.toString(cart.order_total_price));
-            session.setAttribute("totalPrice", Integer.toString(delivery.getPrice() + cart.order_total_price));
-
-            request.getRequestDispatcher("./checkout/confirm.jsp").forward(request, response);
             RequestDispatcher requestDispatcher = request
-                    .getRequestDispatcher("./checkout/confirm.jsp");
+                    .getRequestDispatcher("./checkout/complete.jsp");
             requestDispatcher.forward(request, response);
         } else {
             RequestDispatcher requestDispatcher = request
@@ -290,7 +301,7 @@ public class BookShopServlet extends HttpServlet {
         request.getRequestDispatcher("./checkout/delivery.jsp").include(request, response);
     }
 
-    private void deliverydata(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException {
+    private void deliverydata(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException, ServletException {
         String deliveryTO = request.getParameter("delivery");
         String datetimeOrderTO = request.getParameter("timedateOrder");
 
@@ -348,22 +359,37 @@ public class BookShopServlet extends HttpServlet {
             address = addressDAO.checkAddressById(Integer.parseInt(addressId));
 
 
-            System.out.println(" address.getCity() " + address.getCity());
+            System.out.println(" address.getCity() " + address.getCity() + " cartid " + cartId + " Delivery " + delivery.getId() + " cart id " + cart.getId());
 
-            Order order = new Order();
-            OrderDAO orderDAO = new OrderDAO();
-            order = orderDAO.insertOrder(userId, cart.getItem_total_price(), totalDeliver + cart.getItem_total_price() , address.getCity(), delivery.getId());
-
-
-            //Orderitem orderitem = new Orderitem();
             OrderitemDAO orderitemDAO = new OrderitemDAO();
-            //orderitem =
-            orderitemDAO.insertOrderitem(order.getId(), cart.getId());
 
-            cart = cartDAO.updateCartDelivery(cartId, delivery.getId(), "payment");
+            orderitemDAO.insertOrderitem(delivery.getId(), cart.getId());
 
-            //addressDAO.updateOrderId(userId, order.getId());
-            addressDAO.updateOrderById(Integer.parseInt(addressId), order.getId(), userId);
+            cart = cartDAO.checkCartByStep(cartId, "delivery");
+            System.out.println(" cart before " + cart.getId());
+            cartDAO.updateCartDelivery(cartId, delivery.getId(), "confirm");
+
+            System.out.println("update cart " + cart.getId());
+
+            addressDAO.updateDeliveryById(Integer.parseInt(addressId), delivery.getId(), userId);
+
+
+            String message = null;
+            JSONObject json = new JSONObject();
+            
+            json.put("totppriceid", cart.item_total_price);
+            json.put("ordpriceid", cart.order_total_price);
+            json.put("totpriceid", totalDeliver + cart.order_total_price);
+            
+            message = json.toString();
+            System.out.println(message);
+
+            response.setContentType("text/plain");
+            PrintWriter out = response.getWriter();
+            out.print(message);
+            out.flush();
+            out.close();
+
         }
 
 
@@ -385,7 +411,6 @@ public class BookShopServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String country = request.getParameter("country");
         String state = request.getParameter("state");
-        //String checkbox = request.getParameter("checkbox");
         String sameaddress = request.getParameter("same-address");
         String saveinfo = request.getParameter("save-info");
         String zip = request.getParameter("zip");
@@ -417,10 +442,9 @@ public class BookShopServlet extends HttpServlet {
             Address address = new Address();
             address = addressDAO.insertAddress("shipping", firstName, lastName, addressTo, state, Integer.parseInt(zip), country, phone, userId);
 
-            Cart cart = new Cart();
             CartDAO cartDAO = new CartDAO();
 
-            cart = cartDAO.updateCart(cartId,"delivery");
+            cartDAO.updateCart(cartId,"delivery");
 
             Cookie cookie = new Cookie("addressid", Integer.toString(address.getId()));
             cookie.setMaxAge(1800);
@@ -429,7 +453,6 @@ public class BookShopServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("addressid", Integer.toString(address.getId()));
 
-            request.getRequestDispatcher("./checkout/delivery.jsp").forward(request, response);
             RequestDispatcher requestDispatcher = request
                     .getRequestDispatcher("./checkout/delivery.jsp");
             requestDispatcher.forward(request, response);
@@ -451,7 +474,6 @@ public class BookShopServlet extends HttpServlet {
         ItemDAO itemDAO = new ItemDAO();
         Cart cart = new Cart();
         int totalPrice = bookDAO.totalPrice(temp);
-        //System.out.println(totalPrice);
 
         Cookie[] cookies = request.getCookies();
         for (int i = 0; i < cookies.length; i++) {
@@ -479,6 +501,9 @@ public class BookShopServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String password_confirm = request.getParameter("password_confirm");
+
+        String language = request.getParameter("lang");
+
         System.out.println(" username " + username + " email " + email + " password " + password + " password_confirm " + password_confirm);
         UserDAO userDAO = new UserDAO();
         BookDAO bookDAO = new BookDAO();
@@ -492,6 +517,16 @@ public class BookShopServlet extends HttpServlet {
                     session.setAttribute("books", books);
                     session.setAttribute("username", user.getEmail());
                     session.setAttribute("userid", user.getId());
+
+                    if (language.equals("1")) {
+                        session.setAttribute("idlocal", "en");
+                    }
+                    if (language.equals("2")){
+                        session.setAttribute("idlocal", "ru");
+                    } else {
+                        session.setAttribute("idlocal", "en");
+                    }
+
 
                     String str = Integer.toString(user.getId());
                     Cookie cookie = new Cookie("userid", str);
@@ -518,7 +553,9 @@ public class BookShopServlet extends HttpServlet {
         String email = request.getParameter("login");
         String encrypted_password = request.getParameter("pass");
 
-        System.out.println(" email " + email + " encrypted_password " + encrypted_password + "test input or enter");
+        String language = request.getParameter("lang");
+
+        System.out.println(" email " + email + " encrypted_password " + encrypted_password + "test input or enter" + " choose language " + language);
         UserDAO userDAO = new UserDAO();
         BookDAO bookDAO = new BookDAO();
 
@@ -535,23 +572,40 @@ public class BookShopServlet extends HttpServlet {
                 session.setAttribute("username", user.getEmail());
                 session.setAttribute("userid", user.getId());
 
+                session.setAttribute("roleid", "admin");
+
+
+                if (language.equals("1")) {
+                    session.setAttribute("idlocal", "en");
+                }
+                if (language.equals("2")){
+                    session.setAttribute("idlocal", "ru");
+                    response.setContentType("text/html; charset=UTF-8");
+                    response.setCharacterEncoding("UTF-8");
+
+                } else {
+                    session.setAttribute("idlocal", "en");
+                }
+
                 String str = Integer.toString(user.getId());
                 Cookie cookie = new Cookie("userid", str);
                 cookie.setMaxAge(1800);
                 response.addCookie(cookie);
 
 
-                //request.setAttribute("data", data);
-                request.getRequestDispatcher("shop.jsp").forward(request, response);
+                response.setContentType("text/plain");
+                PrintWriter out = response.getWriter();
+                out.print(str);
+                out.flush();
+                out.close();
 
-                destPage = "shop.jsp";
             } else {
-                String message = "Invalid email/password";
-                request.setAttribute("message", message);
+                response.setContentType("text/plain");
+                PrintWriter out = response.getWriter();
+                out.print("stop");
+                out.flush();
+                out.close();
             }
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
-            dispatcher.forward(request, response);
 
         } catch (Exception ex) {
             throw new ServletException(ex);
@@ -569,6 +623,8 @@ public class BookShopServlet extends HttpServlet {
         if (session != null) {
 
             session.removeAttribute("books");
+            session.removeAttribute("idlocal");
+            session.removeAttribute("userid");
 
             System.out.println("test connect2");
             //session.getAttribute("user");
@@ -598,23 +654,47 @@ public class BookShopServlet extends HttpServlet {
 
         BookDAO bookDAO = new BookDAO();
         List<Book> book = bookDAO.findFromTO(begin, end);
-        StringBuilder sb = new StringBuilder();
 
-
-        for(int i=0; null!=book && i < book.size(); i++) {
-            // sb.append("<tr><td><img src = \"./images/" + book.get(i).getImage() + "\" height = \"100\" width = \"100\"></td></tr><tr><td height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
-            sb.append("<tr><td colspan=\"4\"><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td></tr>");
-            sb.append("<tr id=\"" + book.get(i).getId() + "\"><td colspan=\"4\" class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"400\">" + book.get(i).getTitle() + "</td></tr>");
-            sb.append("<tr><td colspan=\"4\" >" + book.get(i).getAuthor() + "</td></tr>");
-            sb.append("<tr><td>$" + book.get(i).getPrice() + ".00</td><td colspan=\"3\" align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-block\">Add to cart</button></td></tr>");
+        HttpSession session = request.getSession(true);
+        String setLocal = (String) session.getAttribute("idlocal");
+        String fileproper = null;
+        if (setLocal.equals("ru")){
+            fileproper = "app_ru.properties";
+        } else {
+            fileproper = "app_en.properties";
         }
 
-        str = sb.toString();
-        response.setContentType("text/plain");
+        Properties properties = new Properties();
+        InputStream stream = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream(fileproper);
+        InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        properties.load(reader);
+
+        String addTo = properties.getProperty("fieldAddtoCart");
+
+        JSONArray ja = new JSONArray();
+
+        for(int i=0; null!=book && i < book.size(); i++) {
+            JSONObject json = new JSONObject();
+            json.put("bookid", book.get(i).getId());
+            json.put("imageid", book.get(i).getImage());
+            json.put("priceid", book.get(i).getPrice());
+            json.put("titleid", book.get(i).getTitle());
+            json.put("authorid", book.get(i).getAuthor());
+            json.put("local", addTo);
+            ja.put(json);
+        }
+
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("books", ja);
+
+        //response.setContentType("text/plain");
+        response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.print(str);
+        out.print(mainObj);
         out.flush();
         out.close();
+
     }
 
     private void booksorder(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
@@ -653,10 +733,10 @@ public class BookShopServlet extends HttpServlet {
 
         for(int i=0; null!=book && i < book.size(); i++) {
             // sb.append("<tr><td><img src = \"./images/" + book.get(i).getImage() + "\" height = \"100\" width = \"100\"></td></tr><tr><td height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
-            sb.append("<tr><td colspan=\"4\"><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td></tr>");
-            sb.append("<tr id=\"" + book.get(i).getId() + "\"><td colspan=\"4\" class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" colspan=\"2\" height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
-            sb.append("<tr><td colspan=\"4\" >" + book.get(i).getAuthor() + "</td></tr>");
-            sb.append("<tr><td>$" + book.get(i).getPrice() + ".00</td><td colspan=\"3\" align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-block\">Add to cart</button></td></tr>");
+            sb.append("<tr><td colspan=\"5\"><img src = \"./images/" + book.get(i).getImage() + "\" height=\"100\" width=\"100\"/></td></tr>");
+            sb.append("<tr id=\"" + book.get(i).getId() + "\"><td colspan=\"5\" class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\"height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
+            sb.append("<tr><td colspan=\"5\" >" + book.get(i).getAuthor() + "</td></tr>");
+            sb.append("<tr><td>$" + book.get(i).getPrice() + ".00</td><td colspan=\"4\" align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-block\">Add to cart</button></td></tr>");
             System.out.println(" title " + book.get(i).getTitle());
 
         }
@@ -669,6 +749,7 @@ public class BookShopServlet extends HttpServlet {
         out.close();
 
     }
+
 
 
 }

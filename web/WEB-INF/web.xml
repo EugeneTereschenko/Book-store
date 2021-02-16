@@ -7,6 +7,12 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
     <filter>
         <filter-name>Check</filter-name>
         <filter-class>com.shop.Check</filter-class>
@@ -82,5 +88,21 @@
     <servlet-mapping>
         <servlet-name>BookStore</servlet-name>
         <url-pattern>/calendar</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>BookStoreShop</servlet-name>
+        <servlet-class>com.shop.BookShopStore</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/showbooks</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/showusers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/insertbook</url-pattern>
     </servlet-mapping>
 </web-app>

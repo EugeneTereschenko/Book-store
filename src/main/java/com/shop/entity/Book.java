@@ -19,6 +19,26 @@ public class Book {
     public Date created_at;
     public Date update_at;
 
+    public Book(){
+
+    }
+
+    public Book(String title, String description, String image, String materials, int price, int height, int width, int depth, String year, int in_stock, String author, Date created_at, Date update_at) {
+        this.title = title;
+        this.description = description;
+        this.image = image;
+        this.materials = materials;
+        this.price = price;
+        this.height = height;
+        this.width = width;
+        this.depth = depth;
+        this.year = year;
+        this.in_stock = in_stock;
+        this.author = author;
+        this.created_at = created_at;
+        this.update_at = update_at;
+    }
+
     @Override
     public String toString() {
         return "Book{" +

@@ -38,7 +38,7 @@ public class Check implements Filter {
 
         //if (uri.endsWith("confirm") && session == null ){
         //HttpSession session = request.getSession(false);
-        if (session == null) {
+     //   if (session == null) {
 
         //if (!(uri.endsWith("jsp") || uri.endsWith("confirm"))) {+
             //if (session == null) {
@@ -47,16 +47,17 @@ public class Check implements Filter {
                 // response.sendRedirect("bookstore/index.jsp");
         //request.getRequestDispatcher("./checkout/delivery.jsp").include(request, response);
 
-                request.getRequestDispatcher("index.jsp").include(request, response);
+       //         request.getRequestDispatcher("index.jsp").include(request, response);
               //  RequestDispatcher requestDispatcher = request
             //            .getRequestDispatcher("./bookstore/index.jsp");
             //    requestDispatcher.forward(request, response);
           //  }
-        } else {
+        //} else {
             System.out.println("Filter --->>> before doFilter()");
+            request.setCharacterEncoding("UTF-8");
             chain.doFilter(req, resp);
             System.out.println("Filter <<<--- after doFilter()");
-        }
+        //}
     }
 
     public void init(FilterConfig config) throws ServletException {

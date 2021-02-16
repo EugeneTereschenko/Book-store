@@ -26,7 +26,7 @@ public class CartDAO {
                 cart.setDelivery_id(result.getInt("delivery_id"));
                 cart.setOrder_total_price(result.getInt("order_total_price"));
                 cart.setItem_total_price(result.getInt("item_total_price"));
-                cart.setCreated_at(result.getDate("created_at"));
+               // cart.setCreated_at(result.getDate("created_at"));
             } else {
                 System.out.println("Cart is not valid");
                 return null;
@@ -83,26 +83,22 @@ public class CartDAO {
         return null;
     }
 
-    public Cart updateCartDelivery(int id, int delivery_id, String checkout_step) throws ClassNotFoundException {
-        Cart cart = null;
+    public Boolean updateCartDelivery(int id, int delivery_id, String checkout_step) throws ClassNotFoundException {
+
         Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_CART_DELIVERY, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_CART_DELIVERY)) {
             prstatement.setString(1, checkout_step);
             prstatement.setInt(2, delivery_id);
             prstatement.setInt(3, id);
 
             if (prstatement.executeUpdate() > 0) {
-                ResultSet result = prstatement.getGeneratedKeys();
-                cart = new Cart();
-                if (result.next()) {
-                    cart.setId(result.getInt(1));
-                }
+                return true;
             }
-            return cart;
+
         } catch (SQLException e) {
             System.out.println(e);
         }
-        return null;
+        return false;
     }
 
 
@@ -154,7 +150,13 @@ public class CartDAO {
 
         CartDAO cartdao2 = new CartDAO();
         Cart cart2 = new Cart();
-        cart2 = cartdao2.checkCartByStep(54, "delivery");
+        cart2 = cartdao2.checkCartByStep(9, "confirm");
+        System.out.println(" Item_total_price " + cart2.getItem_total_price());
+
+        cart2 = cartdao2.checkCartByStep(21, "confirm");
+
+
+        //cartdao2.updateCartDelivery(3, 3, "confirm");
         System.out.println(" Item_total_price " + cart2.getItem_total_price());
     }
 

@@ -56,6 +56,14 @@
             </div>
         </div>
 
+        <div class="control-group" align = "center">
+            <select class="form-select" aria-label="Default select example" id="lang" name="lang" >
+                <option selected>Choose Language</option>
+                <option value="1">English</option>
+                <option value="2">Russian</option>
+            </select>
+        </div>
+
         <div class="control-group">
             <!-- Button -->
             <div class="controls">

@@ -22,6 +22,8 @@ public class BookDAO {
     private static final String SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_AUTHOR = "SELECT * FROM books where id BETWEEN 1 AND (?) ORDER BY author";
     private static final String SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_PRICE = "SELECT * FROM books where id BETWEEN 1 AND (?) ORDER BY price";
     private static final String SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_YEAR = "SELECT * FROM books where id BETWEEN 1 AND (?) ORDER BY year";
+    private static final String SQL_INSERT_BOOK = "INSERT INTO books (title, description, image, materials, price, height, width, depth, year, in_stock, author, " +
+            "created_at, update_at) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
 
 
     public Book getBookParam(PreparedStatement prstatement){
@@ -112,8 +114,8 @@ public class BookDAO {
                 book.setDepth(result.getInt("depth"));
                 book.setYear(result.getString("year"));
                 book.setIn_stock(result.getInt("in_stock"));
-                //book.setCreated_at(result.getDate("created_at"));
-                //book.setUpdate_at(result.getDate("update-at"));
+                book.setCreated_at(result.getDate("created_at"));
+                book.setUpdate_at(result.getDate("update_at"));
                 books.add(book);
             }
         } catch (SQLException e) {
@@ -150,8 +152,8 @@ public class BookDAO {
                 book.setDepth(result.getInt("depth"));
                 book.setYear(result.getString("year"));
                 book.setIn_stock(result.getInt("in_stock"));
-                //book.setCreated_at(result.getDate("created_at"));
-                //book.setUpdate_at(result.getDate("update-at"));
+                book.setCreated_at(result.getDate("created_at"));
+                book.setUpdate_at(result.getDate("update_at"));
 
                 books.add(book);
             }
@@ -221,8 +223,8 @@ public class BookDAO {
                     book.setDepth(result.getInt("depth"));
                     book.setYear(result.getString("year"));
                     book.setIn_stock(result.getInt("in_stock"));
-                    //book.setCreated_at(result.getDate("created_at"));
-                    //book.setUpdate_at(result.getDate("update-at"));
+                    book.setCreated_at(result.getDate("created_at"));
+                    book.setUpdate_at(result.getDate("update_at"));
 
                     books.add(book);
                 }
@@ -266,8 +268,8 @@ public class BookDAO {
                     book.setDepth(result.getInt("depth"));
                     book.setYear(result.getString("year"));
                     book.setIn_stock(result.getInt("in_stock"));
-                    //book.setCreated_at(result.getDate("created_at"));
-                    //book.setUpdate_at(result.getDate("update-at"));
+                    book.setCreated_at(result.getDate("created_at"));
+                    book.setUpdate_at(result.getDate("update_at"));
 
                     books.add(book);
                 }
@@ -312,8 +314,8 @@ public class BookDAO {
                     book.setDepth(result.getInt("depth"));
                     book.setYear(result.getString("year"));
                     book.setIn_stock(result.getInt("in_stock"));
-                    //book.setCreated_at(result.getDate("created_at"));
-                    //book.setUpdate_at(result.getDate("update-at"));
+                    book.setCreated_at(result.getDate("created_at"));
+                    book.setUpdate_at(result.getDate("update_at"));
 
                     books.add(book);
                 }
@@ -359,8 +361,8 @@ public class BookDAO {
                     book.setDepth(result.getInt("depth"));
                     book.setYear(result.getString("year"));
                     book.setIn_stock(result.getInt("in_stock"));
-                    //book.setCreated_at(result.getDate("created_at"));
-                    //book.setUpdate_at(result.getDate("update-at"));
+                    book.setCreated_at(result.getDate("created_at"));
+                    book.setUpdate_at(result.getDate("update_at"));
 
                     books.add(book);
                 }
@@ -374,6 +376,33 @@ public class BookDAO {
 
     }
 
+    public static boolean insertBook(String title, String description, String image, String materials, int price, int height, int width, int depth, String year, int in_stock, String author)  throws ClassNotFoundException {
+
+
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_INSERT_BOOK)) {
+                    prstatement.setString(1, title);
+                    prstatement.setString(2, description);
+                    prstatement.setString(3, image);
+                    prstatement.setString(4, materials);
+                    prstatement.setInt(5, price);
+                    prstatement.setInt(6, height);
+                    prstatement.setInt(7, width);
+                    prstatement.setInt(8, depth);
+                    prstatement.setString(9, year);
+                    prstatement.setInt(10, in_stock);
+                    prstatement.setString(11, author);
+                    if (prstatement.executeUpdate() > 0) {
+                        return true;
+                    }
+
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+
+
+        return false;
+    }
 
     public static void main(String[] args) throws ClassNotFoundException{
 

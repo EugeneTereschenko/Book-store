@@ -7,9 +7,9 @@ import java.sql.*;
 public class OrderitemDAO {
 
     static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=testcomauser&password=AcPqw.TO,CYU.dcP12";
-    private static final String SQL_FIND_ORDER_ITEM = "SELECT * FROM order_items where book_id = (?) and order_id = (?)";
-    private static final String SQL_INSERT_BOOK_ID_ORDER_ITEM_ID = "INSERT INTO order_items (book_id, quantity, order_id) " +
-            "SELECT book_id, quantity, (?) FROM items WHERE cart_id = (?);";
+    private static final String SQL_FIND_ORDER_ITEM = "SELECT * FROM order_items where book_id = (?) and delivery_id = (?)";
+    private static final String SQL_INSERT_BOOK_ID_ORDER_ITEM_ID = "INSERT INTO order_items (book_id, quantity, delivery_id, created_at, update_at) " +
+            "SELECT book_id, quantity, (?), now(), now() FROM items WHERE cart_id = (?);";
 
     public static Orderitem getOrderitemParam(PreparedStatement prstatement){
         Orderitem orderitem = null;
