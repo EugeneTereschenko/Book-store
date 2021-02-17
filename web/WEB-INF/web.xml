@@ -105,4 +105,16 @@
         <servlet-name>BookStoreShop</servlet-name>
         <url-pattern>/insertbook</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/showonebook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/updatebook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/deletebook</url-pattern>
+    </servlet-mapping>
 </web-app>

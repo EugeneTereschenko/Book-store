@@ -24,7 +24,9 @@ public class BookDAO {
     private static final String SQL_FIND_BOOKS_FROM_TO_BY_ORDER_BY_YEAR = "SELECT * FROM books where id BETWEEN 1 AND (?) ORDER BY year";
     private static final String SQL_INSERT_BOOK = "INSERT INTO books (title, description, image, materials, price, height, width, depth, year, in_stock, author, " +
             "created_at, update_at) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
-
+    private static final String SQL_UPDATE_BOOK = "UPDATE books SET title =(?), description = (?), image = (?), materials = (?), price = (?), height = (?), width = (?)," +
+            " depth = (?), year = (?), in_stock = (?), author = (?) where id = (?)";
+    private static final String SQL_DELETE_BOOK = "DELETE from books where id = (?)";
 
     public Book getBookParam(PreparedStatement prstatement){
         Book book = null;
@@ -42,6 +44,7 @@ public class BookDAO {
                 book.setWidth(result.getInt("width"));
                 book.setDepth(result.getInt("depth"));
                 book.setYear(result.getString("year"));
+                book.setTitle(result.getString("title"));
                 book.setIn_stock(result.getInt("in_stock"));
                 //book.setCreated_at(result.getDate("created_at"));
                 //book.setUpdate_at(result.getDate("update-at"));
@@ -376,6 +379,24 @@ public class BookDAO {
 
     }
 
+
+    public static boolean deleteBook(int bookid)  throws ClassNotFoundException {
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_DELETE_BOOK)) {
+            prstatement.setInt(1, bookid);
+            if (prstatement.executeUpdate() > 0) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return false;
+    }
+
+
     public static boolean insertBook(String title, String description, String image, String materials, int price, int height, int width, int depth, String year, int in_stock, String author)  throws ClassNotFoundException {
 
 
@@ -399,6 +420,36 @@ public class BookDAO {
                 } catch (SQLException e) {
                     System.out.println(e);
                 }
+
+
+        return false;
+    }
+
+
+    public static boolean updateBook(String title, String description, String image, String materials, int price, int height, int width, int depth, String year, int in_stock, String author, int bookid)  throws ClassNotFoundException {
+
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_BOOK)) {
+            prstatement.setString(1, title);
+            prstatement.setString(2, description);
+            prstatement.setString(3, image);
+            prstatement.setString(4, materials);
+            prstatement.setInt(5, price);
+            prstatement.setInt(6, height);
+            prstatement.setInt(7, width);
+            prstatement.setInt(8, depth);
+            prstatement.setString(9, year);
+            prstatement.setInt(10, in_stock);
+            prstatement.setString(11, author);
+            prstatement.setInt(12, bookid);
+            if (prstatement.executeUpdate() > 0) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
 
 
         return false;

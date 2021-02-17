@@ -43,10 +43,13 @@
             $("#dialog").dialog("open");
         });
 
-
+        $("#id_book_close").click(function (e) {
+            e.preventDefault();
+            $("#dialog").dialog("close");
+        });
 
         $("#id_book_but").click(function () {
-            alert("TEST");
+           // alert("TEST");
 
             var book = {};
 
@@ -85,35 +88,184 @@
                     }
                 },
                 success: function (data) {
-                    //alert('success'+data);
+                   // alert('success'+data);
                     console.log(data);
+                    $("#sentstatus").html(data.localid.toString());
+
                 },
                 failure: function (data) {
                     console.log(data);
                     // alert(data);
+                    $("#sentstatus").html("error");
                 }
             });
 
 
         });
 
-        $("#viewbooks").on('click', '.booksnewview', function() {
+        $("#view").dialog({
+            autoOpen: false,
+            modal: true
+        });
+
+
+        $("#viewbooks").on('click', '.booksnewview', function(e) {
 
             alert(this.id);
+            e.preventDefault();
+            $("#view").dialog("open");
+            $.ajax({
+                url: '/bookstore/showonebook',
+                type: 'POST',
+                data: {"idbook": this.id},
+                success: function (data) {
+                    //alert('success'+data);
+
+                    console.log(data);
+                    $('#image_book_view').html(data.imageid);
+                    $('#title_book_view').html(data.titleid);
+                    $('#author_book_view').html(data.authorid);
+                    $('#price_book_view').html(data.priceid);
+                    $('#year_book_view').html(data.yearid);
+                    $('#description_book_view').html(data.descrid);
+                    $('#materials_book_view').html(data.materid);
+                },
+                failure: function (data) {
+                    console.log(data);
+                    // alert(data);
+
+                }
+            });
+
 
         });
 
-        $("#viewbooks").on('click', '.booksnewedit', function() {
+        $("#id_book_close_view").click(function (e) {
+            e.preventDefault();
+            $("#view").dialog("close");
+        });
 
-            alert(this.id);
+        $("#edit").dialog({
+            autoOpen: false,
+            modal: true
+        });
 
+
+        $("#viewbooks").on('click', '.booksnewedit', function(e) {
+            e.preventDefault();
+            $("#edit").dialog("open");
+            //alert(this.id);
+
+            $.ajax({
+                url: '/bookstore/showonebook',
+                type: 'POST',
+                data: {"idbook": this.id},
+                success: function (data) {
+                    //alert('success'+data);
+
+                    console.log(data);
+                    $('#id_book_edit').val(data.bookid);
+                    $('#image_book_edit').val(data.imageid);
+                    $('#title_book_edit').val(data.titleid);
+                    $('#author_book_edit').val(data.authorid);
+                    $('#price_book_edit').val(data.priceid);
+                    $('#year_book_edit').val(data.yearid);
+                    $('#description_book_edit').val(data.descrid);
+                    $('#materials_book_edit').val(data.materid);
+                },
+                failure: function (data) {
+                    console.log(data);
+                    // alert(data);
+
+                }
+            });
+
+        });
+
+        $("#id_book_but_edit").click(function () {
+            // alert("TEST");
+
+            var book = {};
+
+            var idbook = $('#id_book_edit').val();
+            var imagebook = $('#image_book_edit').val();
+            var titlebook = $('#title_book_edit').val();
+            var authorbook = $('#author_book_edit').val();
+            var pricebook = $('#price_book_edit').val();
+            var yearbook = $('#year_book_edit').val();
+            var descriptionbook = $('#description_book_edit').val();
+            var heightbook = $('#height_book_edit').val();
+            var widthbook = $('#width_book_edit').val();
+            var depthbook = $('#depth_book_edit').val();
+            var instockbook = $('#in_stock_book_edit').val();
+            var materialsbook = $('#materials_book_edit').val();
+
+
+
+            book.bookid = idbook;
+            book.image = imagebook;
+            book.title = titlebook;
+            book.author = authorbook;
+            book.price = pricebook;
+            book.year = yearbook;
+            book.description = descriptionbook;
+            book.height = heightbook;
+            book.width = widthbook;
+            book.depth = depthbook;
+            book.instock = instockbook;
+            book.materials = materialsbook;
+
+            $.ajax({
+                url: '/bookstore/updatebook',
+                type: 'POST',
+                data: 'book=' + JSON.stringify(book),
+                dataType: 'JSON',
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                success: function (data) {
+                    // alert('success'+data);
+                    console.log(data);
+                    $("#sentstatus_edit").html(data.localid.toString());
+
+                },
+                failure: function (data) {
+                    console.log(data);
+                    // alert(data);
+                    $("#sentstatus_edit").html("error");
+                }
+            });
+        });
+
+        $("#id_book_close_edit").click(function (e) {
+            e.preventDefault();
+            $("#edit").dialog("close");
         });
 
         $("#viewbooks").on('click', '.booksnewdelete', function() {
 
-            alert(this.id);
+            //alert(this.id);
 
+            $.ajax({
+                url: '/bookstore/deletebook',
+                type: 'POST',
+                data: {"idbook": this.id},
+                success: function (data) {
+                    //alert('success'+data);
+                    console.log(data);
+                    window.location.replace("http://localhost:8080/bookstore/showbooks");
+                },
+                failure: function (data) {
+                    console.log(data);
+                    // alert(data);
+
+                }
+            });
         });
+
+
         $("#id_button").click(function () {
             window.location.replace("http://localhost:8080/bookstore/logout");
         });
@@ -198,14 +350,173 @@
         </div>
         <input type="text" class="form-control" id="in_stock_book"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
     </div>
+
     <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm12">materials</span>
         </div>
         <input type="text" class="form-control" id="materials_book"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-        <button id="id_book_but" class="btn-default btn btn-outline-secondary" type="button" >Sent</button>
     </div>
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="sentstatus">status</span>
+        </div>
+        <button id="id_book_but" class="btn-default btn btn-outline-secondary" type="button" >Sent</button>
+        <button id="id_book_close" type="button" class="btn btn-secondary">Close</button>
+    </div>
+
 </div>
+
+
+<div id="edit" title="Edit book">
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm1edit">id</span>
+        </div>
+        <input type="text" class="form-control" id="id_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm2edit">image</span>
+        </div>
+        <input type="text" class="form-control" id="image_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm3edit">title</span>
+        </div>
+        <input type="text" class="form-control" id="title_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm4edit">author</span>
+        </div>
+        <input type="text" class="form-control" id="author_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm5edit">price</span>
+        </div>
+        <input type="text" class="form-control" id="price_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm6edit">year</span>
+        </div>
+        <input type="text" class="form-control" id="year_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm7edit">description</span>
+        </div>
+        <input type="text" class="form-control" id="description_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm8edit">height</span>
+        </div>
+        <input type="text" class="form-control" id="height_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm9edit">width</span>
+        </div>
+        <input type="text" class="form-control" id="width_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm10edit">depth</span>
+        </div>
+        <input type="text" class="form-control" id="depth_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm11edit">in_stock</span>
+        </div>
+        <input type="text" class="form-control" id="in_stock_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm12edit">materials</span>
+        </div>
+        <input type="text" class="form-control" id="materials_book_edit"  aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+    </div>
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="sentstatus_edit">status</span>
+        </div>
+        <button id="id_book_but_edit" class="btn-default btn btn-outline-secondary" type="button" >Sent</button>
+        <button id="id_book_close_edit" type="button" class="btn btn-secondary">Close</button>
+    </div>
+
+</div>
+
+
+
+<div id="view" title="View book">
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="imageidview">image</span>
+            <span class="input-group-text" id="image_book_view" value=""></span>
+        </div>
+    </div>
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="titleidview">title</span>
+            <span class="input-group-text" id="title_book_view" value=""></span>
+        </div>
+    </div>
+
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="authoridview">author</span>
+            <span class="input-group-text" id="author_book_view" value=""></span>
+        </div>
+    </div>
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="priceidview">price</span>
+            <span class="input-group-text" id="price_book_view"></span>
+        </div>
+    </div>
+
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="yearidview">year</span>
+            <span class="input-group-text" id="year_book_view"></span>
+        </div>
+    </div>
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend" >
+            <span class="input-group-text" id="descridview">desciption</span>
+            <span class="input-group-text" id="description_book_view"></span>
+        </div>
+    </div>
+
+    <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="materialsidview">materials</span>
+            <span class="input-group-text" id="materials_book_view"></span>
+        </div>
+    </div>
+
+    <div class="input-group input-group-sm mb-3">
+        <button id="id_book_close_view" type="button" class="btn btn-secondary">Close</button>
+    </div>
+
+</div>
+
+
+
+
 
 
 <%
