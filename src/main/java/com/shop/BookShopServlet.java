@@ -508,7 +508,7 @@ public class BookShopServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         BookDAO bookDAO = new BookDAO();
 
-        User user = userDAO.inputUser(username, email, password, password_confirm);
+        User user = userDAO.inputUser(username, email, password, password_confirm, "user");
             try {
                 String destPage = "index.jsp";
                 if (user != null) {

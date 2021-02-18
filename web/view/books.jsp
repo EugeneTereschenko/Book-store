@@ -91,6 +91,9 @@
                    // alert('success'+data);
                     console.log(data);
                     $("#sentstatus").html(data.localid.toString());
+                    window.location.replace("http://localhost:8080/bookstore/showbooks.jsp");
+
+
 
                 },
                 failure: function (data) {
@@ -247,7 +250,7 @@
         $("#viewbooks").on('click', '.booksnewdelete', function() {
 
             //alert(this.id);
-
+            $(this).closest("tr").remove();
             $.ajax({
                 url: '/bookstore/deletebook',
                 type: 'POST',
@@ -255,11 +258,12 @@
                 success: function (data) {
                     //alert('success'+data);
                     console.log(data);
-                    window.location.replace("http://localhost:8080/bookstore/showbooks");
+                    //$(this).closest("tr").remove();
+                    //window.location.replace("http://localhost:8080/bookstore/showbooks");
                 },
                 failure: function (data) {
                     console.log(data);
-                    // alert(data);
+                    alert(data);
 
                 }
             });

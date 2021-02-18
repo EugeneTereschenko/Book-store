@@ -53,7 +53,7 @@
         <!-- Username -->
         <label class="control-label"  for="username">Username</label>
         <div class="controls">
-          <input type="text" id="username" name="login" placeholder="" class="input-xlarge">
+          <input type="text" id="username" name="login" placeholder="">
           <p class="help-block">Username can contain any letters or numbers, without spaces</p>
         </div>
       </div>
@@ -63,7 +63,7 @@
         <!-- Password-->
         <label class="control-label" for="password">Password</label>
         <div class="controls">
-          <input type="password" id="password" name="pass" placeholder="" class="input-xlarge">
+          <input type="password" id="password" name="pass" placeholder="">
           <p class="help-block">Password should be at least 4 characters</p>
         </div>
       </div>

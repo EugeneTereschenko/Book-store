@@ -1,8 +1,11 @@
 package com.shop.db;
 
+import com.shop.entity.Book;
 import com.shop.entity.Cart;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartDAO {
 
@@ -13,6 +16,8 @@ public class CartDAO {
     private static final String SQL_UPDATE_CART = "UPDATE carts set checkout_step = (?) where id = (?)";
     private static final String SQL_UPDATE_CART_DELIVERY = "UPDATE carts set checkout_step = (?), delivery_id =(?) where id = (?)";
     private static final String SQL_UPDATE_CART_COUPON = "UPDATE carts set coupon = (?) where id = (?)";
+    private static final String SQL_FIND_ALL_CARTS = "SELECT * FROM carts";
+    private static final String SQL_SELECT_BOOKS_BY_CART_ID ="SELECT title, price, author FROM books where id IN (select book_id from items where cart_id = (?))";
 
     public Cart getCartParam(PreparedStatement prstatement){
          Cart cart = null;
@@ -143,21 +148,66 @@ public class CartDAO {
         return null;
     }
 
+    public List<Cart> findAllCarts() throws ClassNotFoundException {
+
+        List<Cart> carts = new ArrayList<>();
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        try (Connection con = DriverManager.getConnection(URL); Statement statement = con.createStatement(); ResultSet result = statement.executeQuery(SQL_FIND_ALL_CARTS)) {
+            while (result.next()) {
+                Cart cart = new Cart();
+                cart.setId(result.getInt("id"));
+                cart.setOrder_total_price(result.getInt("order_total_price"));
+                cart.setUser_id(result.getInt("user_id"));
+                cart.setCoupon(result.getInt("coupon"));
+                cart.setCheckout_step(result.getString("checkout_step"));
+                cart.setDelivery_id(result.getInt("delivery_id"));
+                carts.add(cart);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return carts;
+    }
+
+    public static List<Book> findallBooksByCartID(int cart_id) throws ClassNotFoundException {
+        List<Book> books = new ArrayList<>();
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_SELECT_BOOKS_BY_CART_ID)) {
+            prstatement.setInt(1, cart_id);
+
+                ResultSet result = prstatement.executeQuery();
+                while (result.next()) {
+                   // System.out.println(result.getString("title"));
+                   // System.out.println(result.getInt("price"));
+                   // System.out.println(result.getString("author"));
+                    Book book = new Book();
+                    book.setTitle(result.getString("title"));
+                    book.setPrice(result.getInt("price"));
+                    book.setAuthor(result.getString("author"));
+                    books.add(book);
+                }
+
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return books;
+    }
+
+
     public static void main(String[] args) throws ClassNotFoundException {
         //CartDAO cartdao = new CartDAO();
         //Cart cart = new Cart();
        // cart = cartdao.insertCart(1, 23, "address");
 
-        CartDAO cartdao2 = new CartDAO();
-        Cart cart2 = new Cart();
-        cart2 = cartdao2.checkCartByStep(9, "confirm");
-        System.out.println(" Item_total_price " + cart2.getItem_total_price());
-
-        cart2 = cartdao2.checkCartByStep(21, "confirm");
 
 
-        //cartdao2.updateCartDelivery(3, 3, "confirm");
-        System.out.println(" Item_total_price " + cart2.getItem_total_price());
+         findallBooksByCartID(2);
+
+
     }
 
 }

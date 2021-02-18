@@ -105,4 +105,40 @@
         <servlet-name>BookStoreShop</servlet-name>
         <url-pattern>/insertbook</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/showonebook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/updatebook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/deletebook</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/insertuser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/showoneuser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/updateuser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/deleteuser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/showcart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreShop</servlet-name>
+        <url-pattern>/updateorder</url-pattern>
+    </servlet-mapping>
 </web-app>

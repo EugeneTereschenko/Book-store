@@ -59,6 +59,7 @@
     String year = properties.getProperty("fieldYear");
     String nextpages = properties.getProperty("fieldNextP");
     String addTo = properties.getProperty("fieldAddtoCart");
+    String order = properties.getProperty("fieldOrder");
 
     List<Book> book = (List<Book>) session.getAttribute("books");
 
@@ -72,6 +73,7 @@
     out.println("<li role=\"presentation\" class=\"active\"><button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"id_button\">" + exit +  "</button></li>");
     out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idusersitemy\" value=\"" + usersitemy + "\" /></li>");
     out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idbooksitemy\" value=\"" + booksitemy + "\" /></li>");
+    out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idbookordermy\" value=\"" + order + "\" /></li>");
     out.println("</ul>");
     out.println("</div>");
     out.println("<div class=\"col\">");
@@ -129,7 +131,6 @@
             "                <div class=\"panel-heading\">\n" +
             "                    <h3>\n" +
             "                        <img class=\"img-circle img-thumbnail\" src=\"https://bootdey.com/img/Content/user_3.jpg\">\n" +
-            "                        Matew darfkmoun\n" +
             "                    </h3>\n" +
             "                </div>\n" +
             "                <div class=\"panel-body\">\n" +

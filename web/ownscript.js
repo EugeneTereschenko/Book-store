@@ -178,6 +178,10 @@ $(document).ready(function(){
             window.location.replace("http://localhost:8080/bookstore/showusers");
         });
 
+         $("#idbookordermy").click(function () {
+        window.location.replace("http://localhost:8080/bookstore/showcart");
+        });
+
         $("#idbooksitemy").click(function () {
             window.location.replace("http://localhost:8080/bookstore/showbooks");
         });
