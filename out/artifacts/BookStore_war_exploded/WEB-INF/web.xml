@@ -21,9 +21,18 @@
         <filter-name>Check</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+        <servlet>
+            <servlet-name>BookStore</servlet-name>
+            <servlet-class>com.shop.BookShopServlet</servlet-class>
+        </servlet>
     <servlet>
-        <servlet-name>BookStore</servlet-name>
-        <servlet-class>com.shop.BookShopServlet</servlet-class>
+        <servlet-name>BookStoreSetting</servlet-name>
+        <servlet-class>com.shop.BookShopSettings</servlet-class>
+        <multipart-config>
+            <max-file-size>100000</max-file-size>
+            <max-request-size>200000</max-request-size>
+            <file-size-threshold>50000</file-size-threshold>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>BookStore</servlet-name>
@@ -31,11 +40,15 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookStore</servlet-name>
-        <url-pattern>/books</url-pattern>
+        <url-pattern>/shop</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookStore</servlet-name>
         <url-pattern>/cards</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/books</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookStore</servlet-name>
@@ -135,10 +148,27 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookStoreShop</servlet-name>
-        <url-pattern>/showcart</url-pattern>
+        <url-pattern>/showcarts</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookStoreShop</servlet-name>
         <url-pattern>/updateorder</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreSetting</servlet-name>
+        <url-pattern>/settings</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreSetting</servlet-name>
+        <url-pattern>/createpdfdocument</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookStoreSetting</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <context-param>
+    <description>Location to store uploaded file</description>
+        <param-name>file-upload</param-name>
+        <param-value>/home/yevhen/IdeaProjects/BookStore/out/artifacts/BookStore_war_exploded</param-value>
+    </context-param>
 </web-app>

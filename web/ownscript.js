@@ -9,10 +9,10 @@ $(document).ready(function(){
     var myorderrows = 4;
 
 
-   // $("#idBookTable").on('click', '.takepages', function(){
+    //$("#idBookTable").on('click', '.takepagesnew', function(){
     $("#takepagesnew").click(function () {
 
-        //alert("hello");
+       // alert("hello");
 
         var rowsplus = myrows + 4;
         var temprows = myrows + 1;
@@ -23,10 +23,6 @@ $(document).ready(function(){
             data: {"temp1": temprows, "temp2": rowsplus},
             success: function (data) {
                 console.log(data);
-                //alert(data);
-                //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
-
-                console.log(data);
 
                 for (var i = 0; i < data.books.length; i++){
                     //alert(data.books[i].imageid);
@@ -35,24 +31,6 @@ $(document).ready(function(){
                     $('#idBookTable').append('<tr><td colspan="5" >' + data.books[i].authorid  + '</td></tr>');
                     $('#idBookTable').append('<tr><td>$' + data.books[i].priceid + '.00</td><td colspan="4" align="center"><input id="' + data.books[i].bookid + '" class="me btn btn-primary btn-block"  height="20" width="70" value="' + data.books[i].local + '" /></td></tr>');
                 }
-
-
-                //json.put("bookid", book.get(i).getId());
-                //json.put("imageid", book.get(i).getImage());
-                //json.put("priceid", book.get(i).getPrice());
-                //json.put("titleid", book.get(i).getTitle());
-                //json.put("authorid", book.get(i).getAuthor());
-                //json.put("localinput", addTo);
-                //document.cookie = "totppriceid=" + obj.totppriceid + ";";
-                //document.cookie = "ordpriceid=" + obj.ordpriceid + ";";
-                //document.cookie = "totpriceid=" + obj.totpriceid + ";";
-                //document.cookie = data;
-                //window.location.replace("http://localhost:8080/bookstore/confirm");
-
-                //alert(data);
-                //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
-                //$('#idBookTable').append(data);
-
 
 
                 // $('#idBookTable').append(data);
@@ -179,7 +157,11 @@ $(document).ready(function(){
         });
 
          $("#idbookordermy").click(function () {
-        window.location.replace("http://localhost:8080/bookstore/showcart");
+             window.location.replace("http://localhost:8080/bookstore/showcarts");
+        });
+
+        $("#my_name").click(function () {
+            window.location.replace("http://localhost:8080/bookstore/settings");
         });
 
         $("#idbooksitemy").click(function () {

@@ -17,6 +17,7 @@ public class UserDAO{
              "encrypted_password = (?), uid = (?) where id = (?)";
     private static final String SQL_DELETE_USER = "DELETE FROM users where id = (?)";
     //private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, encrypted_password) VALUES (?, ?, ?)";
+    private static final String SQL_UPDATE_USER_CURRENT_TIME  = "UPDATE users set current_sign_in_at = NOW() where id = (?)";
 
 
     public static User getUserParam(PreparedStatement prstatement){
@@ -29,9 +30,9 @@ public class UserDAO{
                 user.setEmail(result.getString("email"));
                 user.setUid(result.getString("uid"));
                 user.setName(result.getString("name"));
-                user.setCurrent_sign_in_at(result.getDate("current_sign_in_at"));
-                user.setRemember_created_at(result.getDate("remember_created_at"));
-                user.setEncrypted_password(result.getString("encrypted_password"));
+                user.setCurrent_sign_in_at(result.getString("current_sign_in_at"));
+                user.setRemember_created_at(result.getString("remember_created_at"));
+               // user.setEncrypted_password(result.getString("encrypted_password"));
             } else {
                 System.out.println("You are not valid");
 
@@ -85,8 +86,6 @@ public class UserDAO{
 
         if (userCheckLogin != null) {
 
-
-
             User user = null;
             Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -129,7 +128,7 @@ public class UserDAO{
     }
 
 
-    public static User inputUser(String username, String email, String password, String password_confirm, String role) throws ClassNotFoundException {
+    public static Boolean inputUser(String username, String email, String password, String password_confirm, String role) throws ClassNotFoundException {
         System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
         User login = null;
         login = checkLogin(email);
@@ -148,25 +147,39 @@ public class UserDAO{
                     prstatement.setString(4, role);
                     if (prstatement.executeUpdate() > 0) {
                         ResultSet result = prstatement.getGeneratedKeys();
-                        user = new User();
-                        if (result.next()) {
-                            user.setId(result.getInt(1));
-                        }
+                        return true;
                     }
-                    return user;
+
                 } catch (SQLException e) {
                     System.out.println(e);
                 }
             }
         }
 
+        return false;
+    }
+
+    public static Boolean updatecurrentsignUser(int iduser) throws ClassNotFoundException {
+        //System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_USER_CURRENT_TIME)) {
+
+                prstatement.setInt(1, iduser);
+                if (prstatement.executeUpdate() > 0) {
+                    return true;
+                }
+
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+
+
         return null;
     }
 
-
-
-    public User updateUser(String username, String email, String password, String password_confirm, String role, int iduser, String remembercreatedat) throws ClassNotFoundException {
-        System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
+    public User updateUser(String username, String email, String password, String password_confirm, String uid, int iduser, String remembercreatedat) throws ClassNotFoundException {
+        //System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
         User user = null;
             if (password.equals(password_confirm)) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -175,13 +188,14 @@ public class UserDAO{
                     prstatement.setString(2, username);
                     prstatement.setString(3, remembercreatedat);
                     prstatement.setString(4, password);
-                    prstatement.setString(5, role);
+                    prstatement.setString(5, uid);
                     prstatement.setInt(6, iduser);
                     if (prstatement.executeUpdate() > 0) {
                         ResultSet result = prstatement.getGeneratedKeys();
                         user = new User();
                         if (result.next()) {
-                            user.setId(result.getInt(1));
+                            user.setId(result.getInt("id"));
+
                         }
                     }
                     return user;
@@ -223,8 +237,8 @@ public class UserDAO{
                 user.setEmail(result.getString("email"));
                 user.setName(result.getString("name"));
                 user.setUid(result.getString("uid"));
-                user.setRemember_created_at(result.getDate("remember_created_at"));
-                user.setCurrent_sign_in_at(result.getDate("current_sign_in_at"));
+                user.setRemember_created_at(result.getString("remember_created_at"));
+                user.setCurrent_sign_in_at(result.getString("current_sign_in_at"));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -235,25 +249,14 @@ public class UserDAO{
 
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-
-
-
-        UserDAO userDao = new UserDAO();
-
-        User user5 = userDao.updateUser("STOPWAR", "test5@gmail.com", "123456", "123456",  "user", 4, "2021-02-18");
-
-        if (user5 != null){
-            System.out.println(user5.getEmail());
-        }
-
-        /*
+        //UserDAO userDao = new UserDAO();
+      //  User user5 = userDao.updateUser("STOPWAR", "test5@gmail.com", "123456", "123456",  "user", 4, "2021-02-18");
+        //if (user5 != null){
+        //    System.out.println(user5.getEmail());
+        //}
         User user5 = checkLogin("test@gmail.com");
-        if (user5 == null){
-            System.out.println("sdsd");
-        } else {
-            System.out.println("we have such user");
-        }
-*/
+
+
         //setConnect();
     }
 

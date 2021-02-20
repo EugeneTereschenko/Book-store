@@ -1,10 +1,13 @@
 package com.shop;
 
+import com.itextpdf.text.DocumentException;
 import com.shop.db.BookDAO;
 import com.shop.db.CartDAO;
+import com.shop.db.DeliveryDAO;
 import com.shop.db.UserDAO;
 import com.shop.entity.Book;
 import com.shop.entity.Cart;
+import com.shop.entity.Delivery;
 import com.shop.entity.User;
 import org.json.JSONObject;
 
@@ -120,10 +123,10 @@ public class BookShopStore extends HttpServlet {
                 e.printStackTrace();
             }
             break;
-            case "/showcart":
+            case "/showcarts":
                 try {
                     showcart(request, response);
-                } catch (ClassNotFoundException e) {
+                } catch (ClassNotFoundException | DocumentException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -367,7 +370,7 @@ public class BookShopStore extends HttpServlet {
 
 
         UserDAO userDAO = new UserDAO();
-        User user = userDAO.inputUser(nameuser, emailuser, password, confirmpassword, roleuser);
+        Boolean flag = userDAO.inputUser(nameuser, emailuser, password, confirmpassword, roleuser);
 
         HttpSession session = request.getSession(true);
         String setLocal = (String) session.getAttribute("idlocal");
@@ -387,7 +390,7 @@ public class BookShopStore extends HttpServlet {
         String addToTrue = properties.getProperty("fieldSuccess");
         String addToFalse = properties.getProperty("fieldError");
         JSONObject jsonMain = new JSONObject();
-        if (user != null) {
+        if (flag != null) {
 
             jsonMain.put("flagid", "true");
             jsonMain.put("localid", addToTrue);
@@ -452,7 +455,16 @@ public class BookShopStore extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         User user = new User();
 
-        System.out.println("usid" + usid + " name " + name + " email " + email + " role " + role + " passwd " + passwd + " remember " + rememberuser);
+        //System.out.println("usid" + usid + " name " + name + " email " + email + " role " + role + " passwd " + passwd + " remember " + rememberuser);
+
+        if (role.equals("1")){
+            role = "administrator";
+        } else if (role.equals("2")){
+            role = "manager";
+        } if (role.equals("3")){
+            role = "user";
+        }
+
 
         user = userDAO.updateUser(name, email, passwd, passwd, role, Integer.parseInt(usid), rememberuser);
 
@@ -535,7 +547,7 @@ public class BookShopStore extends HttpServlet {
         out.flush();
         out.close();
     }
-    private void showcart(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, ServletException, IOException {
+    private void showcart(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, ServletException, IOException, DocumentException {
         CartDAO cartDAO = new CartDAO();
         List<Cart> viewcarts = cartDAO.findAllCarts();
         HttpSession session = request.getSession();
@@ -543,19 +555,33 @@ public class BookShopStore extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         List<User> viewcartusers = new ArrayList<>();
         List<Book> books = new ArrayList<>();
+        Delivery delivery = new Delivery();
+        DeliveryDAO deliveryDAO = new DeliveryDAO();
 
-
-
+        int quantity = 0;
         Map<Integer, String> treemapbooks = new HashMap<>();
+        Map<Integer, String> treemaptotaldeliveries = new HashMap<>();
+
+        int totalcost = 0;
 
         for (int i = 0; i < viewcarts.size(); i++) {
             StringBuilder sb = new StringBuilder();
             user = userDAO.checkUserbyId(viewcarts.get(i).getUser_id());
             viewcartusers.add(user);
-            books = cartDAO.findallBooksByCartID(i);
+            books = cartDAO.findallBooksByCartID(i+1);
+            delivery = deliveryDAO.checkDeliveryById(viewcarts.get(i).getDelivery_id());
+            totalcost = delivery.getPrice() + viewcarts.get(i).getItem_total_price() + viewcarts.get(i).getOrder_total_price() - 5;
+           // System.out.println(totalcost);
+            treemaptotaldeliveries.put(i, Integer.toString(totalcost));
+
+           // util.preparePDFreport(user.getEmail(), books.toArray(), viewcarts.get(i).getUser_id());
+            //util.preparePDFreport(user.getEmail());
 
             for (Book book : books){
-                sb.append(book.getTitle()).append(".\t");
+                quantity = cartDAO.findallBookValueByCartID(i+1, book.getId());
+                System.out.println("quantity " + quantity + "i" + i + "book get id" + book.getId());
+                sb.append("<tr><td>");
+                sb.append(book.getTitle()).append(".\t</td><td>").append("\t").append(quantity).append("\t</td><td>").append(book.getPrice()).append("</td></tr>");
                 treemapbooks.put(i, sb.toString());
                 System.out.println(" i " + i + " " + book.getAuthor());
             }
@@ -565,7 +591,8 @@ public class BookShopStore extends HttpServlet {
         session.setAttribute("treemapbooks", treemapbooks);
         session.setAttribute("viewcart", viewcarts);
         session.setAttribute("viewcartusers", viewcartusers);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("./view/cart.jsp");
+        session.setAttribute("viewtreemaptotaldeliveries", treemaptotaldeliveries);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("./view/carts.jsp");
         dispatcher.forward(request, response);
     }
 

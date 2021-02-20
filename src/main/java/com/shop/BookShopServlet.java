@@ -120,6 +120,9 @@ public class BookShopServlet extends HttpServlet {
             case "/payment":
                 payment(request, response);
                 break;
+            case "/shop":
+                shop(request, response);
+                break;
             case "/confirm":
                 try {
                     confirm(request, response);
@@ -301,6 +304,15 @@ public class BookShopServlet extends HttpServlet {
         request.getRequestDispatcher("./checkout/delivery.jsp").include(request, response);
     }
 
+    private void shop(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("shop check");
+        HttpSession session = request.getSession();
+        //response.setContentType("text/html; charset=UTF-8");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("shop.jsp");
+        dispatcher.forward(request, response);
+        //request.getRequestDispatcher("shop.jsp").include(request, response);
+    }
+
     private void deliverydata(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException, ServletException {
         String deliveryTO = request.getParameter("delivery");
         String datetimeOrderTO = request.getParameter("timedateOrder");
@@ -415,9 +427,9 @@ public class BookShopServlet extends HttpServlet {
         String saveinfo = request.getParameter("save-info");
         String zip = request.getParameter("zip");
 
-        System.out.println(" firstname " + firstName + " lastname " + lastName + " username " + username + " email " + email + " address " + addressTo);
-        System.out.println(" phone " + phone + " country " + country + " state " + state + " sameaddress " + sameaddress);
-        System.out.println(" saveinfo " + saveinfo + " zip " + zip);
+        //System.out.println(" firstname " + firstName + " lastname " + lastName + " username " + username + " email " + email + " address " + addressTo);
+        //System.out.println(" phone " + phone + " country " + country + " state " + state + " sameaddress " + sameaddress);
+        //System.out.println(" saveinfo " + saveinfo + " zip " + zip);
 
         if (email != null) {
             int userId = 0;
@@ -435,8 +447,8 @@ public class BookShopServlet extends HttpServlet {
                 }
             }
 
-            System.out.println(" cart id " + cartId);
-            System.out.println(" user id " + userId);
+         //   System.out.println(" cart id " + cartId);
+          //  System.out.println(" user id " + userId);
 
             AddressDAO addressDAO = new AddressDAO();
             Address address = new Address();
@@ -504,19 +516,21 @@ public class BookShopServlet extends HttpServlet {
 
         String language = request.getParameter("lang");
 
-        System.out.println(" username " + username + " email " + email + " password " + password + " password_confirm " + password_confirm);
+        //System.out.println(" username " + username + " email " + email + " password " + password + " password_confirm " + password_confirm);
         UserDAO userDAO = new UserDAO();
         BookDAO bookDAO = new BookDAO();
 
-        User user = userDAO.inputUser(username, email, password, password_confirm, "user");
+        Boolean flag = userDAO.inputUser(username, email, password, password_confirm, "user");
+        User user = userDAO.checkLoginandPassword(email, password_confirm);
             try {
                 String destPage = "index.jsp";
-                if (user != null) {
+                if (flag) {
                     HttpSession session = request.getSession();
                     List<Book> books = bookDAO.findFromTO(1, 4);
                     session.setAttribute("books", books);
                     session.setAttribute("username", user.getEmail());
                     session.setAttribute("userid", user.getId());
+                    session.setAttribute("roleid", user.getUid());
 
                     if (language.equals("1")) {
                         session.setAttribute("idlocal", "en");
@@ -526,6 +540,8 @@ public class BookShopServlet extends HttpServlet {
                     } else {
                         session.setAttribute("idlocal", "en");
                     }
+                    response.setContentType("text/html; charset=UTF-8");
+                    response.setCharacterEncoding("UTF-8");
 
 
                     String str = Integer.toString(user.getId());
@@ -555,7 +571,7 @@ public class BookShopServlet extends HttpServlet {
 
         String language = request.getParameter("lang");
 
-        System.out.println(" email " + email + " encrypted_password " + encrypted_password + "test input or enter" + " choose language " + language);
+        //System.out.println(" email " + email + " encrypted_password " + encrypted_password + "test input or enter" + " choose language " + language);
         UserDAO userDAO = new UserDAO();
         BookDAO bookDAO = new BookDAO();
 
@@ -568,12 +584,13 @@ public class BookShopServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 List<Book> books = bookDAO.findFromTO(1, 4);
                 session.setAttribute("books", books);
-
                 session.setAttribute("username", user.getEmail());
                 session.setAttribute("userid", user.getId());
+                session.setAttribute("roleid", user.getUid());
 
-                session.setAttribute("roleid", "admin");
+                System.out.println(user.getUid());
 
+                userDAO.updatecurrentsignUser(user.getId());
 
                 if (language.equals("1")) {
                     session.setAttribute("idlocal", "en");
@@ -593,7 +610,7 @@ public class BookShopServlet extends HttpServlet {
                 response.addCookie(cookie);
 
 
-                response.setContentType("text/plain");
+                //response.setContentType("text/plain");
                 PrintWriter out = response.getWriter();
                 out.print(str);
                 out.flush();
@@ -625,6 +642,13 @@ public class BookShopServlet extends HttpServlet {
             session.removeAttribute("books");
             session.removeAttribute("idlocal");
             session.removeAttribute("userid");
+            session.removeAttribute("treemapbooks");
+            session.removeAttribute("viewcart");
+            session.removeAttribute("viewcartusers");
+            session.removeAttribute("viewtreemaptotaldeliveries");
+            session.removeAttribute("totalProductPrice");
+            session.removeAttribute("orderProductPrice");
+            session.removeAttribute("totalPrice");
 
             System.out.println("test connect2");
             //session.getAttribute("user");

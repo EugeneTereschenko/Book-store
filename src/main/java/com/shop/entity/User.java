@@ -9,13 +9,13 @@ public class User {
     public String encrypted_password;
     public Date reset_password_token;
     public Date reset_password_sent_at;
-    public Date remember_created_at;
+    public String remember_created_at;
     public int sign_in_count;
-    public Date current_sign_in_at;
+    public String current_sign_in_at;
     public Date last_sign_in_at;
     public String current_sign_in_ip;
     public String last_sign_in_ip;
-    public Date created_at;
+    public String created_at;
     public Date update_at;
     public int role;
     public String name;
@@ -63,11 +63,11 @@ public class User {
         this.reset_password_sent_at = reset_password_sent_at;
     }
 
-    public Date getRemember_created_at() {
+    public String getRemember_created_at() {
         return remember_created_at;
     }
 
-    public void setRemember_created_at(Date remember_created_at) {
+    public void setRemember_created_at(String remember_created_at) {
         this.remember_created_at = remember_created_at;
     }
 
@@ -79,11 +79,12 @@ public class User {
         this.sign_in_count = sign_in_count;
     }
 
-    public Date getCurrent_sign_in_at() {
+    public String getCurrent_sign_in_at() {
+        System.out.println(current_sign_in_at);
         return current_sign_in_at;
     }
 
-    public void setCurrent_sign_in_at(Date current_sign_in_at) {
+    public void setCurrent_sign_in_at(String current_sign_in_at) {
         this.current_sign_in_at = current_sign_in_at;
     }
 
@@ -111,11 +112,11 @@ public class User {
         this.last_sign_in_ip = last_sign_in_ip;
     }
 
-    public Date getCreated_at() {
+    public String getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Date created_at) {
+    public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
 

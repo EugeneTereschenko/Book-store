@@ -17,7 +17,8 @@ public class CartDAO {
     private static final String SQL_UPDATE_CART_DELIVERY = "UPDATE carts set checkout_step = (?), delivery_id =(?) where id = (?)";
     private static final String SQL_UPDATE_CART_COUPON = "UPDATE carts set coupon = (?) where id = (?)";
     private static final String SQL_FIND_ALL_CARTS = "SELECT * FROM carts";
-    private static final String SQL_SELECT_BOOKS_BY_CART_ID ="SELECT title, price, author FROM books where id IN (select book_id from items where cart_id = (?))";
+    private static final String SQL_SELECT_BOOKS_BY_CART_ID ="SELECT id, title, price, author FROM books where id IN (select book_id from items where cart_id = (?))";
+    private static final String SQL_SELECT_QUANTITY_BOOK_BY_CART_ID ="select quantity from items where cart_id = (?) and book_id = (?)";
 
     public Cart getCartParam(PreparedStatement prstatement){
          Cart cart = null;
@@ -159,6 +160,7 @@ public class CartDAO {
                 Cart cart = new Cart();
                 cart.setId(result.getInt("id"));
                 cart.setOrder_total_price(result.getInt("order_total_price"));
+                cart.setItem_total_price(result.getInt("item_total_price"));
                 cart.setUser_id(result.getInt("user_id"));
                 cart.setCoupon(result.getInt("coupon"));
                 cart.setCheckout_step(result.getString("checkout_step"));
@@ -184,6 +186,7 @@ public class CartDAO {
                    // System.out.println(result.getInt("price"));
                    // System.out.println(result.getString("author"));
                     Book book = new Book();
+                    book.setId(result.getInt("id"));
                     book.setTitle(result.getString("title"));
                     book.setPrice(result.getInt("price"));
                     book.setAuthor(result.getString("author"));
@@ -198,14 +201,34 @@ public class CartDAO {
     }
 
 
+    public static int findallBookValueByCartID(int cart_id, int book_id) throws ClassNotFoundException {
+        int quantity = 0;
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_SELECT_QUANTITY_BOOK_BY_CART_ID)) {
+            prstatement.setInt(1, cart_id);
+            prstatement.setInt(2, book_id);
+            ResultSet result = prstatement.executeQuery();
+            while (result.next()) {
+                // System.out.println(result.getString("title"));
+                // System.out.println(result.getInt("price"));
+                // System.out.println(result.getString("author"));
+                quantity = result.getInt("quantity");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return quantity;
+    }
+
     public static void main(String[] args) throws ClassNotFoundException {
         //CartDAO cartdao = new CartDAO();
         //Cart cart = new Cart();
        // cart = cartdao.insertCart(1, 23, "address");
 
+        System.out.println(findallBookValueByCartID(1, 3));
 
-
-         findallBooksByCartID(2);
+         //findallBooksByCartID(2);
 
 
     }

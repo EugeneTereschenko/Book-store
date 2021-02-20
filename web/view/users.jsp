@@ -247,15 +247,16 @@
         });
 
         $("#id_button_back").click(function () {
-            window.location.replace("http://localhost:8080/bookstore/shop.jsp");
+            window.location.replace("http://localhost:8080/bookstore/shop");
         });
 
-        $("#id_idusersitemy").click(function () {
-            window.location.replace("http://localhost:8080/bookstore/showusers.jsp");
+
+        $("#idbooksitemy").click(function () {
+            window.location.replace("http://localhost:8080/bookstore/showbooks");
         });
 
-        $("#id_idbooksitemy").click(function () {
-            window.location.replace("http://localhost:8080/bookstore/shop.jsp");
+        $("#id_idcartsitemy").click(function () {
+            window.location.replace("http://localhost:8080/bookstore/showcarts");
         });
 
 
@@ -446,35 +447,41 @@
     properties.load(reader);
 
     String exit = properties.getProperty("fieldExit");
-    String usersitemy = properties.getProperty("fieldUser");
-    String booksitemy = properties.getProperty("fieldBook");
 
+    String booksitemy = properties.getProperty("fieldBook");
+    String cartsitemy = properties.getProperty("fieldOrder");
 
     String back = properties.getProperty("fieldBack");
-
+    String role = (String) session.getAttribute("roleid");
 
 
 
     out.println("<div class=\"container\">");
     out.println("<div class=\"row\">");
     out.println("<div class=\"col\">");
+
+    out.println("</div>");
+    out.println("<div class=\"col\">");
     out.println("<ul class=\"nav nav-pills\">");
     out.println("<li role=\"presentation\" class=\"active\"><button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"id_button\">" + exit +  "</button></li>");
     out.println("<li role=\"presentation\" class=\"active\"><button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"id_button_back\">" + back +  "</button></li>");
-    out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idusersitemy\" value=\"" + usersitemy + "\" /></li>");
+    if (role.equals("administrator") || role.equals("manager")) {
+        out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idbooksitemy\" value=\"" + booksitemy + "\" /></li>");
+        out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"id_idcartsitemy\" value=\"" + cartsitemy + "\" /><li>");
+    }
     out.println("</ul>");
     out.println("</div>");
     out.println("<div class=\"col\">");
-    out.println("2 of 2");
+
     out.println("</div>");
     out.println("</div>");
     out.println("<div class=\"row\">");
     out.println("<div class=\"col\">");
-    out.println("1 of 3");
+
     out.println("</div>");
     out.println("<div class=\"col\">");
     out.println("<table class=\"table card-table table-success table-striped\" id=\"viewusers\" width = \"800\"><tbody>");
-    out.println("<tr><td>id</td><td>email</td><td>name</td><td>role</td><td>remember_created</td><td>current_sign_in_at</td><td colspan =\"3\"></td></tr>");
+    out.println("<tr><td>id</td><td>email</td><td>name</td><td>UID</td><td>remember_created</td><td>current_sign_in_at</td><td colspan =\"3\"></td></tr>");
     for(int i=0; null!=user && i < user.size(); i++) {
         out.println("<tr><td>" + user.get(i).getId() + "</td><td>" + user.get(i).getEmail() + "</td><td>" + user.get(i).getName() + "</td><td>" + user.get(i).getUid() + "</td><td>" + user.get(i).getRemember_created_at() + "</td><td>" + user.get(i).getCurrent_sign_in_at() + "</td>");
         out.println("<td><button id=\"" + user.get(i).getId() + "\" class=\"btn usersnewview btn-primary btn-block\">View</button></td>");
@@ -485,7 +492,7 @@
     out.println("</tbody></table>");
     out.println("</div>");
     out.println("<div class=\"col\">");
-    out.println("3 of 3");
+
     out.println("</div>");
     out.println("</div>");
     out.println("</div>");

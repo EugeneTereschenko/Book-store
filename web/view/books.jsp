@@ -275,15 +275,15 @@
         });
 
         $("#id_button_back").click(function () {
-            window.location.replace("http://localhost:8080/bookstore/shop.jsp");
+            window.location.replace("http://localhost:8080/bookstore/shop");
         });
 
-        $("#id_idusersitemy").click(function () {
-            window.location.replace("http://localhost:8080/bookstore/showusers.jsp");
+        $("#idusersitemy").click(function () {
+            window.location.replace("http://localhost:8080/bookstore/showusers");
         });
 
-        $("#id_idbooksitemy").click(function () {
-            window.location.replace("http://localhost:8080/bookstore/shop.jsp");
+        $("#id_idcartsitemy").click(function () {
+            window.location.replace("http://localhost:8080/bookstore/showcarts");
         });
 
 
@@ -540,35 +540,38 @@
 
     String exit = properties.getProperty("fieldExit");
     String usersitemy = properties.getProperty("fieldUser");
-    String booksitemy = properties.getProperty("fieldBook");
 
-    String title = properties.getProperty("fieldTitle");
-    String author = properties.getProperty("fieldAuthor");
-    String price = properties.getProperty("fieldPrice");
-    String year = properties.getProperty("fieldYear");
-    String nextpages = properties.getProperty("fieldNextP");
-    String addTo = properties.getProperty("fieldAddtoCart");
+    String cartsitemy = properties.getProperty("fieldOrder");
+
     String back = properties.getProperty("fieldBack");
-
+    String role = (String) session.getAttribute("roleid");
 
     List<Book> book = (List<Book>) session.getAttribute("viewbooks");
 
     out.println("<div class=\"container\">");
         out.println("<div class=\"row\">");
             out.println("<div class=\"col\">");
+            out.println("");
+            out.println("</div>");
+            out.println("<div class=\"col\">");
             out.println("<ul class=\"nav nav-pills\">");
             out.println("<li role=\"presentation\" class=\"active\"><button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"id_button\">" + exit +  "</button></li>");
             out.println("<li role=\"presentation\" class=\"active\"><button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"id_button_back\">" + back +  "</button></li>");
-            out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idusersitemy\" value=\"" + usersitemy + "\" /></li>");
+            if (role.equals("administrator")) {
+                out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idusersitemy\" value=\"" + usersitemy + "\" /></li>");
+            }
+            if (role.equals("administrator") || role.equals("manager")) {
+                out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"id_idcartsitemy\" value=\"" + cartsitemy + "\" /><li>");
+            }
             out.println("</ul>");
             out.println("</div>");
             out.println("<div class=\"col\">");
-            out.println("2 of 2");
+            out.println("");
             out.println("</div>");
         out.println("</div>");
-        out.println("<div class=\"row\">");
+            out.println("<div class=\"row\">");
             out.println("<div class=\"col\">");
-            out.println("1 of 3");
+            out.println("");
             out.println("</div>");
             out.println("<div class=\"col\">");
             out.println("<table class=\"table card-table table-success table-striped\" id=\"viewbooks\" width = \"800\"><tbody>");
@@ -585,7 +588,7 @@
             out.println("</tbody></table>");
             out.println("</div>");
             out.println("<div class=\"col\">");
-            out.println("3 of 3");
+            out.println("");
             out.println("</div>");
         out.println("</div>");
     out.println("</div>");

@@ -36,6 +36,8 @@ public class DeliveryDAO {
 
     public Delivery checkDeliveryById(int id) throws ClassNotFoundException {
 
+        System.out.println(id);
+
         Delivery delivery = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_FIND_DELIVERY)) {
