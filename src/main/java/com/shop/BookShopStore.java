@@ -570,7 +570,7 @@ public class BookShopStore extends HttpServlet {
             viewcartusers.add(user);
             books = cartDAO.findallBooksByCartID(i+1);
             delivery = deliveryDAO.checkDeliveryById(viewcarts.get(i).getDelivery_id());
-            totalcost = delivery.getPrice() + viewcarts.get(i).getItem_total_price() + viewcarts.get(i).getOrder_total_price() - 5;
+            totalcost = delivery.getPrice() + viewcarts.get(i).getOrder_total_price() - 5;
            // System.out.println(totalcost);
             treemaptotaldeliveries.put(i, Integer.toString(totalcost));
 
@@ -579,11 +579,11 @@ public class BookShopStore extends HttpServlet {
 
             for (Book book : books){
                 quantity = cartDAO.findallBookValueByCartID(i+1, book.getId());
-                System.out.println("quantity " + quantity + "i" + i + "book get id" + book.getId());
+               // System.out.println("quantity " + quantity + "i" + i + "book get id" + book.getId());
                 sb.append("<tr><td>");
                 sb.append(book.getTitle()).append(".\t</td><td>").append("\t").append(quantity).append("\t</td><td>").append(book.getPrice()).append("</td></tr>");
                 treemapbooks.put(i, sb.toString());
-                System.out.println(" i " + i + " " + book.getAuthor());
+                //System.out.println(" i " + i + " " + book.getAuthor());
             }
 
         }

@@ -4,8 +4,16 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.shop.db.CartDAO;
+import com.shop.db.DeliveryDAO;
+import com.shop.db.UserDAO;
+import com.shop.entity.Book;
+import com.shop.entity.Cart;
+import com.shop.entity.Delivery;
+import com.shop.entity.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 @WebServlet("/set")
@@ -55,7 +63,7 @@ public class BookShopSettings extends HttpServlet {
                     e.printStackTrace();
                 }
                 break;
-            case "/createpdfdocument":
+            case "/createpdfdoc":
                 createpdfdoc(request, response);
                 break;
             default:
@@ -65,31 +73,68 @@ public class BookShopSettings extends HttpServlet {
     }
 
     private void createpdfdoc(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+            String temp = request.getParameter("cartid");
+
+            //System.out.println(temp);
+
             response.setContentType("application/pdf");
 
             try {
+
+                Cart cart = new Cart();
+                CartDAO cartDAO = new CartDAO();
+                cart = cartDAO.checkCartByStep(Integer.parseInt(temp), "complete");
+
+                User user = new User();
+                UserDAO userDAO = new UserDAO();
+                user = userDAO.checkUserbyId(cart.getUser_id());
+                List<Book> books = new ArrayList<>();
+
+                Delivery delivery = new Delivery();
+                DeliveryDAO deliveryDAO = new DeliveryDAO();
+
+                books = cartDAO.findallBooksByCartID(cart.getId());
+
+                int quantity = 0;
+
 
                 Document doc = new Document();
                 PdfWriter.getInstance(doc, response.getOutputStream());
                // PdfWriter.getInstance(doc, response.set)
                 doc.open();
                 Font bold = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
-                Paragraph paragraph = new Paragraph("user ");
+                Paragraph paragraph = new Paragraph(user.getEmail());
 
-                PdfPTable table = new PdfPTable(5);
-                Stream.of("Chrono Unit", "Duration").forEach(table::addCell);
+                PdfPTable table = new PdfPTable(2);
+                Stream.of("Book", "Value").forEach(table::addCell);
 
-                Arrays.stream(ChronoUnit.values())
-                        .forEach(val ->{
-                            table.addCell(val.toString());
-                            table.addCell(val.getDuration().toString());
-                        });
+                PdfPCell pdfPCell5;
+                PdfPCell pdfPCell6;
+                for (Book book : books){
+                    quantity = cartDAO.findallBookValueByCartID(cart.getId(), book.getId());
+                    pdfPCell5 = new PdfPCell(new Paragraph(book.getTitle()));
+                    pdfPCell6 = new PdfPCell(new Paragraph(Integer.toString(quantity)));
+                    table.addCell(pdfPCell5);
+                    table.addCell(pdfPCell6);
+                    // System.out.println("quantity " + quantity + "i" + i + "book get id" + book.getId());
+                }
+
+                int totalcost = 0;
+                delivery = deliveryDAO.checkDeliveryById(cart.getDelivery_id());
+                totalcost = delivery.getPrice() + cart.getOrder_total_price() - 5;
+
+                Stream.of("Total price", "Order price").forEach(table::addCell);
+                Stream.of(Integer.toString(cart.getItem_total_price()) + "$", Integer.toString(cart.getOrder_total_price()) + "$").forEach(table::addCell);
+
+                Paragraph paragraphCost = new Paragraph("Total price with delivery $" + Integer.toString(totalcost));
 
                 paragraph.add(table);
                 doc.add(paragraph);
+                doc.add(paragraphCost);
                 doc.close();
 
-            }catch (DocumentException e){
+            }catch (DocumentException | ClassNotFoundException e){
                 throw new IOException(e.getMessage());
             }
     }

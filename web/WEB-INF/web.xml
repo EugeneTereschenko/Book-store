@@ -160,7 +160,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookStoreSetting</servlet-name>
-        <url-pattern>/createpdfdocument</url-pattern>
+        <url-pattern>/createpdfdoc</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookStoreSetting</servlet-name>

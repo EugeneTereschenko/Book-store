@@ -35,6 +35,18 @@
 
         $(document).ready(function() {
 
+
+            $("#orderbooks").on('click', '.pdfreport', function (e) {
+
+                alert(this.id);
+
+
+                var url = "http://localhost:8080/bookstore/createpdfdoc?cartid=" + this.id;
+
+                //window.open.replace("http://localhost:8080/bookstore/createpdfdoc?cartid=" + );
+                window.open(url, '_blank');
+            });
+
             $("#orderbooks").on('click', '.confirm', function(e) {
                 //alert("help me")
                 //alert(this.id);

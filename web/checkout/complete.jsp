@@ -19,7 +19,40 @@
     <script src=".././ownscript.js"></script>
 
     <script>
+
+        function getCookie(name) {
+            // Split cookie string and get all individual name=value pairs in an array
+            var cookieArr = document.cookie.split(";");
+
+            // Loop through the array elements
+            for(var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+
+                /* Removing whitespace at the beginning of the cookie name
+                and compare it with the given string */
+                if(name == cookiePair[0].trim()) {
+                    // Decode the cookie value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+
+            // Return null if not found
+            return null;
+        }
+
         $(document).ready(function() {
+
+            $("#pdfreport").click(function (e) {
+
+               // alert(this.id);
+                var value = getCookie("cartid");
+
+
+                var url = "http://localhost:8080/bookstore/createpdfdoc?cartid=" + value;
+
+                //window.open.replace("http://localhost:8080/bookstore/createpdfdoc?cartid=" + );
+                window.open(url, '_blank');
+            });
 
             $("#idcompletepost").click(function (){
                 window.location.replace("http://localhost:8080/bookstore/logout");
@@ -50,6 +83,7 @@
 </td></tr><tr><td>
 <div class="card-body">
     <button type="button" id="idcompletepost" class="btn btn-lg btn-block btn-primary">Complete</button>
+    <button type="button" id="pdfreport" class="btn btn-lg btn-block btn-primary">Create PDF report</button>
 </div>
 </td></tr></table>
 

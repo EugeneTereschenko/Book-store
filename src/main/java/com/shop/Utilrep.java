@@ -5,10 +5,8 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -21,7 +19,7 @@ public class Utilrep {
     public static void preparePDFreport() throws FileNotFoundException, DocumentException {
 
         Document doc = new Document();
-        PdfWriter.getInstance(doc, new FileOutputStream("new3.pdf"));
+        //PdfWriter.getInstance(doc, new FileOutputStream("new3.pdf"));
         doc.open();
         Font bold = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
         Paragraph paragraph = new Paragraph("user ");
@@ -37,6 +35,26 @@ public class Utilrep {
                     table.addCell(val.toString());
                     table.addCell(val.getDuration().toString());
                });
+
+
+        //Stream.of("Email user", "Books title", "value", "cost").forEach(table::addCell);
+
+        //Create cells
+        // PdfPCell pdfPCell1 = new PdfPCell(new Paragraph("Cell 1"));
+        // PdfPCell pdfPCell2 = new PdfPCell(new Paragraph("Cell 2"));
+        //PdfPCell pdfPCell3 = new PdfPCell(new Paragraph("Cell 3"));
+        // PdfPCell pdfPCell4 = new PdfPCell(new Paragraph("Cell 4"));
+
+        //Add cells to table
+        // table.addCell(pdfPCell1);
+        // table.addCell(pdfPCell2);
+        // table.addCell(pdfPCell3);
+        // table.addCell(pdfPCell4);
+        //Arrays.stream(ChronoUnit.values())
+        //        .forEach(val ->{
+        //            table.addCell(val.toString());
+        //            table.addCell(val.getDuration().toString());
+        //        });
 
 
 
