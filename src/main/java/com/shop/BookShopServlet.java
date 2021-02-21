@@ -513,10 +513,9 @@ public class BookShopServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String password_confirm = request.getParameter("password_confirm");
-
         String language = request.getParameter("lang");
 
-        //System.out.println(" username " + username + " email " + email + " password " + password + " password_confirm " + password_confirm);
+        System.out.println(" username " + username + " email " + email + " password " + password + " password_confirm " + password_confirm);
         UserDAO userDAO = new UserDAO();
         BookDAO bookDAO = new BookDAO();
 
@@ -524,18 +523,19 @@ public class BookShopServlet extends HttpServlet {
         User user = userDAO.checkLoginandPassword(email, password_confirm);
             try {
                 String destPage = "index.jsp";
-                if (flag) {
+                if (user != null) {
                     HttpSession session = request.getSession();
                     List<Book> books = bookDAO.findFromTO(1, 4);
                     session.setAttribute("books", books);
                     session.setAttribute("username", user.getEmail());
                     session.setAttribute("userid", user.getId());
                     session.setAttribute("roleid", user.getUid());
+                    //session.setAttribute("imageiduser", user.getImage());
 
                     if (language.equals("1")) {
                         session.setAttribute("idlocal", "en");
                     }
-                    if (language.equals("2")){
+                    if (language.equals("2")) {
                         session.setAttribute("idlocal", "ru");
                     } else {
                         session.setAttribute("idlocal", "en");
@@ -546,18 +546,31 @@ public class BookShopServlet extends HttpServlet {
 
                     String str = Integer.toString(user.getId());
                     Cookie cookie = new Cookie("userid", str);
+                    Cookie cookie2=new Cookie("imageiduser", user.getImage());
                     cookie.setMaxAge(1800);
                     response.addCookie(cookie);
+                    response.addCookie(cookie2);
 
-                    request.getRequestDispatcher("shop.jsp").forward(request, response);
-                    destPage = "shop.jsp";
-                } else {
-                    String message = "Invalid email/password";
-                    request.setAttribute("message", message);
+                    PrintWriter out = response.getWriter();
+                    out.print(str);
+                    out.flush();
+                    out.close();
+
+                        //request.getRequestDispatcher("shop.jsp").forward(request, response);
+                        //destPage = "shop.jsp";
+                    } else {
+                        //String message = "Invalid email/password";
+                        //request.setAttribute("message", message);
+
+                response.setContentType("text/plain");
+                PrintWriter out = response.getWriter();
+                out.print("stop");
+                out.flush();
+                out.close();
+//                RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
+//                dispatcher.forward(request, response);
                 }
 
-                RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
-                dispatcher.forward(request, response);
 
             } catch (Exception ex) {
                 throw new ServletException(ex);
@@ -587,6 +600,7 @@ public class BookShopServlet extends HttpServlet {
                 session.setAttribute("username", user.getEmail());
                 session.setAttribute("userid", user.getId());
                 session.setAttribute("roleid", user.getUid());
+               // session.setAttribute("imageiduser", user.getImage());
 
                 System.out.println(user.getUid());
 
@@ -606,9 +620,10 @@ public class BookShopServlet extends HttpServlet {
 
                 String str = Integer.toString(user.getId());
                 Cookie cookie = new Cookie("userid", str);
+                Cookie cookie2=new Cookie("imageiduser", user.getImage());
                 cookie.setMaxAge(1800);
                 response.addCookie(cookie);
-
+                response.addCookie(cookie2);
 
                 //response.setContentType("text/plain");
                 PrintWriter out = response.getWriter();
@@ -649,6 +664,7 @@ public class BookShopServlet extends HttpServlet {
             session.removeAttribute("totalProductPrice");
             session.removeAttribute("orderProductPrice");
             session.removeAttribute("totalPrice");
+            //session.removeAttribute("imageiduser");
 
             System.out.println("test connect2");
             //session.getAttribute("user");

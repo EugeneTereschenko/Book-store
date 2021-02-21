@@ -33,8 +33,24 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
+
 <h1 align="center">Welcome to Bookshop</h1>
+
 <%
+   // String imageuser = (String) session.getAttribute("imageiduser");
+
+    String imageIDuser = null;
+    Cookie[] cookies = request.getCookies();
+    for (int i = 0; i < cookies.length; i++) {
+        String name = cookies[i].getName();
+        String valueID = cookies[i].getValue();
+        if (name.equals("imageiduser")) {
+            imageIDuser = valueID;
+        }
+
+    }
+
+
     String setLocal = (String) session.getAttribute("idlocal");
     String fileproper = null;
     if (setLocal.equals("ru")){
@@ -138,7 +154,7 @@
             "            <div class=\"panel panel-info panel-shadow\">\n" +
             "                <div class=\"panel-heading\">\n" +
             "                    <h3>\n" +
-            "                        <img class=\"img-circle img-thumbnail\" src=\"https://bootdey.com/img/Content/user_3.jpg\">\n" +
+            "                        <img class=\"img-circle img-thumbnail\" src=\"./images/user/" + imageIDuser + "\" alt=\"https://bootdey.com/img/Content/user_3.jpg\">\n" +
             "                    </h3>\n" +
             "                </div>\n" +
             "                <div class=\"panel-body\">\n" +

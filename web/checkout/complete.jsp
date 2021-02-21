@@ -42,6 +42,26 @@
 
         $(document).ready(function() {
 
+            $("#pdfsentemail").click(function () {
+
+                var value = getCookie("cartid");
+
+                $.ajax({
+                    url: '/bookstore/sendmailcartid',
+                    type: 'POST',
+                    data: {"cartid": value},
+                    success: function (data) {
+                    //   console.log(data)
+
+                    },
+                    failure: function (data) {
+                        //  console.log(data);
+                        // alert(data);
+                    }
+                });
+
+            });
+
             $("#pdfreport").click(function (e) {
 
                // alert(this.id);
@@ -84,6 +104,7 @@
 <div class="card-body">
     <button type="button" id="idcompletepost" class="btn btn-lg btn-block btn-primary">Complete</button>
     <button type="button" id="pdfreport" class="btn btn-lg btn-block btn-primary">Create PDF report</button>
+    <button type="button" id="pdfsentemail" class="btn btn-lg btn-block btn-primary">Sent me email</button>
 </div>
 </td></tr></table>
 

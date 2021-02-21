@@ -63,6 +63,30 @@
             window.location.replace("http://localhost:8080/bookstore/shop.jsp");
 
         });
+
+
+
+        $("#pdfsentemail").click(function () {
+
+           // var value = getCookie("cartid");
+
+            $.ajax({
+                url: '/bookstore/sendmailcartid',
+                type: 'POST',
+                data: {"cartid": 2},
+                success: function (data) {
+                    //   console.log(data)
+
+                },
+                failure: function (data) {
+                    //  console.log(data);
+                    // alert(data);
+                }
+            });
+
+        });
+
+
     });
 </script>
 <button type="button" class="btn btn-primary btn-sm" id="id_button_step2">Step2</button>
@@ -73,6 +97,7 @@
 
 <button id="myButton">click!</button>
 <button id="id_book_but_new" class="btn btn-default id_book_but" >index</button>
+<button type="button" id="pdfsentemail" class="btn btn-lg btn-block btn-primary">Sent me email</button>
 <div id="dialog" title="Dialog box">
     <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
@@ -91,6 +116,11 @@
     <input type="submit" />
 </form>
 
+
+<img class = "img-circle img-thumbnail" src = "../WEB-INF/uploads/29.jpg" alt="xerox" height="100" width="100" />
+<img src = "../WEB-INF/uploads/29.jpg" alt="xerox" height="100" width="100" />
+<img src = "./images/user/29.jpg" alt="xerox" height="100" width="100" />
+<img src = "./images/9780393635546.jpg" height="100" width="100"/>
 
 </body>
 </html>

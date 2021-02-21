@@ -18,6 +18,7 @@ public class UserDAO{
     private static final String SQL_DELETE_USER = "DELETE FROM users where id = (?)";
     //private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, encrypted_password) VALUES (?, ?, ?)";
     private static final String SQL_UPDATE_USER_CURRENT_TIME  = "UPDATE users set current_sign_in_at = NOW() where id = (?)";
+    private static final String SQL_UPDATE_USER_CURRENT_IMAGE = "UPDATE users set image = (?) where id = (?)";
 
 
     public static User getUserParam(PreparedStatement prstatement){
@@ -30,6 +31,7 @@ public class UserDAO{
                 user.setEmail(result.getString("email"));
                 user.setUid(result.getString("uid"));
                 user.setName(result.getString("name"));
+                user.setImage(result.getString("image"));
                 user.setCurrent_sign_in_at(result.getString("current_sign_in_at"));
                 user.setRemember_created_at(result.getString("remember_created_at"));
                // user.setEncrypted_password(result.getString("encrypted_password"));
@@ -158,6 +160,27 @@ public class UserDAO{
 
         return false;
     }
+
+    public static Boolean updatecurrentimageUser(String image, int id) throws ClassNotFoundException {
+        //System.out.println(" dd " + image + " dd " + id + " rr ");
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_USER_CURRENT_IMAGE)) {
+
+            prstatement.setString(1, image);
+            prstatement.setInt(2, id);
+            if (prstatement.executeUpdate() > 0) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+
+        return null;
+    }
+
 
     public static Boolean updatecurrentsignUser(int iduser) throws ClassNotFoundException {
         //System.out.println(username + " dd " + email + " dd " + password + " rr " + role);

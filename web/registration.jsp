@@ -14,8 +14,76 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body>
+<script>
+    $(function() {
+
+        $("#id_book_register").click(function () {
+
+
+            var text1 = $('#username').val();
+            var text2 = $('#email').val();
+            var text3 = $('#password').val();
+            var text4 = $('#password_confirm').val();
+            var text5 = "off";
+
+
+            if($('#flexCheckDefault').prop('checked')){
+                 text5 = "on";
+             }
+            var text6 = $('#lang').val();
+
+            //alert(text5);
+
+            $.ajax({
+                url: '/bookstore/registration',
+                type: 'POST',
+                data: {"username": text1, "email": text2, "password": text3, "password_confirm": text4, "lang": text6},
+                success: function (data) {
+                    //console.log(data);
+               //     temp = data;
+
+                    //alert(data);
+                    if (data != "stop") {
+
+                      //  alert(text2);
+
+                        if (text5 == "on") {
+                            // alert("sendmessage");
+                            $.ajax({
+                                url: '/bookstore/sendmailuserregister',
+                                type: 'POST',
+                                data: {"email": text2},
+                                success: function (data) {
+                                    //   console.log(data)
+
+                                },
+                                failure: function (data) {
+                                    //  console.log(data);
+                                    // alert(data);
+                                }
+                            });
+                        }
+
+
+
+                        window.location.replace("http://localhost:8080/bookstore/shop.jsp");
+                    }
+
+                },
+                failure: function (data) {
+                    //  console.log(data);
+                    // alert(data);
+                }
+            });
+
+           // alert(temp);
+
+
+
+        });
+    });
+</script>
 <table align="center"><tr><td>
-<form class="form-horizontal" action='registration' method="POST">
     <fieldset>
         <div id="legend">
             <legend class="">Register</legend>
@@ -62,16 +130,21 @@
                 <option value="1">English</option>
                 <option value="2">Russian</option>
             </select>
+            <div class="form-check" align = "left">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Sent me email after registration
+                </label>
+            </div>
         </div>
 
         <div class="control-group">
             <!-- Button -->
             <div class="controls">
-                <button class="btn btn-success">Register</button>
+                <button id="id_book_register" class="btn btn-default id_book_login" >Register</button>
             </div>
         </div>
     </fieldset>
-</form>
 </td></tr></table>
 </body>
 </html>

@@ -168,7 +168,19 @@
     </servlet-mapping>
     <context-param>
     <description>Location to store uploaded file</description>
-        <param-name>file-upload</param-name>
-        <param-value>/home/yevhen/IdeaProjects/BookStore/out/artifacts/BookStore_war_exploded</param-value>
+        <param-name>fileuploadto</param-name>
+        <param-value>/home/yevhen/IdeaProjects/BookStore/web/images/user</param-value>
     </context-param>
+    <servlet>
+        <servlet-name>BookSendMAIL</servlet-name>
+        <servlet-class>com.shop.SendMail</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BookSendMAIL</servlet-name>
+        <url-pattern>/sendmailuserregister</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookSendMAIL</servlet-name>
+        <url-pattern>/sendmailcartid</url-pattern>
+    </servlet-mapping>
 </web-app>

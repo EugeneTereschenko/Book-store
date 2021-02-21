@@ -36,9 +36,11 @@
         $(document).ready(function() {
 
 
+
+
             $("#orderbooks").on('click', '.pdfreport', function (e) {
 
-                alert(this.id);
+              //  alert(this.id);
 
 
                 var url = "http://localhost:8080/bookstore/createpdfdoc?cartid=" + this.id;

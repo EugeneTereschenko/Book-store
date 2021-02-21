@@ -18,10 +18,7 @@ import com.shop.entity.User;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -173,7 +170,25 @@ public class BookShopSettings extends HttpServlet {
 
 */
 
-        String path = getServletContext().getRealPath("") + File.separator + FILE_DIR;
+
+        int userId = 0;
+        Cookie[] cookies = request.getCookies();
+        for (int i = 0; i < cookies.length; i++) {
+            String name = cookies[i].getName();
+            String valueID = cookies[i].getValue();
+            if (name.equals("userid")) {
+                userId = Integer.parseInt(valueID);
+            }
+        }
+
+        System.out.println(" userid " + userId);
+
+        UserDAO userDAO = new UserDAO();
+       // User user = new User();
+
+        String relativeWebPath = "/images/user";
+        //String path = getServletContext().getRealPath(relativeWebPath) + File.separator + FILE_DIR;
+        String path = getServletContext().getInitParameter("fileuploadto");
         File dir = new File(path);
         if (!dir.exists()){
             dir.mkdir();
@@ -188,6 +203,12 @@ public class BookShopSettings extends HttpServlet {
                 if (fileName != null && !fileName.isEmpty()){
                     part.write(path + File.separator + fileName);
                     System.out.println("-->" + fileName);
+                    userDAO.updatecurrentimageUser(fileName, userId);
+
+                    Cookie cookie=new Cookie("imageiduser", fileName);
+                    cookie.setMaxAge(1800);
+                    response.addCookie(cookie);
+
                 }
             }
         } catch (Exception e){
