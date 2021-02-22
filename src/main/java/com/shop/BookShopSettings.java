@@ -21,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -143,34 +144,6 @@ public class BookShopSettings extends HttpServlet {
 
     private void upload(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-/*
-        Part file = request.getPart("file");
-        String filename = getFilename(file);
-        InputStream filecontent = file.getInputStream();
-        // ... Do your file saving job here.
-
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("File " + filename + " successfully uploaded");
-
-
-        //get the file chosen by the user
-        Part filePart = request.getPart("file");
-
-
-        final String fileName = get
-        //get the InputStream to store the file somewhere
-        InputStream fileInputStream = filePart.getInputStream();
-
-        //for example, you can copy the uploaded file to the server
-        //note that you probably don't want to do this in real life!
-        //upload it to a file host like S3 or GCS instead
-        File fileToSave = new File("/home/yevhen/IdeaProjects/BookStore/out/artifacts/BookStore_war_exploded" + filePart.getSubmittedFileName());
-        Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-*/
-
-
         int userId = 0;
         Cookie[] cookies = request.getCookies();
         for (int i = 0; i < cookies.length; i++) {
@@ -211,6 +184,27 @@ public class BookShopSettings extends HttpServlet {
 
                 }
             }
+
+
+            String title = "Change Image";
+            String res = "Change Image successfully....<a href='/bookstore/shop'>Back</a>";
+            String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
+
+
+            PrintWriter out = response.getWriter();
+
+            out.println(docType +
+                    "<html>\n" +
+                    "<head><title>" + title + "</title><head>\n" +
+                    "<body bgcolor = \"#f0f0f0\">\n" +
+                    "<h1 align = \"center\">" + title + "</h1>\n" +
+                    "<p align = \"center\">" + res + "</p>\n" +
+                    "</body>\n" +
+                    "</html>"
+            );
+            out.flush();
+            out.close();
+
         } catch (Exception e){
             System.out.println("Error! " + e.getMessage());
         }

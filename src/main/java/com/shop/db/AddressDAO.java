@@ -90,6 +90,21 @@ public class AddressDAO {
         return address;
     }
 
+
+    /**
+     *
+     * @param address_type
+     * @param first_name
+     * @param last_name
+     * @param addressTo
+     * @param city
+     * @param zip
+     * @param country
+     * @param phone
+     * @param user_id
+     * @return
+     * @throws ClassNotFoundException
+     */
     public Address insertAddress(String address_type, String first_name, String last_name, String addressTo, String city, int zip, String country, String phone, int user_id) throws ClassNotFoundException {
                 Address address = null;
                 Class.forName("com.mysql.cj.jdbc.Driver");
