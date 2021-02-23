@@ -46,7 +46,7 @@
             $("#idpromocodetable").on('click', '.idsendcode', function(){
 
                 var valueIt3 =$("#promoCode").val();
-                alert(valueIt3);
+               // alert(valueIt3);
 
 
                 $.ajax({
@@ -55,7 +55,7 @@
                     data: {"promocode": valueIt3},
                     success: function (data) {
                         console.log(data);
-                        alert(data);
+                        //alert(data);
                         $("#promoCodeOut").text(data);
                         //alert(data);
                         //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
@@ -72,14 +72,14 @@
             // Get value on button click and show alert
             $("#myBtn").click(function(){
                 var str = $("#myInput").val();
-                alert(str);
+               // alert(str);
 
                 var valueIt3 =$("#promoCode").val();
-                alert(valueIt3);
+               // alert(valueIt3);
 
 
                 var valueIt6 =$("#valcartedit").val();
-                alert(valueIt6);
+                //alert(valueIt6);
             });
 
         });

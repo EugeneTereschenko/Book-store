@@ -21,7 +21,7 @@ public class UserDAO{
     private static final String SQL_UPDATE_USER_CURRENT_IMAGE = "UPDATE users set image = (?) where id = (?)";
 
 
-    public static User getUserParam(PreparedStatement prstatement){
+    public User getUserParam(PreparedStatement prstatement){
         User user = null;
 
         try (ResultSet result = prstatement.executeQuery()) {
@@ -49,7 +49,7 @@ public class UserDAO{
 
 
 
-    public static User checkLogin(String email) throws ClassNotFoundException {
+    public User checkLogin(String email) throws ClassNotFoundException {
 
         User user = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -78,7 +78,7 @@ public class UserDAO{
 
     }
 
-    public static User checkLoginandPassword(String email, String encrypted_password) throws ClassNotFoundException {
+    public User checkLoginandPassword(String email, String encrypted_password) throws ClassNotFoundException {
 
         User userCheckLogin=checkLogin(email);
 
@@ -116,7 +116,7 @@ public class UserDAO{
         return null;
     }
 
-    public static User checkUserbyId(int id) throws ClassNotFoundException {
+    public User checkUserbyId(int id) throws ClassNotFoundException {
         User user = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_FIND_USER_BY_ID)) {
@@ -130,7 +130,7 @@ public class UserDAO{
     }
 
 
-    public static Boolean inputUser(String username, String email, String password, String password_confirm, String role) throws ClassNotFoundException {
+    public Boolean inputUser(String username, String email, String password, String password_confirm, String role) throws ClassNotFoundException {
         System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
         User login = null;
         login = checkLogin(email);
@@ -161,7 +161,7 @@ public class UserDAO{
         return false;
     }
 
-    public static Boolean updatecurrentimageUser(String image, int id) throws ClassNotFoundException {
+    public Boolean updatecurrentimageUser(String image, int id) throws ClassNotFoundException {
         //System.out.println(" dd " + image + " dd " + id + " rr ");
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -182,7 +182,7 @@ public class UserDAO{
     }
 
 
-    public static Boolean updatecurrentsignUser(int iduser) throws ClassNotFoundException {
+    public Boolean updatecurrentsignUser(int iduser) throws ClassNotFoundException {
         //System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
 
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -231,7 +231,7 @@ public class UserDAO{
     }
 
 
-    public static boolean deleteUser(int userid)  throws ClassNotFoundException {
+    public boolean deleteUser(int userid)  throws ClassNotFoundException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_DELETE_USER)) {
@@ -271,17 +271,6 @@ public class UserDAO{
     }
 
 
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        //UserDAO userDao = new UserDAO();
-      //  User user5 = userDao.updateUser("STOPWAR", "test5@gmail.com", "123456", "123456",  "user", 4, "2021-02-18");
-        //if (user5 != null){
-        //    System.out.println(user5.getEmail());
-        //}
-        User user5 = checkLogin("test@gmail.com");
-
-
-        //setConnect();
-    }
 
 
 

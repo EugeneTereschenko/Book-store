@@ -108,45 +108,38 @@ public class CartDAO {
     }
 
 
-    public Cart updateCart(int id, String checkout_step) throws ClassNotFoundException {
-        Cart cart = null;
+    public Boolean updateCart(int id, String checkout_step) throws ClassNotFoundException {
+
         Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_CART, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_CART)) {
             prstatement.setString(1, checkout_step);
             prstatement.setInt(2, id);
             if (prstatement.executeUpdate() > 0) {
-                ResultSet result = prstatement.getGeneratedKeys();
-                cart = new Cart();
-                if (result.next()) {
-                    cart.setId(result.getInt(1));
-                }
+                return true;
             }
-            return cart;
+
         } catch (SQLException e) {
             System.out.println(e);
         }
-        return null;
+        return false;
     }
 
 
-    public Cart updateCartCoupon(int id, int coupon) throws ClassNotFoundException {
-        Cart cart = null;
+    public Boolean updateCartCoupon(int id, int coupon) throws ClassNotFoundException {
+
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_CART_COUPON, Statement.RETURN_GENERATED_KEYS)) {
             prstatement.setInt(1, coupon);
             prstatement.setInt(2, id);
             if (prstatement.executeUpdate() > 0) {
                 ResultSet result = prstatement.getGeneratedKeys();
-                cart = new Cart();
-                if (result.next()) {
-                    cart.setId(result.getInt(1));
-                }
+                return true;
             }
-            return cart;
+
         } catch (SQLException e) {
             System.out.println(e);
         }
-        return null;
+        return false;
     }
 
     public List<Cart> findAllCarts() throws ClassNotFoundException {
@@ -219,18 +212,6 @@ public class CartDAO {
             System.out.println(e);
         }
         return quantity;
-    }
-
-    public static void main(String[] args) throws ClassNotFoundException {
-        //CartDAO cartdao = new CartDAO();
-        //Cart cart = new Cart();
-       // cart = cartdao.insertCart(1, 23, "address");
-
-        System.out.println(findallBookValueByCartID(1, 3));
-
-         //findallBooksByCartID(2);
-
-
     }
 
 }

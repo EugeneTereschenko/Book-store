@@ -18,6 +18,12 @@ public class AddressDAO {
     //private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, encrypted_password) VALUES (?, ?, ?)";
 
 
+    /**
+     *
+     * @param prstatement
+     * @return
+     */
+
     public Address getAddressParam(PreparedStatement prstatement){
         Address address = null;
 
@@ -47,6 +53,12 @@ public class AddressDAO {
 
     }
 
+    /**
+     *
+     * @param addressId
+     * @return
+     * @throws ClassNotFoundException
+     */
 
 
     public Address checkAddressByUserId(int addressId) throws ClassNotFoundException {
@@ -68,6 +80,14 @@ public class AddressDAO {
         }
         return address;
     }
+
+
+    /**
+     *
+     * @param addressId
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public Address checkAddressById(int addressId) throws ClassNotFoundException {
 
@@ -134,58 +154,57 @@ public class AddressDAO {
         return null;
     }
 
-    public Address updateDeliveryId(int user_id, int order_id) throws ClassNotFoundException {
-        Address address = null;
+    /**
+     *
+     * @param user_id
+     * @param order_id
+     * @return
+     * @throws ClassNotFoundException
+     */
+
+    public Boolean updateDeliveryId(int user_id, int order_id) throws ClassNotFoundException {
+
         Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_DELIVERY_ID, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_DELIVERY_ID)) {
             prstatement.setInt(1, order_id);
             prstatement.setInt(2, user_id);
 
             if (prstatement.executeUpdate() > 0) {
-                ResultSet result = prstatement.getGeneratedKeys();
-                address = new Address();
-                if (result.next()) {
-                    address.setId(result.getInt(1));
-                }
+                return true;
+            } else {
+                return false;
             }
-            return address;
         } catch (SQLException e) {
             System.out.println(e);
         }
+
         return null;
     }
 
-    public Address updateDeliveryById(int address_id, int delivery_id, int user_id ) throws ClassNotFoundException {
-        Address address = null;
+    /**
+     *
+     * @param delivery_id
+     * @param address_id
+     * @param user_id
+     * @return
+     * @throws ClassNotFoundException
+     */
+
+    public Boolean updateDeliveryById(int delivery_id, int address_id, int user_id ) throws ClassNotFoundException {
+
         Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_DELIVERY_ID_BY_ID, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_ADDRESS_DELIVERY_ID_BY_ID)) {
             prstatement.setInt(1, delivery_id);
             prstatement.setInt(2, address_id);
             prstatement.setInt(3, user_id);
-
             if (prstatement.executeUpdate() > 0) {
-                ResultSet result = prstatement.getGeneratedKeys();
-                address = new Address();
-                if (result.next()) {
-                    address.setId(result.getInt(1));
-                }
+                return true;
             }
-            return address;
         } catch (SQLException e) {
             System.out.println(e);
         }
-        return null;
+        return false;
     }
 
-
-    public static void main(String[] args) throws ClassNotFoundException {
-        Address address = new Address();
-        AddressDAO addressDAO = new AddressDAO();
-        address = addressDAO.checkAddressById(3);
-
-
-        System.out.println(" address.getCity() " + address.getCity());
-
-    }
 
 }

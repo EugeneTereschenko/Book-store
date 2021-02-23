@@ -170,7 +170,7 @@ public class BookDAO {
     }
 
     public int totalPrice(String temp) throws ClassNotFoundException {
-       // System.out.println("price total");
+        System.out.println("price total " + temp);
 
         String id = null;
         String value = null;
@@ -195,6 +195,13 @@ public class BookDAO {
         //System.out.println(" total " + total);
         return total;
     }
+
+    /**
+     *
+     * @param rows
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public List<Book> findOrderTOByTitle(int rows) throws ClassNotFoundException {
 
@@ -241,6 +248,14 @@ public class BookDAO {
 
     }
 
+
+    /**
+     *
+     * @param rows
+     * @return
+     * @throws ClassNotFoundException
+     */
+
     public List<Book> findOrderTOByAuthor(int rows) throws ClassNotFoundException {
 
 
@@ -286,6 +301,12 @@ public class BookDAO {
 
     }
 
+    /**
+     *
+     * @param rows
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public List<Book> findOrderTOByPrice(int rows) throws ClassNotFoundException {
 
@@ -332,7 +353,12 @@ public class BookDAO {
 
     }
 
-
+    /**
+     *
+     * @param rows
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public List<Book> findOrderTOByYear(int rows) throws ClassNotFoundException {
 
@@ -455,8 +481,6 @@ public class BookDAO {
         return false;
     }
 
-    public static void main(String[] args) throws ClassNotFoundException{
 
-    }
 
 }

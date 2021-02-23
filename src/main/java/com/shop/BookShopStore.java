@@ -608,8 +608,8 @@ public class BookShopStore extends HttpServlet {
 
 
         CartDAO cartDAO = new CartDAO();
-        Cart cart = new Cart();
-        cart = cartDAO.updateCart(Integer.parseInt(cartid), name);
+        Boolean flag;
+        flag = cartDAO.updateCart(Integer.parseInt(cartid), name);
 
         HttpSession session = request.getSession(true);
         String setLocal = (String) session.getAttribute("idlocal");
@@ -629,7 +629,7 @@ public class BookShopStore extends HttpServlet {
         String addToTrue = properties.getProperty("fieldSuccess");
         String addToFalse = properties.getProperty("fieldError");
         JSONObject jsonMain = new JSONObject();
-        if (cart != null) {
+        if (flag) {
 
             jsonMain.put("flagid", "true");
             jsonMain.put("localid", addToTrue);

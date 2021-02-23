@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix = "ex" uri = "/WEB-INF/custom.tld"%>
+
 <html lang="ru">
 <head>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -121,6 +123,18 @@
 <img src = "../WEB-INF/uploads/29.jpg" alt="xerox" height="100" width="100" />
 <img src = "./images/user/29.jpg" alt="xerox" height="100" width="100" />
 <img src = "./images/9780393635546.jpg" height="100" width="100"/>
+
+<ex:infoFooter/>
+
+<footer class="bg-light text-center text-lg-start">
+    <!-- Copyright -->
+    <div class="text-center p-3" align = "center" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+
 
 </body>
 </html>

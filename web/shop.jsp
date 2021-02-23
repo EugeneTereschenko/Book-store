@@ -17,6 +17,7 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.Properties" %>
 <%@ page import="java.util.ResourceBundle" %>
+<%@ taglib prefix = "ex" uri = "/WEB-INF/custom.tld"%>
 <html>
 <head>
     <title>Bookshop</title>
@@ -154,7 +155,7 @@
             "            <div class=\"panel panel-info panel-shadow\">\n" +
             "                <div class=\"panel-heading\">\n" +
             "                    <h3>\n" +
-            "                        <img class=\"img-circle img-thumbnail\" src=\"./images/user/" + imageIDuser + "\" alt=\"https://bootdey.com/img/Content/user_3.jpg\">\n" +
+            "                        <img class=\"img-circle img-thumbnail\" src=\"./images/user/" + imageIDuser + "\" alt=\"\">\n" +
             "                    </h3>\n" +
             "                </div>\n" +
             "                <div class=\"panel-body\">\n" +
@@ -201,5 +202,8 @@
 
 
 %>
+
+
+<ex:infoFooter/>
 </body>
 </html>

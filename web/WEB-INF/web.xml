@@ -34,6 +34,11 @@
             <file-size-threshold>50000</file-size-threshold>
         </multipart-config>
     </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BookStore</servlet-name>
+        <url-pattern>/bookstore</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BookStore</servlet-name>
         <url-pattern>/logout</url-pattern>

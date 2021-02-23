@@ -2,6 +2,9 @@ package com.shop;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(urlPatterns = { "/authentication" }, servletNames = { "authentication" })
@@ -15,52 +18,34 @@ public class Check implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
 
-       // HttpServletRequest request = (HttpServletRequest) req;
-       // HttpServletResponse response = (HttpServletResponse) resp;
-
-        //String uri = request.getServletPath();
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
 
 
-        //this.context.log("Requested Resource::"+uri);
+        String uri = ((HttpServletRequest) req).getRequestURI();
 
-        //System.out.println(" check " + uri);
 
-        //HttpSession session = request.getSession(false);
 
-      //  if (uri.endsWith("index.jsp")){
-      //      System.out.println("Filter --->>> before doFilter()");
-      //      chain.doFilter(req, resp);
-      //      System.out.println("Filter <<<--- after doFilter()");
-      //  }
+        HttpSession session = ((HttpServletRequest) req).getSession(false);
+        Object user_o = ((HttpServletRequest) req).getSession().getAttribute("username");
 
-        //if (uri.endsWith("confirm") && session == null ){
-        //HttpSession session = request.getSession(false);
-     //   if (session == null) {
 
-        //if (!(uri.endsWith("jsp") || uri.endsWith("confirm"))) {+
-            //if (session == null) {
-             //   System.out.println("redirect to authentication");
-              //  this.context.log("Unauthorized access request");
-                // response.sendRedirect("bookstore/index.jsp");
-        //request.getRequestDispatcher("./checkout/delivery.jsp").include(request, response);
+        System.out.println(" username " + user_o);
 
-       //         request.getRequestDispatcher("index.jsp").include(request, response);
-              //  RequestDispatcher requestDispatcher = request
-            //            .getRequestDispatcher("./bookstore/index.jsp");
-            //    requestDispatcher.forward(request, response);
-          //  }
-        //} else {
-         //  System.out.println("Filter --->>> before doFilter()");
-           // request.setCharacterEncoding("UTF-8");
+        if (user_o == null && !(uri.endsWith("index.jsp") || uri.endsWith("shop.jsp") ||  uri.endsWith("/authentication") || uri.endsWith("registration.jsp") || uri.endsWith("/registration"))) {
+             RequestDispatcher requestDispatcher = request
+                 .getRequestDispatcher("index.jsp");
+         requestDispatcher.forward(request, response);
+        } else {
             chain.doFilter(req, resp);
-           // System.out.println("Filter <<<--- after doFilter()");
-        //}
+        }
     }
 
     public void init(FilterConfig config) throws ServletException {
         System.out.println("Filter init()");
-        //this.context = config.getServletContext();
-       // this.context.log("AuthenticationFilter initialized");
+        this.context = config.getServletContext();
+        this.context.log("AuthenticationFilter initialized");
+
     }
 
 }
