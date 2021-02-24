@@ -169,11 +169,8 @@ public class AddressDAO {
             prstatement.setInt(1, order_id);
             prstatement.setInt(2, user_id);
 
-            if (prstatement.executeUpdate() > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return prstatement.executeUpdate() > 0;
+
         } catch (SQLException e) {
             System.out.println(e);
         }

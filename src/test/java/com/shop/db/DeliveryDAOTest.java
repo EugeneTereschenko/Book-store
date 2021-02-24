@@ -15,6 +15,7 @@ public class DeliveryDAOTest extends TestCase {
     static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=testcomauser&password=AcPqw.TO,CYU.dcP12";
     private static final String SQL_FIND_DELIVERY = "SELECT * FROM deliveries where id = (?)";
 
+
     @Test
     public void testGetDeliveryParam() throws ClassNotFoundException {
 
@@ -32,6 +33,7 @@ public class DeliveryDAOTest extends TestCase {
             Assert.assertEquals(3, delivery.getId());
 
         } catch (SQLException e) {
+
         }
 
     }

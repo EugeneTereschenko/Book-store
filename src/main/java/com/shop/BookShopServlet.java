@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -85,8 +84,6 @@ public class BookShopServlet extends HttpServlet {
                     paymentdata(request, response);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
                 break;
             case "/confirmdata":
@@ -129,11 +126,7 @@ public class BookShopServlet extends HttpServlet {
                 shop(request, response);
                 break;
             case "/confirm":
-                try {
-                    confirm(request, response);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                confirm(request, response);
                 break;
             case "/complete":
                 complete(request, response);
@@ -157,7 +150,7 @@ public class BookShopServlet extends HttpServlet {
         request.getRequestDispatcher("./checkout/complete.jsp").include(request, response);
     }
 
-    private void confirmdata(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
+    private void confirmdata(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String promocode = request.getParameter("promocode");
 
         logger.info(promocode);
@@ -198,7 +191,7 @@ public class BookShopServlet extends HttpServlet {
 
     }
 
-    private void confirm(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
+    private void confirm(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
         logger.info("confirm check");
 
 //
@@ -247,7 +240,7 @@ public class BookShopServlet extends HttpServlet {
         request.getRequestDispatcher("./checkout/payment.jsp").include(request, response);
     }
 
-    private void paymentdata(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException, ParseException {
+    private void paymentdata(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
 
         String paymentMethod = request.getParameter("paymentMethod");
         String ccname = request.getParameter("credname");
@@ -491,6 +484,7 @@ public class BookShopServlet extends HttpServlet {
 
         cart = cartDAO.insertCart(Integer.parseInt(userId), totalPrice + 2, totalPrice, "address");
         logger.info("userId " + userId + " totalPrice " + totalPrice + " cart id " + cart.getId());
+        logger.info(" temp " + temp);
 
 
         itemDAO.insertItem(temp, cart.getId());
