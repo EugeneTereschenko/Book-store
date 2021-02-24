@@ -22,7 +22,7 @@ public class ItemDAO {
      * @param prstatement
      * @return
      */
-    public static Item getUserParam(PreparedStatement prstatement){
+    public Item getItemParam(PreparedStatement prstatement){
         Item item = null;
 
         try (ResultSet result = prstatement.executeQuery()) {
@@ -52,7 +52,7 @@ public class ItemDAO {
      * @throws ClassNotFoundException
      */
 
-    public static Item checkItem(String book_id, String cart_id) throws ClassNotFoundException {
+    public Item checkItem(int book_id, int cart_id) throws ClassNotFoundException {
 
         Item item = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -63,10 +63,10 @@ public class ItemDAO {
                 con.setAutoCommit(false);
             }
 
-            prstatement.setString(1, book_id);
-            prstatement.setString(2, cart_id);
+            prstatement.setInt(1, book_id);
+            prstatement.setInt(2, cart_id);
 
-            item = getUserParam(prstatement);
+            item = getItemParam(prstatement);
 
             if (item == null){
                 con.rollback();
@@ -90,7 +90,7 @@ public class ItemDAO {
      */
 
 
-    public static boolean insertItem(int book_id, int cart_id, int quantity) throws ClassNotFoundException {
+    public boolean insertItem(int book_id, int cart_id, int quantity) throws ClassNotFoundException {
         Item item = null;
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_INSERT_ITEM)) {
@@ -114,7 +114,7 @@ public class ItemDAO {
      * @return
      * @throws ClassNotFoundException
      */
-    public static boolean insertItem(String temp, int cart_id) throws ClassNotFoundException {
+    public boolean insertItem(String temp, int cart_id) throws ClassNotFoundException {
 
         String id = null;
         String value = null;
@@ -122,22 +122,29 @@ public class ItemDAO {
         Book book = new Book();
         BookDAO bookDAO = new BookDAO();
 
+
         JSONObject json = new JSONObject(temp);
         JSONArray array = json.getJSONArray("books");
-        int i = 0;
+
         JSONObject myJsonObject = new JSONObject();
-        while(i < array.length()){
+
+        for (int i=0; i < array.length(); i++ ){
+
             myJsonObject = array.getJSONObject(i);
             id = (String) myJsonObject.get("id");
             value = myJsonObject.getString("value");
-            if (!value.equals("undefined") && value != null) {
+            if (value != null && !value.equals("undefined")) {
                 book = bookDAO.checkBookById(Integer.parseInt(id));
                 //
-                insertItem(book.getId(), cart_id, Integer.parseInt(value));
+                Boolean flag = insertItem(book.getId(), cart_id, Integer.parseInt(value));
+                if (!flag){
+                    logger.info(" book getId " + book.getId() + " cart " + cart_id + " value " + Integer.parseInt(value));
+                    return false;
+                }
             }
-            i++;
+
         }
-        return false;
+        return true;
     }
 
 }

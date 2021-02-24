@@ -491,6 +491,8 @@ public class BookShopServlet extends HttpServlet {
 
         cart = cartDAO.insertCart(Integer.parseInt(userId), totalPrice + 2, totalPrice, "address");
         logger.info("userId " + userId + " totalPrice " + totalPrice + " cart id " + cart.getId());
+
+
         itemDAO.insertItem(temp, cart.getId());
 
         response.setContentType("text/plain");
@@ -498,7 +500,6 @@ public class BookShopServlet extends HttpServlet {
         out.print(Integer.toString(cart.getId()));
         out.flush();
         out.close();
-
     }
 
     private void registration(HttpServletRequest request, HttpServletResponse response) throws ServletException, ClassNotFoundException {

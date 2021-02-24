@@ -258,12 +258,12 @@
                         <h4 class="my-0 font-weight-normal">Click & Collect</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
+                        <h1 class="card-title pricing-card-title">$1 <small class="text-muted">/ mo</small></h1>
                         <ul class="list-unstyled mt-3 mb-4">
                             <li>Online</li>
                             <li>ebooks read</li>
                             <li>Free 30 Day Trial</li>
-                            <li>only $8.99/mon.</li>
+                            <li>only $5/mon.</li>
                         </ul>
                         <button type="button" id="id_online" class="btn btn-lg btn-block btn-primary">Contact us</button>
                     </div>

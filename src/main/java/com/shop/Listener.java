@@ -11,11 +11,14 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.io.File;
+import java.util.logging.Logger;
 
 @WebListener()
 public class Listener implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
 
+
+    static final Logger logger = Logger.getLogger(String.valueOf(Listener.class));
     // Public constructor is required by servlet spec
     public Listener() {
     }
@@ -31,6 +34,7 @@ public class Listener implements ServletContextListener,
 
         ServletContext context = sce.getServletContext();
         String log4gConfigFile = context.getInitParameter("log4j-config-location");
+        logger.info("logConfig " + log4gConfigFile);
         String fullPath = context.getRealPath("") + File.separator + log4gConfigFile;
         PropertyConfigurator.configure(fullPath);
 

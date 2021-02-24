@@ -42,6 +42,12 @@ public class CardDAO {
 
     }
 
+    /**
+     *
+     * @param user_id
+     * @return
+     * @throws ClassNotFoundException
+     */
 
 
     public static Card checkCardByUserId(int user_id) throws ClassNotFoundException {
@@ -72,6 +78,18 @@ public class CardDAO {
         return card;
 
     }
+
+    /**
+     *
+     * @param user_id
+     * @param expiration_month_year
+     * @param cvv
+     * @param name
+     * @param card_number
+     * @return
+     * @throws ClassNotFoundException
+     */
+
 
 
     public static Card insertCard(int user_id, String expiration_month_year, int cvv, String name, String card_number) throws ClassNotFoundException {

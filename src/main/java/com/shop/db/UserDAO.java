@@ -23,6 +23,13 @@ public class UserDAO{
     private static final String SQL_UPDATE_USER_CURRENT_IMAGE = "UPDATE users set image = (?) where id = (?)";
     static final Logger logger = Logger.getLogger(String.valueOf(UserDAO.class));
 
+    /**
+     *
+     * @param prstatement
+     * @return
+     */
+
+
     public User getUserParam(PreparedStatement prstatement){
         User user = null;
 
@@ -49,7 +56,12 @@ public class UserDAO{
 
     }
 
-
+    /**
+     *
+     * @param email
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public User checkLogin(String email) throws ClassNotFoundException {
 
@@ -79,6 +91,14 @@ public class UserDAO{
         return user;
 
     }
+
+    /**
+     *
+     * @param email
+     * @param encrypted_password
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public User checkLoginandPassword(String email, String encrypted_password) throws ClassNotFoundException {
 
@@ -118,6 +138,13 @@ public class UserDAO{
         return null;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws ClassNotFoundException
+     */
+
     public User checkUserbyId(int id) throws ClassNotFoundException {
         User user = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -131,6 +158,16 @@ public class UserDAO{
 
     }
 
+    /**
+     *
+     * @param username
+     * @param email
+     * @param password
+     * @param password_confirm
+     * @param role
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public Boolean inputUser(String username, String email, String password, String password_confirm, String role) throws ClassNotFoundException {
         logger.info(username + " dd " + email + " dd " + password + " rr " + role);
@@ -163,6 +200,14 @@ public class UserDAO{
         return false;
     }
 
+    /**
+     *
+     * @param image
+     * @param id
+     * @return
+     * @throws ClassNotFoundException
+     */
+
     public Boolean updatecurrentimageUser(String image, int id) throws ClassNotFoundException {
         //System.out.println(" dd " + image + " dd " + id + " rr ");
 
@@ -183,6 +228,12 @@ public class UserDAO{
         return null;
     }
 
+    /**
+     *
+     * @param iduser
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public Boolean updatecurrentsignUser(int iduser) throws ClassNotFoundException {
 
@@ -202,6 +253,19 @@ public class UserDAO{
 
         return null;
     }
+
+    /**
+     *
+     * @param username
+     * @param email
+     * @param password
+     * @param password_confirm
+     * @param uid
+     * @param iduser
+     * @param remembercreatedat
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public User updateUser(String username, String email, String password, String password_confirm, String uid, int iduser, String remembercreatedat) throws ClassNotFoundException {
 
@@ -233,6 +297,13 @@ public class UserDAO{
     }
 
 
+    /**
+     *
+     * @param userid
+     * @return
+     * @throws ClassNotFoundException
+     */
+
     public boolean deleteUser(int userid)  throws ClassNotFoundException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -248,6 +319,12 @@ public class UserDAO{
 
         return false;
     }
+
+    /**
+     *
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public List<User> findAllUsers() throws ClassNotFoundException {
 
@@ -271,9 +348,4 @@ public class UserDAO{
         }
         return users;
     }
-
-
-
-
-
 }

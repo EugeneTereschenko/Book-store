@@ -211,8 +211,6 @@ public class BookShopStore extends HttpServlet {
     private void updatebook(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("book");
 
-
-        Logger logger = Logger.getLogger("https_services.log");
         logger.info("updatebook");
         logger.info(temp);
 
@@ -357,11 +355,17 @@ public class BookShopStore extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
 
     private void insertuser(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
         String temp = request.getParameter("user");
 
-        Logger logger = Logger.getLogger("https_services.log");
         logger.info(temp);
 
 
@@ -419,8 +423,6 @@ public class BookShopStore extends HttpServlet {
     private void showOneUser(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
         String iduser = request.getParameter("iduser");
 
-
-        Logger logger = Logger.getLogger("https_services.log");
         logger.info(" iduser " + iduser);
 
 
