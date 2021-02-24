@@ -3,6 +3,7 @@ package com.shop.db;
 import com.shop.entity.Card;
 
 import java.sql.*;
+import java.util.logging.Logger;
 
 public class CardDAO {
 
@@ -11,8 +12,13 @@ public class CardDAO {
     private static final String SQL_FIND_CARD = "SELECT * FROM cards where user_id = (?)";
     private static final String SQL_INSERT_CARD = "INSERT INTO cards (created_at, update_at, user_id, expiration_month_year, cvv, name, card_number) VALUES (NOW(), NOW(), ?, ?, ?, ?, ?)";
     //private static final String SQL_UPDATE_CARD = "UPDATE carts set  where id = (?)";
+    static final Logger logger = Logger.getLogger(String.valueOf(CardDAO.class));
 
-
+    /**
+     *
+     * @param prstatement
+     * @return
+     */
     public static Card getCardParam(PreparedStatement prstatement){
         Card card = null;
 
@@ -25,12 +31,12 @@ public class CardDAO {
                 card.setExpiration_month_year(result.getString("expiration_month_year"));
                 card.setUser_id(result.getInt("user_id"));
             } else {
-                System.out.println("You are not valid");
+                logger.info("You are not valid");
 
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
         return card;
 
@@ -54,13 +60,13 @@ public class CardDAO {
             card = getCardParam(prstatement);
 
             if (card == null){
-                System.out.println("card is null");
+                logger.info("card is null");
                 con.rollback();
                 return null;
             }
 
         } catch (SQLException e) {
-            System.out.println("error find card" + e);
+            logger.info("error find card" + e);
         }
 
         return card;
@@ -86,7 +92,7 @@ public class CardDAO {
                     }
                     return card;
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    logger.info("" + e);
                 }
 
         return null;

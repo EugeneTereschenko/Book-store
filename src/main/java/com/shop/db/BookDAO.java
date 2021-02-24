@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class BookDAO {
 
@@ -27,6 +28,7 @@ public class BookDAO {
     private static final String SQL_UPDATE_BOOK = "UPDATE books SET title =(?), description = (?), image = (?), materials = (?), price = (?), height = (?), width = (?)," +
             " depth = (?), year = (?), in_stock = (?), author = (?) where id = (?)";
     private static final String SQL_DELETE_BOOK = "DELETE from books where id = (?)";
+    static final Logger logger = Logger.getLogger(String.valueOf(BookDAO.class));
 
     public Book getBookParam(PreparedStatement prstatement){
         Book book = null;
@@ -50,7 +52,7 @@ public class BookDAO {
                 //book.setUpdate_at(result.getDate("update-at"));
             }
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
         return book;
 
@@ -69,7 +71,7 @@ public class BookDAO {
             book = getBookParam(prstatement);
 
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return book;
@@ -89,7 +91,7 @@ public class BookDAO {
             book = getBookParam(prstatement);
 
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return book;
@@ -122,7 +124,7 @@ public class BookDAO {
                 books.add(book);
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
         return books;
     }
@@ -162,7 +164,7 @@ public class BookDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return books;
@@ -170,7 +172,7 @@ public class BookDAO {
     }
 
     public int totalPrice(String temp) throws ClassNotFoundException {
-        System.out.println("price total " + temp);
+        logger.info("price total " + temp);
 
         String id = null;
         String value = null;
@@ -294,7 +296,7 @@ public class BookDAO {
 
             }
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return books;
@@ -346,7 +348,7 @@ public class BookDAO {
 
             }
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return books;
@@ -398,7 +400,7 @@ public class BookDAO {
 
             }
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return books;
@@ -416,7 +418,7 @@ public class BookDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
 
         return false;
@@ -444,7 +446,7 @@ public class BookDAO {
                     }
 
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    logger.info("" + e);
                 }
 
 
@@ -474,7 +476,7 @@ public class BookDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
 
 

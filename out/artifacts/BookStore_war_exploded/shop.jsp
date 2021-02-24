@@ -17,6 +17,8 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.Properties" %>
 <%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.logging.Logger" %>
+<%@ page import="com.shop.BookShopServlet" %>
 <%@ taglib prefix = "ex" uri = "/WEB-INF/custom.tld"%>
 <html>
 <head>
@@ -39,6 +41,8 @@
 
 <%
    // String imageuser = (String) session.getAttribute("imageiduser");
+
+    Logger logger = Logger.getLogger(String.valueOf(BookShopServlet.class));
 
     String imageIDuser = null;
     Cookie[] cookies = request.getCookies();
@@ -81,7 +85,7 @@
     String username = (String) session.getAttribute("username");
     String role = (String) session.getAttribute("roleid");
 
-    System.out.println(" role " + role + " username " + username);
+    logger.info(" role " + role + " username " + username);
 
     List<Book> book = (List<Book>) session.getAttribute("books");
 
@@ -91,14 +95,14 @@
     out.println("</div>");
     out.println("<div class=\"col col-md-auto\">");
     out.println("<ul class=\"nav nav-pills\">");
-    out.println("<li role=\"presentation\" class=\"active\"><button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"id_button\">" + exit +  "</button></li>");
-    out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary btn-sm\" id=\"my_name\" value=\"" + username + "\" /></li>");
+    out.println("<li role=\"presentation\" class=\"active\"><button type=\"button\" class=\"btn btn-primary list-group-item-action btn-sm\" id=\"id_button\">" + exit +  "</button></li>");
+    out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary list-group-item-action btn-sm\" id=\"my_name\" value=\"" + username + "\" /></li>");
     if (role.equals("administrator")) {
-        out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idusersitemy\" value=\"" + usersitemy + "\" /></li>");
+        out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass list-group-item-action btn-sm\" id=\"idusersitemy\" value=\"" + usersitemy + "\" /></li>");
     }
     if (role.equals("administrator") || role.equals("manager")) {
-        out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idbooksitemy\" value=\"" + booksitemy + "\" /></li>");
-        out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass btn-sm\" id=\"idbookordermy\" value=\"" + order + "\" /></li>");
+        out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass list-group-item-action btn-sm\" id=\"idbooksitemy\" value=\"" + booksitemy + "\" /></li>");
+        out.println("<li role=\"presentation\" class=\"active\"><input type=\"button\" class=\"btn btn-primary newclass list-group-item-action btn-sm\" id=\"idbookordermy\" value=\"" + order + "\" /></li>");
     }
     out.println("</ul>");
     out.println("</div>");
@@ -128,7 +132,9 @@
         out.println("<tr id=\"" + book.get(i).getId() + "\"><td colspan=\"5\" class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\" height = \"100\" width=\"400\">" + book.get(i).getTitle() + "</td></tr>");
         out.println("<tr><td colspan=\"5\" >" + book.get(i).getAuthor() + "</td></tr>");
         out.println("<tr><td>$" + book.get(i).getPrice() + ".00</td><td colspan=\"4\" align=\"center\"><input id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-block\" height=\"20\" width=\"70\" value=\"" + addTo + "\"/></td></tr>");
-        System.out.println(book.get(i).getId());
+
+        logger.info(Integer.toString(book.get(i).getId()));
+
     }
 
     out.println("</tbody></table>");

@@ -19,11 +19,13 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 @WebServlet("/authentication")
 public class BookShopServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    static final Logger logger = Logger.getLogger(String.valueOf(BookShopServlet.class));
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -136,9 +138,6 @@ public class BookShopServlet extends HttpServlet {
             case "/complete":
                 complete(request, response);
                 break;
-            case "/calendar":
-                calendar(request, response);
-                break;
             default:
                 break;
         }
@@ -146,20 +145,14 @@ public class BookShopServlet extends HttpServlet {
     }
 
     private void bookstore(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println("calendar check");
+        logger.info("calendar check");
         RequestDispatcher requestDispatcher = request
                 .getRequestDispatcher("index.jsp");
         requestDispatcher.forward(request, response);
     }
 
-    private void calendar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println("calendar check");
-        PrintWriter out=response.getWriter();
-        request.getRequestDispatcher("./checkout/calendar.jsp").include(request, response);
-    }
-
     private void complete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println("payment check");
+        logger.info("payment check");
         PrintWriter out=response.getWriter();
         request.getRequestDispatcher("./checkout/complete.jsp").include(request, response);
     }
@@ -167,7 +160,7 @@ public class BookShopServlet extends HttpServlet {
     private void confirmdata(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
         String promocode = request.getParameter("promocode");
 
-        System.out.println(promocode);
+        logger.info(promocode);
 
         if (promocode != null) {
             int userId = 0;
@@ -206,7 +199,7 @@ public class BookShopServlet extends HttpServlet {
     }
 
     private void confirm(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
-        System.out.println("confirm check");
+        logger.info("confirm check");
 
 //
 
@@ -238,8 +231,6 @@ public class BookShopServlet extends HttpServlet {
             }
         }
 
-       // System.out.println("cart and user  confirm " + userId + " cart" + cartId + " totppriceid " + totppriceId + " ordpriceid " + ordpriceId + " totpriceid " + totpriceId);
-
 
         HttpSession session = request.getSession();
 
@@ -264,7 +255,7 @@ public class BookShopServlet extends HttpServlet {
         String ccexpiration = request.getParameter("credexpiration");
         String cccvv = request.getParameter("credcvv");
 
-        System.out.println(" paymentMethod " + paymentMethod + " ccname " + ccname + " ccnumber " + ccnumber + " ccexpiration " + ccexpiration + " cccvv " + cccvv);
+        logger.info(" paymentMethod " + paymentMethod + " ccname " + ccname + " ccnumber " + ccnumber + " ccexpiration " + ccexpiration + " cccvv " + cccvv);
 
         if (ccname != null && ccnumber != null) {
 
@@ -290,8 +281,6 @@ public class BookShopServlet extends HttpServlet {
             cart = cartDAO.checkCartByStep(cartId, "payment");
             cartDAO.updateCart(cartId, "complete");
 
-            //System.out.println(" cart.getDelivery_id() " + cart.getDelivery_id());
-
             Card card = new Card();
             CardDAO cardDAO = new CardDAO();
 
@@ -309,13 +298,13 @@ public class BookShopServlet extends HttpServlet {
     }
 
     private void delivery(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println("delivery check");
+        logger.info("delivery check");
         PrintWriter out=response.getWriter();
         request.getRequestDispatcher("./checkout/delivery.jsp").include(request, response);
     }
 
     private void shop(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("shop check");
+        logger.info("shop check");
         HttpSession session = request.getSession();
         //response.setContentType("text/html; charset=UTF-8");
         RequestDispatcher dispatcher = request.getRequestDispatcher("shop.jsp");
@@ -369,7 +358,7 @@ public class BookShopServlet extends HttpServlet {
 
             HttpSession session = request.getSession();
             String addressId=(String)session.getAttribute("addressid");
-            System.out.println(" addressId " + addressId);
+            logger.info(" addressId " + addressId);
 
 
             Cart cart = new Cart();
@@ -381,17 +370,17 @@ public class BookShopServlet extends HttpServlet {
             address = addressDAO.checkAddressById(Integer.parseInt(addressId));
 
 
-            System.out.println(" address.getCity() " + address.getCity() + " cartid " + cartId + " Delivery " + delivery.getId() + " cart id " + cart.getId());
+            logger.info(" address.getCity() " + address.getCity() + " cartid " + cartId + " Delivery " + delivery.getId() + " cart id " + cart.getId());
 
             OrderitemDAO orderitemDAO = new OrderitemDAO();
 
             orderitemDAO.insertOrderitem(delivery.getId(), cart.getId());
 
             cart = cartDAO.checkCartByStep(cartId, "delivery");
-            System.out.println(" cart before " + cart.getId());
+            logger.info(" cart before " + cart.getId());
             cartDAO.updateCartDelivery(cartId, delivery.getId(), "confirm");
 
-            System.out.println("update cart " + cart.getId());
+            logger.info("update cart " + cart.getId());
 
             addressDAO.updateDeliveryById(delivery.getId(), Integer.parseInt(addressId), userId);
 
@@ -404,7 +393,7 @@ public class BookShopServlet extends HttpServlet {
             json.put("totpriceid", totalDeliver + cart.order_total_price);
             
             message = json.toString();
-            System.out.println(message);
+            logger.info(message);
 
             response.setContentType("text/plain");
             PrintWriter out = response.getWriter();
@@ -415,11 +404,11 @@ public class BookShopServlet extends HttpServlet {
         }
 
 
-        System.out.println(" delivery " + deliveryTO + " datetimeOrder " + datetimeOrderTO);
+        logger.info(" delivery " + deliveryTO + " datetimeOrder " + datetimeOrderTO);
     }
 
     private void address(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println("address check");
+        logger.info("address check");
         PrintWriter out=response.getWriter();
         request.getRequestDispatcher("./checkout/address.jsp").include(request, response);
     }
@@ -437,9 +426,6 @@ public class BookShopServlet extends HttpServlet {
         String saveinfo = request.getParameter("save-info");
         String zip = request.getParameter("zip");
 
-        //System.out.println(" firstname " + firstName + " lastname " + lastName + " username " + username + " email " + email + " address " + addressTo);
-        //System.out.println(" phone " + phone + " country " + country + " state " + state + " sameaddress " + sameaddress);
-        //System.out.println(" saveinfo " + saveinfo + " zip " + zip);
 
         if (email != null) {
             int userId = 0;
@@ -456,9 +442,6 @@ public class BookShopServlet extends HttpServlet {
                     cartId = Integer.parseInt(valueID);
                 }
             }
-
-         //   System.out.println(" cart id " + cartId);
-          //  System.out.println(" user id " + userId);
 
             AddressDAO addressDAO = new AddressDAO();
             Address address = new Address();
@@ -507,7 +490,7 @@ public class BookShopServlet extends HttpServlet {
         }
 
         cart = cartDAO.insertCart(Integer.parseInt(userId), totalPrice + 2, totalPrice, "address");
-        System.out.println(" userId " + userId + " totalPrice " + totalPrice + " cart id " + cart.getId());
+        logger.info("userId " + userId + " totalPrice " + totalPrice + " cart id " + cart.getId());
         itemDAO.insertItem(temp, cart.getId());
 
         response.setContentType("text/plain");
@@ -525,7 +508,8 @@ public class BookShopServlet extends HttpServlet {
         String password_confirm = request.getParameter("password_confirm");
         String language = request.getParameter("lang");
 
-        System.out.println(" username " + username + " email " + email + " password " + password + " password_confirm " + password_confirm);
+        logger.info(" username " + username + " email " + email + " password " + password + " password_confirm " + password_confirm);
+
         UserDAO userDAO = new UserDAO();
         BookDAO bookDAO = new BookDAO();
 
@@ -566,19 +550,15 @@ public class BookShopServlet extends HttpServlet {
                     out.flush();
                     out.close();
 
-                        //request.getRequestDispatcher("shop.jsp").forward(request, response);
-                        //destPage = "shop.jsp";
                     } else {
-                        //String message = "Invalid email/password";
-                        //request.setAttribute("message", message);
+
 
                 response.setContentType("text/plain");
                 PrintWriter out = response.getWriter();
                 out.print("stop");
                 out.flush();
                 out.close();
-//                RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
-//                dispatcher.forward(request, response);
+
                 }
 
 
@@ -589,12 +569,16 @@ public class BookShopServlet extends HttpServlet {
 
     private void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 
+
+
         String email = request.getParameter("login");
         String encrypted_password = request.getParameter("pass");
 
         String language = request.getParameter("lang");
 
-        System.out.println(" email " + email + " encrypted_password " + encrypted_password + "test input or enter" + " choose language " + language);
+
+        logger.info(" email " + email + " encrypted_password " + encrypted_password + "test input or enter" + " choose language " + language);
+
         UserDAO userDAO = new UserDAO();
         BookDAO bookDAO = new BookDAO();
 
@@ -612,7 +596,8 @@ public class BookShopServlet extends HttpServlet {
                 session.setAttribute("roleid", user.getUid());
                // session.setAttribute("imageiduser", user.getImage());
 
-                System.out.println("user.get " + user.getId());
+
+                logger.info("user.get " + user.getId());
 
                 userDAO.updatecurrentsignUser(user.getId());
 
@@ -635,7 +620,8 @@ public class BookShopServlet extends HttpServlet {
                 response.addCookie(cookie);
                 response.addCookie(cookie2);
 
-                System.out.println(str);
+
+                logger.info(str);
 
                 //response.setContentType("text/plain");
                 PrintWriter out = response.getWriter();
@@ -662,8 +648,6 @@ public class BookShopServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        System.out.println("test connect");
-
         if (session != null) {
 
             session.removeAttribute("books");
@@ -678,7 +662,6 @@ public class BookShopServlet extends HttpServlet {
             session.removeAttribute("totalPrice");
             //session.removeAttribute("imageiduser");
 
-            System.out.println("test connect2");
             //session.getAttribute("user");
 
             ServletContext servletContext = getServletContext();
@@ -699,10 +682,12 @@ public class BookShopServlet extends HttpServlet {
 
         int begin = Integer.parseInt(idBookBegin);
         int end = Integer.parseInt(idBookEnd);
-        System.out.println(" " + idBookBegin + " " + idBookEnd);
+
+
+        logger.info(" " + idBookBegin + " " + idBookEnd);
 
         String str = null;
-        System.out.println("servlet");
+        logger.info("servlet");
 
         BookDAO bookDAO = new BookDAO();
         List<Book> book = bookDAO.findFromTO(begin, end);
@@ -756,10 +741,10 @@ public class BookShopServlet extends HttpServlet {
 
 
         int rowsOfBook = Integer.parseInt(rows);
-        System.out.println(" " + rows + " " + typeOrder);
+        logger.info(" " + rows + " " + typeOrder);
 
         String str = null;
-        System.out.println("servlet");
+        logger.info("servlet");
 
 
         BookDAO bookDAO = new BookDAO();
@@ -789,7 +774,7 @@ public class BookShopServlet extends HttpServlet {
             sb.append("<tr id=\"" + book.get(i).getId() + "\"><td colspan=\"5\" class=\"row-data\" id_cost=\"" + book.get(i).getPrice() + "\" id_image=\"./images/" + book.get(i).getImage()  + "\" id=\"col" + book.get(i).getId() + "\"height = \"100\" width=\"200\">" + book.get(i).getTitle() + "</td></tr>");
             sb.append("<tr><td colspan=\"5\" >" + book.get(i).getAuthor() + "</td></tr>");
             sb.append("<tr><td>$" + book.get(i).getPrice() + ".00</td><td colspan=\"4\" align=\"center\"><button id=\"" + book.get(i).getId() + "\" class=\"me btn btn-primary btn-block\">Add to cart</button></td></tr>");
-            System.out.println(" title " + book.get(i).getTitle());
+            logger.info(" title " + book.get(i).getTitle());
 
         }
 

@@ -6,6 +6,7 @@ import com.shop.entity.Cart;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class CartDAO {
 
@@ -20,6 +21,13 @@ public class CartDAO {
     private static final String SQL_SELECT_BOOKS_BY_CART_ID ="SELECT id, title, price, author FROM books where id IN (select book_id from items where cart_id = (?))";
     private static final String SQL_SELECT_QUANTITY_BOOK_BY_CART_ID ="select quantity from items where cart_id = (?) and book_id = (?)";
 
+    static final Logger logger = Logger.getLogger(String.valueOf(CardDAO.class));
+
+    /**
+     *
+     * @param prstatement
+     * @return
+     */
     public Cart getCartParam(PreparedStatement prstatement){
          Cart cart = null;
 
@@ -34,16 +42,22 @@ public class CartDAO {
                 cart.setItem_total_price(result.getInt("item_total_price"));
                // cart.setCreated_at(result.getDate("created_at"));
             } else {
-                System.out.println("Cart is not valid");
+                logger.info("Cart is not valid");
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
         return cart;
     }
 
-
+    /**
+     *
+     * @param id
+     * @param checkout_step
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public Cart checkCartByStep(int id, String checkout_step) throws ClassNotFoundException {
 
@@ -60,12 +74,20 @@ public class CartDAO {
                 con.rollback();
             }
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
         return cart;
     }
 
-
+    /**
+     *
+     * @param user_id
+     * @param order_total_price
+     * @param item_total_price
+     * @param checkout_step
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public Cart insertCart(int user_id, int order_total_price, int item_total_price, String checkout_step) throws ClassNotFoundException {
             Cart cart = null;
@@ -84,11 +106,20 @@ public class CartDAO {
                     }
                     return cart;
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    logger.info("" + e);
                 }
         return null;
     }
 
+
+    /**
+     *
+     * @param id
+     * @param delivery_id
+     * @param checkout_step
+     * @return
+     * @throws ClassNotFoundException
+     */
     public Boolean updateCartDelivery(int id, int delivery_id, String checkout_step) throws ClassNotFoundException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -102,12 +133,18 @@ public class CartDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
         return false;
     }
 
-
+    /**
+     *
+     * @param id
+     * @param checkout_step
+     * @return
+     * @throws ClassNotFoundException
+     */
     public Boolean updateCart(int id, String checkout_step) throws ClassNotFoundException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -119,12 +156,19 @@ public class CartDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
         return false;
     }
 
 
+    /**
+     *
+     * @param id
+     * @param coupon
+     * @return
+     * @throws ClassNotFoundException
+     */
     public Boolean updateCartCoupon(int id, int coupon) throws ClassNotFoundException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -137,11 +181,17 @@ public class CartDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
         return false;
     }
 
+
+    /**
+     *
+     * @return
+     * @throws ClassNotFoundException
+     */
     public List<Cart> findAllCarts() throws ClassNotFoundException {
 
         List<Cart> carts = new ArrayList<>();
@@ -161,11 +211,18 @@ public class CartDAO {
                 carts.add(cart);
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
         return carts;
     }
 
+
+    /**
+     *
+     * @param cart_id
+     * @return
+     * @throws ClassNotFoundException
+     */
     public static List<Book> findallBooksByCartID(int cart_id) throws ClassNotFoundException {
         List<Book> books = new ArrayList<>();
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -175,9 +232,6 @@ public class CartDAO {
 
                 ResultSet result = prstatement.executeQuery();
                 while (result.next()) {
-                   // System.out.println(result.getString("title"));
-                   // System.out.println(result.getInt("price"));
-                   // System.out.println(result.getString("author"));
                     Book book = new Book();
                     book.setId(result.getInt("id"));
                     book.setTitle(result.getString("title"));
@@ -188,10 +242,18 @@ public class CartDAO {
 
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
         return books;
     }
+
+    /**
+     *
+     * @param cart_id
+     * @param book_id
+     * @return
+     * @throws ClassNotFoundException
+     */
 
 
     public static int findallBookValueByCartID(int cart_id, int book_id) throws ClassNotFoundException {
@@ -203,13 +265,10 @@ public class CartDAO {
             prstatement.setInt(2, book_id);
             ResultSet result = prstatement.executeQuery();
             while (result.next()) {
-                // System.out.println(result.getString("title"));
-                // System.out.println(result.getInt("price"));
-                // System.out.println(result.getString("author"));
                 quantity = result.getInt("quantity");
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info( ""  + e);
         }
         return quantity;
     }

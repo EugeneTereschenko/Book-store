@@ -24,11 +24,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 @WebServlet("/store")
 public class BookShopStore extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    static final Logger logger = Logger.getLogger(String.valueOf(BookShopStore.class));
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
@@ -163,7 +167,7 @@ public class BookShopStore extends HttpServlet {
 
     private void deletebook(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("idbook");
-        System.out.println("deletebook");
+        logger.info("deletebook");
 
         BookDAO bookDAO = new BookDAO();
         boolean flag = bookDAO.deleteBook(Integer.parseInt(temp));
@@ -207,9 +211,11 @@ public class BookShopStore extends HttpServlet {
     private void updatebook(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("book");
 
-        System.out.println("updatebook");
 
-        System.out.println(temp);
+        Logger logger = Logger.getLogger("https_services.log");
+        logger.info("updatebook");
+        logger.info(temp);
+
 
         JSONObject myJsonObject = new JSONObject(temp);
 
@@ -272,7 +278,7 @@ public class BookShopStore extends HttpServlet {
     private void insertbook(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
         String temp = request.getParameter("book");
 
-        System.out.println(temp);
+        logger.info(temp);
 
             JSONObject myJsonObject = new JSONObject(temp);
 
@@ -355,7 +361,9 @@ public class BookShopStore extends HttpServlet {
     private void insertuser(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
         String temp = request.getParameter("user");
 
-        System.out.println(temp);
+        Logger logger = Logger.getLogger("https_services.log");
+        logger.info(temp);
+
 
         JSONObject myJsonObject = new JSONObject(temp);
 
@@ -410,7 +418,12 @@ public class BookShopStore extends HttpServlet {
 
     private void showOneUser(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
         String iduser = request.getParameter("iduser");
-        System.out.println(" iduser " + iduser);
+
+
+        Logger logger = Logger.getLogger("https_services.log");
+        logger.info(" iduser " + iduser);
+
+
         User user = new User();
         UserDAO userDAO = new UserDAO();
         user = userDAO.checkUserbyId(Integer.parseInt(iduser));
@@ -423,8 +436,8 @@ public class BookShopStore extends HttpServlet {
         json.put("remembid", user.getRemember_created_at());
         json.put("currentid", user.getCurrent_sign_in_at());
 
-        System.out.println(json);
 
+        logger.info((Supplier<String>) json);
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.print(json);
@@ -436,9 +449,9 @@ public class BookShopStore extends HttpServlet {
     private void updateuser(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("user");
 
-        System.out.println("updateuser");
+        logger.info("updateuser");
 
-        System.out.println(temp);
+        logger.info(temp);
 
         JSONObject myJsonObject = new JSONObject(temp);
 
@@ -455,7 +468,6 @@ public class BookShopStore extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         User user = new User();
 
-        //System.out.println("usid" + usid + " name " + name + " email " + email + " role " + role + " passwd " + passwd + " remember " + rememberuser);
 
         if (role.equals("1")){
             role = "administrator";
@@ -507,7 +519,7 @@ public class BookShopStore extends HttpServlet {
 
     private void deleteuser(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("iduser");
-        System.out.println("deleteuser");
+        logger.info("deleteuser");
 
         UserDAO userDAO = new UserDAO();
         boolean flag = userDAO.deleteUser(Integer.parseInt(temp));
@@ -571,20 +583,29 @@ public class BookShopStore extends HttpServlet {
             books = cartDAO.findallBooksByCartID(i+1);
             delivery = deliveryDAO.checkDeliveryById(viewcarts.get(i).getDelivery_id());
             totalcost = delivery.getPrice() + viewcarts.get(i).getOrder_total_price() - 5;
-           // System.out.println(totalcost);
+
             treemaptotaldeliveries.put(i, Integer.toString(totalcost));
 
            // util.preparePDFreport(user.getEmail(), books.toArray(), viewcarts.get(i).getUser_id());
             //util.preparePDFreport(user.getEmail());
 
+
+            int sum = 0;
+            sb.append("<ul class=\"list-group list-inline\" width=\"200\">");
+
             for (Book book : books){
                 quantity = cartDAO.findallBookValueByCartID(i+1, book.getId());
                // System.out.println("quantity " + quantity + "i" + i + "book get id" + book.getId());
-                sb.append("<tr><td>");
-                sb.append(book.getTitle()).append(".\t</td><td>").append("\t").append(quantity).append("\t</td><td>").append(book.getPrice()).append("</td></tr>");
-                treemapbooks.put(i, sb.toString());
+                sum += quantity;
+                sb.append("<li class=\"list-group-item list-group-item-action list-group-item-primary\">");
+                sb.append(book.getTitle()).append("\tValue\t:\t").append(quantity).append("</li>");
+
                 //System.out.println(" i " + i + " " + book.getAuthor());
             }
+            sb.append("<table width=\"300\"><tr><td></td></tr></table>");
+            sb.append("<li class=\"list-group-item list-group-item-action list-group-item-info\">").append("Total value:\t").append(sum);
+            sb.append("</li>");
+            treemapbooks.put(i, sb.toString());
 
         }
 
@@ -599,7 +620,7 @@ public class BookShopStore extends HttpServlet {
     private void updateorder(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("idorder");
 
-        System.out.println(temp);
+        logger.info(temp);
 
         JSONObject myJsonObject = new JSONObject(temp);
 

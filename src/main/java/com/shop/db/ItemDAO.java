@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
+import java.util.logging.Logger;
 
 public class ItemDAO {
 
@@ -13,8 +14,14 @@ public class ItemDAO {
     private static final String SQL_FIND_ITEM = "SELECT * FROM items where book_id = (?) and cart_id = (?)";
     private static final String SQL_INSERT_ITEM = "INSERT INTO items (book_id, cart_id, quantity, created_at, update_at) VALUES (?, ?, ?, NOW(), NOW())";
 
+    static final Logger logger = Logger.getLogger(String.valueOf(ItemDAO.class));
 
 
+    /**
+     *
+     * @param prstatement
+     * @return
+     */
     public static Item getUserParam(PreparedStatement prstatement){
         Item item = null;
 
@@ -26,18 +33,24 @@ public class ItemDAO {
                 item.setQuantity(result.getInt("quantity"));
 
             } else {
-                System.out.println("item is not valid");
+                logger.info("item is not valid");
 
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
         return item;
 
     }
 
-
+    /**
+     *
+     * @param book_id
+     * @param cart_id
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public static Item checkItem(String book_id, String cart_id) throws ClassNotFoundException {
 
@@ -60,14 +73,21 @@ public class ItemDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return item;
 
     }
 
-
+    /**
+     *
+     * @param book_id
+     * @param cart_id
+     * @param quantity
+     * @return
+     * @throws ClassNotFoundException
+     */
 
 
     public static boolean insertItem(int book_id, int cart_id, int quantity) throws ClassNotFoundException {
@@ -82,11 +102,18 @@ public class ItemDAO {
                     }
 
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    logger.info("" + e);
                 }
         return false;
     }
 
+    /**
+     *
+     * @param temp
+     * @param cart_id
+     * @return
+     * @throws ClassNotFoundException
+     */
     public static boolean insertItem(String temp, int cart_id) throws ClassNotFoundException {
 
         String id = null;
@@ -111,10 +138,6 @@ public class ItemDAO {
             i++;
         }
         return false;
-    }
-
-    public static void main(String[] args){
-
     }
 
 }

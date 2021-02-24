@@ -1,6 +1,9 @@
 <component name="libraryTable">
   <library name="com.itextpdf.maven:itextdoc:2.0.0" type="repository">
     <properties maven-id="com.itextpdf.maven:itextdoc:2.0.0" />
+    <ANNOTATIONS>
+      <root url="file://$USER_HOME$/Downloads/Log4j" />
+    </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/itextpdf/maven/itextdoc/2.0.0/itextdoc-2.0.0.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/com/itextpdf/itextpdf/5.1.2/itextpdf-5.1.2.jar!/" />

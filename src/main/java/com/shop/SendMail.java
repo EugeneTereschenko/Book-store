@@ -17,9 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 @WebServlet("/sendmail")
 public class SendMail extends HttpServlet {
+    static final Logger logger = Logger.getLogger(String.valueOf(SendMail.class));
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //String content = request.getParameter("content");
 
@@ -76,7 +79,7 @@ public class SendMail extends HttpServlet {
             message.setSubject("This is the Subject Line!");
             message.setText("This is actual message from " + email);
 
-            System.out.println(" user.getEmail() " + email);
+            logger.info(" user.getEmail() " + email);
 
             Transport.send(message);
             String title = "Send Email";
@@ -124,7 +127,7 @@ public class SendMail extends HttpServlet {
             message.setSubject("This is the Subject Line!");
             message.setText("This is actual message from <a href=\"http://localhost:8080/bookstore/createpdfdoc?cartid=" + cardid + "\">Your payment</a>");
 
-            System.out.println(" user.getEmail() " + cardid);
+            logger.info(" user.getEmail() " + cardid);
 
             Transport.send(message);
             String title = "Send Email";

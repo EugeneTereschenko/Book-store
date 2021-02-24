@@ -24,11 +24,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 @WebServlet("/set")
 public class BookShopSettings extends HttpServlet {
     private static final String FILE_DIR = "";
+    static final Logger logger = Logger.getLogger(String.valueOf(BookShopServlet.class));
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -74,7 +76,7 @@ public class BookShopSettings extends HttpServlet {
 
             String temp = request.getParameter("cartid");
 
-            //System.out.println(temp);
+
 
             response.setContentType("application/pdf");
 
@@ -115,7 +117,7 @@ public class BookShopSettings extends HttpServlet {
                     pdfPCell6 = new PdfPCell(new Paragraph(Integer.toString(quantity)));
                     table.addCell(pdfPCell5);
                     table.addCell(pdfPCell6);
-                    // System.out.println("quantity " + quantity + "i" + i + "book get id" + book.getId());
+
                 }
 
                 int totalcost = 0;
@@ -154,7 +156,9 @@ public class BookShopSettings extends HttpServlet {
             }
         }
 
-        System.out.println(" userid " + userId);
+
+
+        logger.info(" userid " + userId);
 
         UserDAO userDAO = new UserDAO();
        // User user = new User();
@@ -165,9 +169,9 @@ public class BookShopSettings extends HttpServlet {
         File dir = new File(path);
         if (!dir.exists()){
             dir.mkdir();
-            System.out.println("dir exists");
+            logger.info("dir exists");
         }
-        System.out.println(dir.getAbsolutePath());
+        logger.info(dir.getAbsolutePath());
 
         try {
             String fileName ="";
@@ -175,7 +179,7 @@ public class BookShopSettings extends HttpServlet {
                 fileName = part.getSubmittedFileName();
                 if (fileName != null && !fileName.isEmpty()){
                     part.write(path + File.separator + fileName);
-                    System.out.println("-->" + fileName);
+                    logger.info("-->" + fileName);
                     userDAO.updatecurrentimageUser(fileName, userId);
 
                     Cookie cookie=new Cookie("imageiduser", fileName);
@@ -206,7 +210,7 @@ public class BookShopSettings extends HttpServlet {
             out.close();
 
         } catch (Exception e){
-            System.out.println("Error! " + e.getMessage());
+            logger.info("Error! " + e.getMessage());
         }
 
     }

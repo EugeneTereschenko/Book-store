@@ -3,6 +3,7 @@ package com.shop.db;
 import com.shop.entity.Delivery;
 
 import java.sql.*;
+import java.util.logging.Logger;
 
 public class DeliveryDAO {
 
@@ -10,8 +11,14 @@ public class DeliveryDAO {
     private static final String SQL_FIND_DELIVERY = "SELECT * FROM deliveries where id = (?)";
     private static final String SQL_INSERT_DELIVERY = "INSERT INTO deliveries (created_at, update_at, name, time, price) VALUES (NOW(), NOW(), ?, ?, ?)";
     //private static final String SQL_UPDATE_DELIVERY = "UPDATE carts set checkout_step = (?) where id = (?)";
+    static final Logger logger = Logger.getLogger(String.valueOf(DeliveryDAO.class));
 
 
+    /**
+     *
+     * @param prstatement
+     * @return
+     */
     public Delivery getDeliveryParam(PreparedStatement prstatement){
         Delivery delivery = null;
 
@@ -23,20 +30,25 @@ public class DeliveryDAO {
                 delivery.setTime(result.getString("time"));
                 delivery.setPrice(result.getInt("price"));
             } else {
-                System.out.println("Delivery is not valid");
+                logger.info("Delivery is not valid");
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
-            System.out.println("error find order" + e);
+            logger.info("error find order" + e);
         }
         return delivery;
     }
 
-
+    /**
+     *
+     * @param id
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public Delivery checkDeliveryById(int id) throws ClassNotFoundException {
 
-        System.out.println(id);
+        logger.info(Integer.toString(id));
 
         Delivery delivery = null;
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -50,12 +62,19 @@ public class DeliveryDAO {
                 con.rollback();
             }
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
         return delivery;
     }
 
-
+    /**
+     *
+     * @param name
+     * @param time
+     * @param price
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public Delivery insertDelivery(String name, String time, int price) throws ClassNotFoundException {
         Delivery delivery = null;
@@ -73,17 +92,10 @@ public class DeliveryDAO {
             }
             return delivery;
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info("" + e);
         }
         return null;
     }
 
-
-    public static void main(String[] args) throws ClassNotFoundException {
-        DeliveryDAO deliveryDAO = new DeliveryDAO();
-        Delivery delivery = new Delivery();
-
-        delivery = deliveryDAO.insertDelivery("test", "test2",5);
-    }
 
 }

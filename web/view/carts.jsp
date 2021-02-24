@@ -232,9 +232,9 @@
     out.println("</div>");
     out.println("<div class=\"col\">");
     out.println("<table class=\"table card-table table-success table-striped\" id=\"orderbooks\" width = \"800\"><tbody>");
-    out.println("<tr><td>cart_id</td><td>status</td><td>user_id</td><td>Books</td><td colspan =\"4\"></td></tr>");
+    out.println("<tr><td>cart_id</td><td>status</td><td>user_id</td><td width =\"300\">Books</td><td colspan =\"4\"></td></tr>");
     for(int i=0; null!=cart && i < cart.size(); i++) {
-        out.println("<tr><td>" + cart.get(i).getId() + "</td><td>" + cart.get(i).getCheckout_step() + "</td><td>" + user.get(i).getEmail() + "</td><td><table class=\"table card-table\"><tr><td>Title</td><td>Value</td><td>Cost $</td></tr><tbody>" + treemapbooks.get(i) + "<tr><td>Total price</td><td>Order price</td><td>Total price with delivery</td></tr><tr><td>" + cart.get(i).getItem_total_price() + "</td><td>" + cart.get(i).getOrder_total_price() + "</td><td>" + treemaptotaldeliveries.get(i) + "</td></tr></tbody></table></td>");
+        out.println("<tr><td>" + cart.get(i).getId() + "</td><td>" + cart.get(i).getCheckout_step() + "</td><td>" + user.get(i).getEmail() + "</td><td td width =\"300\">" + treemapbooks.get(i) + "<li class=\"list-group-item list-group-item-action list-group-item-info\">Total price with delivery $" + treemaptotaldeliveries.get(i) + "</li></ul></td>");
         //out.println("<td>" + book.get(i).getTitle() + "</td><td>" + book.get(i).getAuthor() + "</td><td>$" + book.get(i).getPrice() + ".00</td>");
        // out.println("<td>" + book.get(i).getYear() + "</td><td>" + book.get(i).getDescription() + "</td><td>" + book.get(i).getMaterials() + "</td>");
         out.println("<td><button id=\"" + (i+1) + "\" class=\"btn btn-primary confirm booksnewview btn-block\">Confirm</button></td>");

@@ -27,6 +27,9 @@
           type: 'POST',
           data: {"login": text1, "pass": text2, "lang": text3},
           success: function (data) {
+            console.log(data);
+
+           // alert(data);
 
             if (data != "stop") {
               window.location.replace("http://localhost:8080/bookstore/shop.jsp");
@@ -34,8 +37,7 @@
 
           },
           failure: function (data) {
-          //  console.log(data);
-            // alert(data);
+
           }
         });
 

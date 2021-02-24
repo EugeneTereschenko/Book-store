@@ -8,11 +8,7 @@ $(document).ready(function(){
     var myrows = 4;
     var myorderrows = 4;
 
-
-    //$("#idBookTable").on('click', '.takepagesnew', function(){
     $("#takepagesnew").click(function () {
-
-       // alert("hello");
 
         var rowsplus = myrows + 4;
         var temprows = myrows + 1;
@@ -25,15 +21,13 @@ $(document).ready(function(){
                 console.log(data);
 
                 for (var i = 0; i < data.books.length; i++){
-                    //alert(data.books[i].imageid);
+
                     $('#idBookTable').append('<tr><td colspan="5"><img src = "./images/' + data.books[i].imageid + '" height="100" width="100"/></td></tr>');
                     $('#idBookTable').append('<tr id="' + data.books[i].bookid + '"><td colspan="5" class="row-data" id_cost="' + data.books[i].priceid + '" id_image=\"./images/' + data.books[i].imageid  + '" id="col' + data.books[i].bookid + '" height = "100" width="200">' + data.books[i].titleid + '</td></tr>');
                     $('#idBookTable').append('<tr><td colspan="5" >' + data.books[i].authorid  + '</td></tr>');
                     $('#idBookTable').append('<tr><td>$' + data.books[i].priceid + '.00</td><td colspan="4" align="center"><input id="' + data.books[i].bookid + '" class="me btn btn-primary btn-block"  height="20" width="70" value="' + data.books[i].local + '" /></td></tr>');
                 }
 
-
-                // $('#idBookTable').append(data);
             },
             failure: function (data) {
                 console.log(data);
@@ -66,7 +60,7 @@ $(document).ready(function(){
             '<button id=\"' + num + '\" class="btn btn-default itercost" ><i class="fa fa-pencil"></i></button>\n' +
             '<button id=\"' + num + '\" class="btn btn-primary iterdeletecost" rel="tooltip" ><i class="fa fa-trash-o"></i></button></td><td id=\"sumone' + num + '\" id_cost=\"' + cost + '\">$' + cost + '.00</td><td id=\"sumall' + num + '\" id_sum=\"' + cost + '\">$' + cost + '.00</td></tr>');
 
-        //$('#idCartTable').append('<tr><td>' + text2 + '</td></tr>');
+
         } else {
             alert("check your choose");
         }
@@ -106,7 +100,6 @@ $(document).ready(function(){
 
         var sumOf = parseInt(sum) * valueOf;
 
-       // alert(sumOf);
 
         sumOfTotalProduct = +sumOfTotalProduct + +sumOf - +sum*(+valueOf - 1);
         sumOfTotal = +sumOfTotalProduct + +sumOfShipping;
@@ -118,31 +111,6 @@ $(document).ready(function(){
         $('#sumall' + num).attr('id_sum').val(sumOf.toString());
     });
 
-
-    /*
-    $(".me").click(function () {
-        alert("help me i");
-        alert(this.id);
-        alert("stop");
-
-
-        var rows = $('#idBookTable tr').length;
-        alert(rows);
-
-
-
-        var rowId = event.target.parentNode.parentNode.id;
-
-        var data = document.getElementById(rowId).querySelectorAll(".row-data");
-
-
-        var name = data[0].innerHTML;
-        var age = data[1].innerHTML;
-
-        alert("Name: " + name + "\nAge: " + age);
-
-    });
-*/
 
 
         var temp1 = 2;
@@ -171,25 +139,7 @@ $(document).ready(function(){
         $("#id_button").click(function () {
            // alert("help me");
             window.location.replace("http://localhost:8080/bookstore/logout");
-            /*$(location).attr('href', 'http://stackoverflow.com')
 
-             $.ajax({
-                url: "/BookStore_war_exploded/logout",
-                 type: 'GET',
-                 success: function(data){
-                     console.log(data);
-                     if (data.d == true) {
-                         alert("You will now be redirected.");
-                         window.location = "/BookStore_war_exploded/logout";
-                     }
-                 },
-                 failure: function (data) {
-                     console.log(data);
-                     alert(data);
-                 }
-             });
-
-             */
         });
 
         $("#nextcart").click(function (){
@@ -199,7 +149,7 @@ $(document).ready(function(){
                 var book = {"id": valuesid[i],"value": valueIt};
                 books.books.push(book);
             }
-                //alert(JSON.stringify(books));
+
                 $.ajax({
                     url: '/bookstore/items',
                     type: 'POST',
@@ -211,14 +161,12 @@ $(document).ready(function(){
                         }
                     },
                     success: function (data) {
-                        //alert('success'+data);
+
                         console.log(data);
 
                         document.cookie =  "cartid=" + data + ";";
                         window.location.replace("http://localhost:8080/bookstore/address");
-                       // alert(data);
-                        //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
-                        //$('#idBookTable').append(data);
+
                     },
                     failure: function (data) {
                         console.log(data);
@@ -226,18 +174,11 @@ $(document).ready(function(){
                     }
                 });
 
-            //window.location.replace("http://localhost:8080/bookstore/address");
         });
 
 
 
     $("#id_button_title").click(function () {
-       // alert("help me");
-        // var rows = $('#idBookTable tr').length;
-        //rows = rows / 4;
-        //
-
-       // var rowsplus = myrows + 4;
 
         $.ajax({
             url: '/bookstore/booksorder',
@@ -245,15 +186,14 @@ $(document).ready(function(){
             data: {"temp1": myrows, "temp2": "title"},
             success: function (data) {
                 console.log(data);
-                //alert(data);
-                //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
+
                 $("#idBookTable").find("tr:not(:nth-child(1)):not(:nth-child(2))").remove();
-                //$(this).closest("tr").remove();
+
                 $('#idBookTable').append(data);
             },
             failure: function (data) {
                 console.log(data);
-                // alert(data);
+
             }
         });
 
@@ -261,10 +201,7 @@ $(document).ready(function(){
 
 
     $("#id_button_author").click(function () {
-       // alert("help me");
-        // var rows = $('#idBookTable tr').length;
 
-        //
 
         $.ajax({
             url: '/bookstore/booksorder',
@@ -272,15 +209,14 @@ $(document).ready(function(){
             data: {"temp1": myrows, "temp2": "author"},
             success: function (data) {
                 console.log(data);
-                //alert(data);
-                //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
+
                 $("#idBookTable").find("tr:not(:nth-child(1)):not(:nth-child(2))").remove();
-                //$(this).closest("tr").remove();
+
                 $('#idBookTable').append(data);
             },
             failure: function (data) {
                 console.log(data);
-                // alert(data);
+
             }
         });
     });
@@ -288,9 +224,7 @@ $(document).ready(function(){
 
 
     $("#id_button_price").click(function () {
-        //alert("help me");
-        // var rows = $('#idBookTable tr').length;
-        //rows = rows / 4;
+
 
         $.ajax({
             url: '/bookstore/booksorder',
@@ -298,15 +232,14 @@ $(document).ready(function(){
             data: {"temp1": myrows, "temp2": "price"},
             success: function (data) {
                 console.log(data);
-                //alert(data);
-                //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
+
                 $("#idBookTable").find("tr:not(:nth-child(1)):not(:nth-child(2))").remove();
-                //$(this).closest("tr").remove();
+
                 $('#idBookTable').append(data);
             },
             failure: function (data) {
                 console.log(data);
-                // alert(data);
+
             }
         });
 
@@ -315,10 +248,7 @@ $(document).ready(function(){
 
 
     $("#id_button_year").click(function () {
-        //alert("help me");
-        // var rows = $('#idBookTable tr').length;
-        //rows = rows / 4;
-        //
+
 
         $.ajax({
             url: '/bookstore/booksorder',
@@ -326,15 +256,14 @@ $(document).ready(function(){
             data: {"temp1": myrows, "temp2": "year"},
             success: function (data) {
                 console.log(data);
-                //alert(data);
-                //$('#idBookTable').append('<tr><td>' + data + '</td></tr>');
+
                 $("#idBookTable").find("tr:not(:nth-child(1)):not(:nth-child(2))").remove();
-                //$(this).closest("tr").remove();
+
                 $('#idBookTable').append(data);
             },
             failure: function (data) {
                 console.log(data);
-                // alert(data);
+
             }
         });
     });

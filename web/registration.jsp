@@ -32,34 +32,27 @@
              }
             var text6 = $('#lang').val();
 
-            //alert(text5);
-
             $.ajax({
                 url: '/bookstore/registration',
                 type: 'POST',
                 data: {"username": text1, "email": text2, "password": text3, "password_confirm": text4, "lang": text6},
                 success: function (data) {
-                    //console.log(data);
-               //     temp = data;
 
-                    //alert(data);
                     if (data != "stop") {
 
-                      //  alert(text2);
 
                         if (text5 == "on") {
-                            // alert("sendmessage");
+
                             $.ajax({
                                 url: '/bookstore/sendmailuserregister',
                                 type: 'POST',
                                 data: {"email": text2},
                                 success: function (data) {
-                                    //   console.log(data)
+
 
                                 },
                                 failure: function (data) {
-                                    //  console.log(data);
-                                    // alert(data);
+
                                 }
                             });
                         }
@@ -71,14 +64,9 @@
 
                 },
                 failure: function (data) {
-                    //  console.log(data);
-                    // alert(data);
+
                 }
             });
-
-           // alert(temp);
-
-
 
         });
     });

@@ -4,6 +4,8 @@ import com.shop.entity.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 public class UserDAO{
 
@@ -19,7 +21,7 @@ public class UserDAO{
     //private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, encrypted_password) VALUES (?, ?, ?)";
     private static final String SQL_UPDATE_USER_CURRENT_TIME  = "UPDATE users set current_sign_in_at = NOW() where id = (?)";
     private static final String SQL_UPDATE_USER_CURRENT_IMAGE = "UPDATE users set image = (?) where id = (?)";
-
+    static final Logger logger = Logger.getLogger(String.valueOf(UserDAO.class));
 
     public User getUserParam(PreparedStatement prstatement){
         User user = null;
@@ -36,12 +38,12 @@ public class UserDAO{
                 user.setRemember_created_at(result.getString("remember_created_at"));
                // user.setEncrypted_password(result.getString("encrypted_password"));
             } else {
-                System.out.println("You are not valid");
+                logger.info("You are not valid");
 
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
         return user;
 
@@ -65,13 +67,13 @@ public class UserDAO{
             user = getUserParam(prstatement);
 
             if (user == null){
-                System.out.println("user is null");
+                logger.info("user is null");
                 con.rollback();
                 return null;
             }
 
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return user;
@@ -108,7 +110,7 @@ public class UserDAO{
                 }
 
             } catch (SQLException e) {
-                System.out.println("error find user" + e);
+                logger.info("error find user" + e);
             }
 
             return user;
@@ -123,7 +125,7 @@ public class UserDAO{
             prstatement.setInt(1, id);
             user = getUserParam(prstatement);
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
         return user;
 
@@ -131,7 +133,7 @@ public class UserDAO{
 
 
     public Boolean inputUser(String username, String email, String password, String password_confirm, String role) throws ClassNotFoundException {
-        System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
+        logger.info(username + " dd " + email + " dd " + password + " rr " + role);
         User login = null;
         login = checkLogin(email);
 
@@ -153,7 +155,7 @@ public class UserDAO{
                     }
 
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    logger.info((Supplier<String>) e);
                 }
             }
         }
@@ -174,7 +176,7 @@ public class UserDAO{
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info((Supplier<String>) e);
         }
 
 
@@ -183,7 +185,7 @@ public class UserDAO{
 
 
     public Boolean updatecurrentsignUser(int iduser) throws ClassNotFoundException {
-        //System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
+
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_USER_CURRENT_TIME)) {
@@ -194,7 +196,7 @@ public class UserDAO{
                 }
 
             } catch (SQLException e) {
-                System.out.println(e);
+                logger.info((Supplier<String>) e);
             }
 
 
@@ -202,7 +204,7 @@ public class UserDAO{
     }
 
     public User updateUser(String username, String email, String password, String password_confirm, String uid, int iduser, String remembercreatedat) throws ClassNotFoundException {
-        //System.out.println(username + " dd " + email + " dd " + password + " rr " + role);
+
         User user = null;
             if (password.equals(password_confirm)) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -223,7 +225,7 @@ public class UserDAO{
                     }
                     return user;
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    logger.info("" + e);
                 }
             }
 
@@ -241,7 +243,7 @@ public class UserDAO{
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info((Supplier<String>) e);
         }
 
         return false;
@@ -265,7 +267,7 @@ public class UserDAO{
                 users.add(user);
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info((Supplier<String>) e);
         }
         return users;
     }

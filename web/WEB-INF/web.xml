@@ -176,6 +176,13 @@
         <param-name>fileuploadto</param-name>
         <param-value>/home/yevhen/IdeaProjects/BookStore/web/images/user</param-value>
     </context-param>
+    <context-param>
+        <param-name>log4j-config-location</param-name>
+        <param-value>WEB-INF/log4j.properties</param-value>
+    </context-param>
+    <listener>
+        <listener-class>com.shop.Listener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>BookSendMAIL</servlet-name>
         <servlet-class>com.shop.SendMail</servlet-class>

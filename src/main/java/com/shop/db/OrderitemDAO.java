@@ -3,6 +3,8 @@ package com.shop.db;
 import com.shop.entity.Orderitem;
 
 import java.sql.*;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 public class OrderitemDAO {
 
@@ -11,6 +13,14 @@ public class OrderitemDAO {
     private static final String SQL_INSERT_BOOK_ID_ORDER_ITEM_ID = "INSERT INTO order_items (book_id, quantity, delivery_id, created_at, update_at) " +
             "SELECT book_id, quantity, (?), now(), now() FROM items WHERE cart_id = (?);";
 
+    static final Logger logger = Logger.getLogger(String.valueOf(OrderitemDAO.class));
+
+
+    /**
+     *
+     * @param prstatement
+     * @return
+     */
     public static Orderitem getOrderitemParam(PreparedStatement prstatement){
         Orderitem orderitem = null;
 
@@ -21,18 +31,24 @@ public class OrderitemDAO {
                 orderitem.setOrder_id(result.getInt("order_id"));
                 orderitem.setQuantity(result.getInt("quantity"));
             } else {
-                System.out.println("orderitem is not valid");
+                logger.info("orderitem is not valid");
 
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
-            System.out.println("error find orderitem" + e);
+            logger.info("error find orderitem" + e);
         }
         return orderitem;
 
     }
 
-
+    /**
+     *
+     * @param book_id
+     * @param order_id
+     * @return
+     * @throws ClassNotFoundException
+     */
 
     public static Orderitem checkOrderitem(int book_id, int order_id) throws ClassNotFoundException {
 
@@ -51,19 +67,27 @@ public class OrderitemDAO {
             orderitem = getOrderitemParam(prstatement);
 
             if (orderitem == null){
-                System.out.println("orderitem is null");
+                logger.info("orderitem is null");
                 con.rollback();
                 return null;
             }
 
         } catch (SQLException e) {
-            System.out.println("error find user" + e);
+            logger.info("error find user" + e);
         }
 
         return orderitem;
 
     }
 
+
+    /**
+     *
+     * @param order_id
+     * @param cart_id
+     * @return
+     * @throws ClassNotFoundException
+     */
     public static boolean insertOrderitem(int order_id, int cart_id) throws ClassNotFoundException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -75,7 +99,7 @@ public class OrderitemDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            logger.info((Supplier<String>) e);
         }
         return false;
     }
