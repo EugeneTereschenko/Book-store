@@ -1,9 +1,10 @@
 package com.shop.db;
 
 import com.shop.entity.Delivery;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
-import java.util.logging.Logger;
 
 public class DeliveryDAO {
 
@@ -11,7 +12,9 @@ public class DeliveryDAO {
     private static final String SQL_FIND_DELIVERY = "SELECT * FROM deliveries where id = (?)";
     private static final String SQL_INSERT_DELIVERY = "INSERT INTO deliveries (created_at, update_at, name, time, price) VALUES (NOW(), NOW(), ?, ?, ?)";
     //private static final String SQL_UPDATE_DELIVERY = "UPDATE carts set checkout_step = (?) where id = (?)";
-    static final Logger logger = Logger.getLogger(String.valueOf(DeliveryDAO.class));
+
+    private static final Logger logger = LogManager.getLogger(DeliveryDAO.class);
+
 
 
     /**

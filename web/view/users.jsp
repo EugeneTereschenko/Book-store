@@ -100,7 +100,7 @@
 
         $("#viewusers").on('click', '.usersnewview', function(e) {
 
-            alert(this.id);
+            //alert(this.id);
             e.preventDefault();
             $("#view").dialog("open");
             $.ajax({
@@ -483,7 +483,7 @@
     out.println("<table class=\"table card-table table-success table-striped\" id=\"viewusers\" width = \"800\"><tbody>");
     out.println("<tr><td>id</td><td>email</td><td>name</td><td>UID</td><td>remember_created</td><td>current_sign_in_at</td><td colspan =\"3\"></td></tr>");
     for(int i=0; null!=user && i < user.size(); i++) {
-        out.println("<tr><td>" + user.get(i).getId() + "</td><td>" + user.get(i).getEmail() + "</td><td>" + user.get(i).getName() + "</td><td>" + user.get(i).getUid() + "</td><td>" + user.get(i).getRemember_created_at() + "</td><td>" + user.get(i).getCurrent_sign_in_at() + "</td>");
+        out.println("<tr><td>" + user.get(i).getId() + "</td><td>" + user.get(i).getEmail() + "</td><td>" + user.get(i).getName() + "</td><td>" + user.get(i).getUid() + "</td><td>" + user.get(i).getRemember_created_at() + "</td><td>" +  user.get(i).getCurrent_sign_in_at() + "</td>");
         out.println("<td><button id=\"" + user.get(i).getId() + "\" class=\"btn usersnewview btn-primary btn-block\">View</button></td>");
         out.println("<td><button id=\"" + user.get(i).getId() + "\" class=\"btn usersnewedit btn-primary btn-block\">Edit</button></td>");
         out.println("<td><button id=\"" + user.get(i).getId() + "\" class=\"btn usersnewdelete btn-primary btn-block\">Delete</button></td><tr>");

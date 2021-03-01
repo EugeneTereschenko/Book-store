@@ -9,6 +9,8 @@ import com.shop.entity.Book;
 import com.shop.entity.Cart;
 import com.shop.entity.Delivery;
 import com.shop.entity.User;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import javax.servlet.RequestDispatcher;
@@ -24,15 +26,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 @WebServlet("/store")
 public class BookShopStore extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    static final Logger logger = Logger.getLogger(String.valueOf(BookShopStore.class));
 
+    private static final Logger logger = LogManager.getLogger(BookShopStore.class);
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
@@ -136,10 +136,17 @@ public class BookShopStore extends HttpServlet {
                 break;
         default:
         break;
-    }
+        }
 
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
     private void showOneBook(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
         String idbook = request.getParameter("idbook");
 
@@ -164,6 +171,14 @@ public class BookShopStore extends HttpServlet {
         out.close();
 
     }
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 
     private void deletebook(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("idbook");
@@ -207,6 +222,14 @@ public class BookShopStore extends HttpServlet {
         out.flush();
         out.close();
     }
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 
     private void updatebook(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("book");
@@ -271,7 +294,13 @@ public class BookShopStore extends HttpServlet {
         out.close();
     }
 
-
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
 
     private void insertbook(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
         String temp = request.getParameter("book");
@@ -334,6 +363,15 @@ public class BookShopStore extends HttpServlet {
 
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException
+     * @throws ClassNotFoundException
+     */
+
     private void showbooks(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
         BookDAO bookDAO = new BookDAO();
         HttpSession session = request.getSession();
@@ -344,6 +382,14 @@ public class BookShopStore extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException
+     * @throws ClassNotFoundException
+     */
 
     private void showusers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException {
 
@@ -420,16 +466,22 @@ public class BookShopStore extends HttpServlet {
 
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
+
     private void showOneUser(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException {
         String iduser = request.getParameter("iduser");
 
         logger.info(" iduser " + iduser);
-
-
         User user = new User();
         UserDAO userDAO = new UserDAO();
         user = userDAO.checkUserbyId(Integer.parseInt(iduser));
-
+        logger.info(" userDao get id " + user.getId() + " userDao get email " + user.getEmail());
         JSONObject json = new JSONObject();
         json.put("userid", user.getId());
         json.put("emailid", user.getEmail());
@@ -438,16 +490,22 @@ public class BookShopStore extends HttpServlet {
         json.put("remembid", user.getRemember_created_at());
         json.put("currentid", user.getCurrent_sign_in_at());
 
-
-        logger.info((Supplier<String>) json);
+        logger.info(json);
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.print(json);
         out.flush();
         out.close();
-
     }
 
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void updateuser(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("user");
 
@@ -518,6 +576,13 @@ public class BookShopStore extends HttpServlet {
         out.close();
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
 
     private void deleteuser(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("iduser");
@@ -561,6 +626,16 @@ public class BookShopStore extends HttpServlet {
         out.flush();
         out.close();
     }
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ClassNotFoundException
+     * @throws ServletException
+     * @throws IOException
+     * @throws DocumentException
+     */
     private void showcart(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, ServletException, IOException, DocumentException {
         CartDAO cartDAO = new CartDAO();
         List<Cart> viewcarts = cartDAO.findAllCarts();
@@ -619,6 +694,14 @@ public class BookShopStore extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void updateorder(HttpServletRequest request, HttpServletResponse response) throws IOException, ClassNotFoundException {
         String temp = request.getParameter("idorder");
 

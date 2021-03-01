@@ -1,9 +1,11 @@
 package com.shop.db;
 
 import com.shop.entity.Card;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
-import java.util.logging.Logger;
+
 
 public class CardDAO {
 
@@ -12,7 +14,9 @@ public class CardDAO {
     private static final String SQL_FIND_CARD = "SELECT * FROM cards where user_id = (?)";
     private static final String SQL_INSERT_CARD = "INSERT INTO cards (created_at, update_at, user_id, expiration_month_year, cvv, name, card_number) VALUES (NOW(), NOW(), ?, ?, ?, ?, ?)";
     //private static final String SQL_UPDATE_CARD = "UPDATE carts set  where id = (?)";
-    static final Logger logger = Logger.getLogger(String.valueOf(CardDAO.class));
+
+    private static final Logger logger = LogManager.getLogger(CardDAO.class);
+
 
     /**
      *

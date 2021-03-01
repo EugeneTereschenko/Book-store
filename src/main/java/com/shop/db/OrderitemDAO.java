@@ -1,10 +1,12 @@
 package com.shop.db;
 
 import com.shop.entity.Orderitem;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
+
 
 public class OrderitemDAO {
 
@@ -13,7 +15,7 @@ public class OrderitemDAO {
     private static final String SQL_INSERT_BOOK_ID_ORDER_ITEM_ID = "INSERT INTO order_items (book_id, quantity, delivery_id, created_at, update_at) " +
             "SELECT book_id, quantity, (?), now(), now() FROM items WHERE cart_id = (?);";
 
-    static final Logger logger = Logger.getLogger(String.valueOf(OrderitemDAO.class));
+    private static final Logger logger = LogManager.getLogger(OrderitemDAO.class);
 
 
     /**

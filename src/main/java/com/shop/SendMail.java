@@ -1,7 +1,8 @@
 package com.shop;
 
 
-
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -17,11 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 @WebServlet("/sendmail")
 public class SendMail extends HttpServlet {
-    static final Logger logger = Logger.getLogger(String.valueOf(SendMail.class));
+
+    private static final Logger logger = LogManager.getLogger(SendMail.class);
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //String content = request.getParameter("content");

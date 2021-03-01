@@ -1,13 +1,17 @@
 package com.shop.db;
 import com.shop.entity.User;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
+
 
 public class UserDAO{
+
+
 
     private static final String URL = "jdbc:mysql://localhost:3306/test" + "?user=testcomauser&password=AcPqw.TO,CYU.dcP12";
     private static final String SQL_FIND_USER = "SELECT * FROM users where email = (?) and encrypted_password = (?)";
@@ -21,7 +25,8 @@ public class UserDAO{
     //private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, encrypted_password) VALUES (?, ?, ?)";
     private static final String SQL_UPDATE_USER_CURRENT_TIME  = "UPDATE users set current_sign_in_at = NOW() where id = (?)";
     private static final String SQL_UPDATE_USER_CURRENT_IMAGE = "UPDATE users set image = (?) where id = (?)";
-    static final Logger logger = Logger.getLogger(String.valueOf(UserDAO.class));
+
+    private static final Logger logger = LogManager.getLogger(UserDAO.class);
 
     /**
      *

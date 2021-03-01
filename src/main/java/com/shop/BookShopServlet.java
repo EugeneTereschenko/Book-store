@@ -3,6 +3,9 @@ package com.shop;
 
 import com.shop.db.*;
 import com.shop.entity.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,13 +21,13 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Logger;
+
 
 @WebServlet("/authentication")
 public class BookShopServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    static final Logger logger = Logger.getLogger(String.valueOf(BookShopServlet.class));
+    private static final Logger logger = LogManager.getLogger(BookShopServlet.class);
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -483,8 +486,8 @@ public class BookShopServlet extends HttpServlet {
         }
 
         cart = cartDAO.insertCart(Integer.parseInt(userId), totalPrice + 2, totalPrice, "address");
-        logger.info("userId " + userId + " totalPrice " + totalPrice + " cart id " + cart.getId());
-        logger.info(" temp " + temp);
+        logger.log(Level.INFO, "userId " + userId + " totalPrice " + totalPrice + " cart id " + cart.getId());
+        logger.log(Level.INFO," temp " + temp);
 
 
         itemDAO.insertItem(temp, cart.getId());

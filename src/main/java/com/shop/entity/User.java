@@ -80,7 +80,6 @@ public class User {
     }
 
     public String getCurrent_sign_in_at() {
-        System.out.println(current_sign_in_at);
         return current_sign_in_at;
     }
 

@@ -6,19 +6,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@page import="java.util.List"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.shop.db.BookDAO"%>
+<%@page import="com.shop.BookShopServlet"%>
 <%@page import="com.shop.entity.Book"%>
-<%@page import="com.shop.entity.User"%>
-<%@ page import="java.io.InputStream" %>
+<%@page import="org.apache.log4j.LogManager"%>
+<%@page import="org.apache.log4j.Logger"%>
+<%@page import="java.io.InputStream"%>
 <%@ page import="java.io.InputStreamReader" %>
 <%@ page import="java.nio.charset.StandardCharsets" %>
-<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.List" %>
 <%@ page import="java.util.Properties" %>
-<%@ page import="java.util.ResourceBundle" %>
-<%@ page import="java.util.logging.Logger" %>
-<%@ page import="com.shop.BookShopServlet" %>
 <%@ taglib prefix = "ex" uri = "/WEB-INF/custom.tld"%>
 <html>
 <head>
@@ -42,7 +38,8 @@
 <%
    // String imageuser = (String) session.getAttribute("imageiduser");
 
-    Logger logger = Logger.getLogger(String.valueOf(BookShopServlet.class));
+
+    Logger logger = LogManager.getLogger(BookShopServlet.class);
 
     String imageIDuser = null;
     Cookie[] cookies = request.getCookies();

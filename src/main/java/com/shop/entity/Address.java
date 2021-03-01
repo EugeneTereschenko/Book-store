@@ -4,6 +4,9 @@ import java.util.Date;
 
 public class Address {
 
+
+
+
     public int id;
     public String address_type;
     public String first_name;

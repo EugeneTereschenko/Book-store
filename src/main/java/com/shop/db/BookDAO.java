@@ -1,13 +1,14 @@
 package com.shop.db;
 
 import com.shop.entity.Book;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class BookDAO {
 
@@ -28,7 +29,9 @@ public class BookDAO {
     private static final String SQL_UPDATE_BOOK = "UPDATE books SET title =(?), description = (?), image = (?), materials = (?), price = (?), height = (?), width = (?)," +
             " depth = (?), year = (?), in_stock = (?), author = (?) where id = (?)";
     private static final String SQL_DELETE_BOOK = "DELETE from books where id = (?)";
-    static final Logger logger = Logger.getLogger(String.valueOf(BookDAO.class));
+
+
+    private static final Logger logger = LogManager.getLogger(BookDAO.class);
 
     public Book getBookParam(PreparedStatement prstatement){
         Book book = null;

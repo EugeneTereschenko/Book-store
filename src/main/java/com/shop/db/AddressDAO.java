@@ -1,6 +1,8 @@
 package com.shop.db;
 
 import com.shop.entity.Address;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 
@@ -16,6 +18,9 @@ public class AddressDAO {
     private static final String SQL_UPDATE_ADDRESS_DELIVERY_ID_BY_ID = "UPDATE addresses SET delivery_id = (?) where id = (?) and user_id = (?)";
 
     //private static final String SQL_INSERT_USER = "INSERT INTO users (email, name, encrypted_password) VALUES (?, ?, ?)";
+
+
+    private static final Logger logger = LogManager.getLogger(AddressDAO.class);
 
 
     /**

@@ -1,17 +1,20 @@
 package com.shop;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 @WebFilter(urlPatterns = { "/authentication" }, servletNames = { "authentication" })
 public class Check implements Filter {
 
-    static final Logger logger = Logger.getLogger(String.valueOf(Check.class));
+
+    private static final Logger logger = LogManager.getLogger(Check.class);
     private ServletContext context;
 
     public void destroy() {

@@ -2,11 +2,13 @@ package com.shop.db;
 
 import com.shop.entity.Book;
 import com.shop.entity.Item;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
-import java.util.logging.Logger;
+
 
 public class ItemDAO {
 
@@ -14,7 +16,8 @@ public class ItemDAO {
     private static final String SQL_FIND_ITEM = "SELECT * FROM items where book_id = (?) and cart_id = (?)";
     private static final String SQL_INSERT_ITEM = "INSERT INTO items (book_id, cart_id, quantity, created_at, update_at) VALUES (?, ?, ?, NOW(), NOW())";
 
-    static final Logger logger = Logger.getLogger(String.valueOf(ItemDAO.class));
+    private static final Logger logger = LogManager.getLogger(ItemDAO.class);
+
 
 
     /**

@@ -2,11 +2,13 @@ package com.shop.db;
 
 import com.shop.entity.Book;
 import com.shop.entity.Cart;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 public class CartDAO {
 
@@ -21,7 +23,9 @@ public class CartDAO {
     private static final String SQL_SELECT_BOOKS_BY_CART_ID ="SELECT id, title, price, author FROM books where id IN (select book_id from items where cart_id = (?))";
     private static final String SQL_SELECT_QUANTITY_BOOK_BY_CART_ID ="select quantity from items where cart_id = (?) and book_id = (?)";
 
-    static final Logger logger = Logger.getLogger(String.valueOf(CardDAO.class));
+
+    private static final Logger logger = LogManager.getLogger(CartDAO.class);
+
 
     /**
      *

@@ -1,5 +1,7 @@
 package com.shop;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.ServletContext;
@@ -11,14 +13,12 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.io.File;
-import java.util.logging.Logger;
 
 @WebListener()
 public class Listener implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
 
-
-    static final Logger logger = Logger.getLogger(String.valueOf(Listener.class));
+    private static final Logger logger = LogManager.getLogger(Listener.class);
     // Public constructor is required by servlet spec
     public Listener() {
     }
