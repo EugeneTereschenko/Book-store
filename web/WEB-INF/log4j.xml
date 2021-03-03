@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <File name="File1" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputbookshopservlet.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File2" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputbookshopsettings.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File3" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputcheck.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File4" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputlistener.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File5" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputbookshopstore.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File6" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputsendmail.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File7" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputuserdao.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File8" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputorderitemdao.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File9" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputaddressdao.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File10" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputbookdao.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File11" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputcarddao.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File12" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputcartdao.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File13" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputdeliverydao.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+        <File name="File14" fileName="/home/yevhen/IdeaProjects/BookStore/log/outputitemdao.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <Logger name="com.shop.BookShopServlet" level="debug" additivity="false">
+            <AppenderRef ref="File1"/>
+        </Logger>
+        <Logger name="com.shop.BookShopSettings" level="debug" additivity="false">
+            <AppenderRef ref="File2"/>
+        </Logger>
+        <Logger name="com.shop.Check" level="debug" additivity="false">
+            <AppenderRef ref="File3"/>
+        </Logger>
+        <Logger name="com.shop.Listener" level="debug" additivity="false">
+            <AppenderRef ref="File4"/>
+        </Logger>
+        <Logger name="com.shop.BookShopStore" level="debug" additivity="false">
+            <AppenderRef ref="File5"/>
+        </Logger>
+        <Logger name="com.shop.SendMail" level="debug" additivity="false">
+            <AppenderRef ref="File6"/>
+        </Logger>
+        <Logger name="com.shop.db.UserDAO" level="debug" additivity="false">
+            <AppenderRef ref="File7"/>
+        </Logger>
+        <Logger name="com.shop.db.OrderitemDAO" level="debug" additivity="false">
+            <AppenderRef ref="File8"/>
+        </Logger>
+        <Logger name="com.shop.db.AddressDAO" level="debug" additivity="false">
+            <AppenderRef ref="File9"/>
+        </Logger>
+        <Logger name="com.shop.db.BookDAO" level="debug" additivity="false">
+            <AppenderRef ref="File10"/>
+        </Logger>
+        <Logger name="com.shop.db.CardDAO" level="debug" additivity="false">
+            <AppenderRef ref="File11"/>
+        </Logger>
+        <Logger name="com.shop.db.CartDAO" level="debug" additivity="false">
+            <AppenderRef ref="File12"/>
+        </Logger>
+        <Logger name="com.shop.db.DeliveryDAO" level="debug" additivity="false">
+            <AppenderRef ref="File13"/>
+        </Logger>
+        <Logger name="com.shop.db.ItemDAO" level="debug" additivity="false">
+            <AppenderRef ref="File14"/>
+        </Logger>
+    </Loggers>
+</Configuration>

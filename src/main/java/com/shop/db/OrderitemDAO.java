@@ -30,7 +30,7 @@ public class OrderitemDAO {
             if (result.next()) {
                 orderitem = new Orderitem();
                 orderitem.setBook_id(result.getInt("book_id"));
-                orderitem.setOrder_id(result.getInt("order_id"));
+                orderitem.setOrder_id(result.getInt("delivery_id"));
                 orderitem.setQuantity(result.getInt("quantity"));
             } else {
                 logger.info("orderitem is not valid");
