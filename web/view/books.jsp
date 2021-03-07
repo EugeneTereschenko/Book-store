@@ -34,6 +34,7 @@
 
 
         $("#dialog").dialog({
+            position: { my: "center", at: "top" },
             autoOpen: false,
             modal: true
         });
@@ -91,7 +92,7 @@
                    // alert('success'+data);
                     console.log(data);
                     $("#sentstatus").html(data.localid.toString());
-                    window.location.replace("http://localhost:8080/bookstore/showbooks.jsp");
+                    window.location.replace("http://localhost:8080/bookstore/showbooks");
 
 
 
@@ -107,6 +108,7 @@
         });
 
         $("#view").dialog({
+            position: { my: "center", at: "top" },
             autoOpen: false,
             modal: true
         });
@@ -114,7 +116,7 @@
 
         $("#viewbooks").on('click', '.booksnewview', function(e) {
 
-            alert(this.id);
+           // alert(this.id);
             e.preventDefault();
             $("#view").dialog("open");
             $.ajax({
@@ -149,6 +151,7 @@
         });
 
         $("#edit").dialog({
+            position: { my: "center", at: "top" },
             autoOpen: false,
             modal: true
         });

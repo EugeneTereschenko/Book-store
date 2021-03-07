@@ -459,6 +459,7 @@ public class BookDAO {
 
     public static boolean updateBook(String title, String description, String image, String materials, int price, int height, int width, int depth, String year, int in_stock, String author, int bookid)  throws ClassNotFoundException {
 
+        logger.info("Update book Title = " + title + " description = " + description);
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection con = DriverManager.getConnection(URL); PreparedStatement prstatement = con.prepareStatement(SQL_UPDATE_BOOK)) {

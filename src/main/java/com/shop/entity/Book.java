@@ -4,39 +4,114 @@ import java.util.Date;
 
 public class Book {
 
-    public int id;
-    public String title;
-    public String description;
-    public String image;
-    public String materials;
-    public int price;
-    public int height;
-    public int width;
-    public int depth;
-    public String year;
-    public int in_stock;
-    public String author;
-    public Date created_at;
-    public Date update_at;
+    private int id;
+    private String title;
+    private String description;
+    private String image;
+    private String materials;
+    private int price;
+    private int height;
+    private int width;
+    private int depth;
+    private String year;
+    private int in_stock;
+    private String author;
+    private Date created_at;
+    private Date update_at;
 
-    public Book(){
+
+    public static Builder newBuilder(){
+        return new Book.Builder();
+    }
+
+    public static class Builder {
+
+        private Book book;
+
+        public Builder(){
+            book = new Book();
+        }
+
+
+        public Builder addId(int val){
+            book.id = val;
+            return this;
+        }
+
+        public Builder addTitle(String val){
+            book.title = val;
+            return this;
+        }
+
+        public Builder addDescription(String val){
+            book.description = val;
+            return this;
+        }
+
+        public Builder addImage(String val){
+            book.image = val;
+            return this;
+        }
+
+        public Builder addMaterials(String val){
+            book.materials = val;
+            return this;
+        }
+
+        public Builder addPrice(int val){
+            book.price = val;
+            return this;
+        }
+
+        public Builder addHeight(int val){
+            book.height = val;
+            return this;
+        }
+
+        public Builder addWidth(int val){
+            book.width = val;
+            return this;
+        }
+
+        public Builder addDepth(int val){
+            book.depth = val;
+            return this;
+        }
+
+        public Builder addYear(String val){
+            book.year = val;
+            return this;
+        }
+
+        public Builder addInstock(int val){
+            book.in_stock = val;
+            return this;
+        }
+
+        public Builder addAuthor(String val){
+            book.author = val;
+            return this;
+        }
+
+        public Builder addCreatedat(Date val){
+            book.created_at = val;
+            return this;
+        }
+
+        public Builder addUpdateat(Date val){
+            book.update_at = val;
+            return this;
+        }
+
+        public Book build() {
+            return book;
+        }
 
     }
 
-    public Book(String title, String description, String image, String materials, int price, int height, int width, int depth, String year, int in_stock, String author, Date created_at, Date update_at) {
-        this.title = title;
-        this.description = description;
-        this.image = image;
-        this.materials = materials;
-        this.price = price;
-        this.height = height;
-        this.width = width;
-        this.depth = depth;
-        this.year = year;
-        this.in_stock = in_stock;
-        this.author = author;
-        this.created_at = created_at;
-        this.update_at = update_at;
+
+    public Book(){
+
     }
 
     @Override
